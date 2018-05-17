@@ -1,3 +1,4 @@
+package sprites;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
@@ -5,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+
+import engine.KeyboardInput;
 
 public abstract class Sprite {
 
@@ -47,6 +50,13 @@ public abstract class Sprite {
 	public abstract long getHeight();
 	public abstract long getWidth();
 	public abstract Image getImage();
+	
+	public final double getXPos(){
+		return currentX;
+	}
+	public final double getYPos(){
+		return currentY;
+	}
 	
 	public abstract void setMinX(double currentX);
 	public abstract void setMinY(double currentY);

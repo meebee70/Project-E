@@ -1,5 +1,8 @@
+package engine;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+
+import sprites.Sprite;
 
 public class Bounce {
 	
@@ -55,14 +58,14 @@ public class Bounce {
 	    
 	    this.newVelocityX = velocityX;
 	    this.newVelocityY = velocityY;
-	    this.newX = sprite.currentX + movement_x;
-	    this.newY = sprite.currentY + movement_y;
+	    this.newX = sprite.getXPos() + movement_x;
+	    this.newY = sprite.getYPos() + movement_y;
 	    this.didBounce = false;
 
-	    long this_top = Math.round(sprite.currentY);
-	    long this_bottom = this_top + sprite.IMAGE_HEIGHT;
-	    long this_left = Math.round(sprite.currentX);
-	    long this_right = this_left + sprite.IMAGE_WIDTH;
+	    long this_top = Math.round(sprite.getYPos());
+	    long this_bottom = this_top + sprite.getHeight();
+	    long this_left = Math.round(sprite.getXPos());
+	    long this_right = this_left + sprite.getWidth();
 		 
 	    for (Rectangle barrier : barriers) {
 			//colliding with top edge of barrier?
@@ -72,7 +75,7 @@ public class Bounce {
 	            if (!( (this_left > barrier.getMaxX()) || (this_right < barrier.getMinX()))) {
 	                this.calculateBounce(this_bottom, movement_y, barrier.getMinY());
 	                if (this.justBounced) {
-	                	this.newY = this.newLocaton - sprite.IMAGE_HEIGHT;
+	                	this.newY = this.newLocaton - sprite.getHeight();
 	                	this.newVelocityY = -velocityY;
 	                	this.didBounce = true;
 	                }
@@ -100,7 +103,7 @@ public class Bounce {
 	            if (!( (this_top > barrier.getMaxY()) || (this_bottom < barrier.getMinY()))) {
 	                this.calculateBounce(this_right, movement_x, barrier.getMinX());
 	                if (this.justBounced) {
-	                	this.newX = this.newLocaton - sprite.IMAGE_WIDTH;
+	                	this.newX = this.newLocaton - sprite.getWidth();
 	                	this.newVelocityX = -velocityX;
 	                	this.didBounce = true;
 	                }

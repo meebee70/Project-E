@@ -1,4 +1,10 @@
+package engine;
 import javax.swing.*;
+
+import backgrounds.Background;
+import backgrounds.BackgroundAberhart;
+import sprites.Sprite;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.MouseAdapter;

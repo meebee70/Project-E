@@ -1,8 +1,11 @@
+package backgrounds;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import engine.Tile;
 
 public abstract class Background {
 
