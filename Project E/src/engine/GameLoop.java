@@ -13,14 +13,20 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 
 public class GameLoop extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6025644422779754466L;
+	
 	final public static int FRAMES_PER_SECOND = 60;
 	final public static int SCREEN_HEIGHT = 900;
 	final public static int SCREEN_WIDTH = 900;
-	final public static Color BARRIER_COLOR = Color.BLUE;
+	final public static Color BARRIER_COLOR = Color.RED;
 	final public static boolean CENTER_ON_PLAYER = false;
 	
     private JPanel panel = null;
@@ -50,7 +56,10 @@ public class GameLoop extends JFrame {
     
     public GameLoop()
     {
-        super("");
+        //super("Space Shooter"); replaced with "init()"
+    	init("Space Shooter");
+    	
+    	
 
         addKeyListener(new KeyAdapter() {
         	@Override
@@ -64,12 +73,12 @@ public class GameLoop extends JFrame {
         });
         this.setFocusable(true);
         
-        getContentPane().setBackground(Color.BLACK);
+        getContentPane().setBackground(Color.WHITE);
         Container cp = getContentPane();
         
         panel = new DrawPanel();
-        getContentPane().add(panel, BorderLayout.CENTER);
-        getContentPane().setLayout(null);
+        cp.add(panel, BorderLayout.CENTER);
+        cp.setLayout(null);
         
         btnPauseRun = new JButton("||");
         btnPauseRun.addMouseListener(new MouseAdapter() {
@@ -81,31 +90,43 @@ public class GameLoop extends JFrame {
         
         btnPauseRun.setFont(new Font("Tahoma", Font.BOLD, 12));
         btnPauseRun.setBounds(20, 20, 48, 32);
-        getContentPane().add(btnPauseRun);
+        cp.add(btnPauseRun);
         
         lblTime = new JLabel("000");
         lblTime.setForeground(Color.WHITE);
         lblTime.setFont(new Font("Tahoma", Font.BOLD, 30));
         lblTime.setBounds(171, 22, 302, 30);
-        getContentPane().add(lblTime);
+        cp.add(lblTime);
 
         panel.setLayout(null);
         panel.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        setSize(SCREEN_WIDTH + 20, SCREEN_HEIGHT + 36);
+        //setSize(SCREEN_WIDTH + 20, SCREEN_HEIGHT + 36);
                         
         lblTimeLabel = new JLabel("Time: ");
         lblTimeLabel.setForeground(Color.WHITE);
         lblTimeLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
         lblTimeLabel.setBounds(78, 22, 97, 30);
-        getContentPane().add(lblTimeLabel);
+        cp.add(lblTimeLabel);
         
-        getContentPane().setComponentZOrder(lblTimeLabel, 0);
-        getContentPane().setComponentZOrder(lblTime, 0);
-        getContentPane().setComponentZOrder(btnPauseRun, 0);
+        cp.setComponentZOrder(lblTimeLabel, 0);
+        cp.setComponentZOrder(lblTime, 0);
+        cp.setComponentZOrder(btnPauseRun, 0);
         
         createBarriers();
         createSprites();
-                        	    			    	    
+        
+        setVisible(true); //this should not be touched			    	    
+    }
+    
+    /**
+     * Initializes all setting of the screen itself
+     * @param title this is the title of the program
+     */
+    private void init(String title){
+    	setTitle(title);
+    	setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    	
+    	
     }
     
     private void createBarriers() {
@@ -123,7 +144,7 @@ public class GameLoop extends JFrame {
 	public static void main(String[] args)
     {
     	GameLoop m = new GameLoop();
-    	m.setVisible(true);
+    	
     	
         loop = new Thread()
         {
@@ -222,6 +243,11 @@ public class GameLoop extends JFrame {
 	
 	class DrawPanel extends JPanel {
 				
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 7200442706585427853L;
+
 		public void paintComponent(Graphics g)
 		{			 
 			if (CENTER_ON_PLAYER && me != null) {

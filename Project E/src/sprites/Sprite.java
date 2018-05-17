@@ -47,9 +47,14 @@ public abstract class Sprite {
 	public abstract double getMaxX();
 	public abstract double getMinY();
 	public abstract double getMaxY();
-	public abstract long getHeight();
-	public abstract long getWidth();
 	public abstract Image getImage();
+	
+	public long getHeight(){
+		return IMAGE_HEIGHT;
+	}
+	public long getWidth(){
+		return IMAGE_WIDTH;
+	}
 	
 	public final double getXPos(){
 		return currentX;
@@ -61,9 +66,17 @@ public abstract class Sprite {
 	public abstract void setMinX(double currentX);
 	public abstract void setMinY(double currentY);
 	
-	public abstract void setBarriers(ArrayList<Rectangle> barriers);
-	public abstract void setSprites(ArrayList<Sprite> staticSprites);
-	public abstract void setKeyboard(KeyboardInput keyboard); 
+	public void setBarriers(ArrayList<Rectangle> barriers){
+		this.barriers = barriers;
+	}
+	
+	public void setSprites(ArrayList<Sprite> staticSprites){
+		this.sprites = staticSprites;
+	}
+	
+	public void setKeyboard(KeyboardInput keyboard){
+		this.keyboard = keyboard;
+	}
 	
 	public abstract boolean checkCollisionWithSprites(double x, double y);
 	public abstract boolean checkCollisionWithBarrier(double x, double y);
