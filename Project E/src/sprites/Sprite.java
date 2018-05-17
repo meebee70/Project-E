@@ -49,10 +49,10 @@ public abstract class Sprite {
 	public abstract double getMaxY();
 	public abstract Image getImage();
 	
-	public long getHeight(){
+	public double getHeight(){
 		return IMAGE_HEIGHT;
 	}
-	public long getWidth(){
+	public double getWidth(){
 		return IMAGE_WIDTH;
 	}
 	

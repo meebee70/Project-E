@@ -28,7 +28,7 @@ public class GameLoop extends JFrame {
 	final public static int SCREEN_HEIGHT = 900;
 	final public static int SCREEN_WIDTH = 900;
 	final public static Color BARRIER_COLOR = Color.RED;
-	final public static boolean CENTER_ON_PLAYER = false;
+	final public static boolean CENTER_ON_PLAYER = true;
 	
     private JPanel panel = null;
     private JButton btnPauseRun;
