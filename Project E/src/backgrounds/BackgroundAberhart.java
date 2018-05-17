@@ -55,9 +55,8 @@ public class BackgroundAberhart extends Background {
 				return col;
 			}
 		}
-		else {
-			return 0;
-		}
+		
+		return 0;
 	}
 	
 	public int getRow(int y) {
