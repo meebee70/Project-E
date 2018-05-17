@@ -5,8 +5,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import engine.Tile;
-
 public class BackgroundAberhart extends Background {
 
     private Image aberhart;

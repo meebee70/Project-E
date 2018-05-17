@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import backgrounds.Background;
 import backgrounds.BackgroundAberhart;
+import backgrounds.Tile;
 import sprites.Sprite;
 
 import java.awt.*;
@@ -125,7 +126,7 @@ public class GameLoop extends JFrame {
     private void init(String title){
     	setTitle(title);
     	setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    	
+    	setDefaultCloseOperation(EXIT_ON_CLOSE);
     	
     }
     
@@ -133,7 +134,9 @@ public class GameLoop extends JFrame {
     }
     
     private void createSprites() {
-   		   	
+   		
+    	
+    	
     	for (Sprite sprite : sprites) {
     		sprite.setBarriers(barriers);
     		sprite.setSprites(sprites);
@@ -207,12 +210,12 @@ public class GameLoop extends JFrame {
     }
     
     private void disposeSprites() {
-    	for (Sprite sprite : this.sprites) {
+    	for (Sprite sprite : sprites) {
     		if (sprite.getDispose() == true) {
     			spritesToDispose.add(sprite);
     		}
     	}
-    	for (Sprite sprite : this.spritesToDispose) {
+    	for (Sprite sprite : spritesToDispose) {
     		sprites.remove(sprite);
     	}
     	if (spritesToDispose.size() > 0) {

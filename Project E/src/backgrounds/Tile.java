@@ -1,4 +1,4 @@
-package engine;
+package backgrounds;
 import java.awt.Image;
 
 public class Tile {
