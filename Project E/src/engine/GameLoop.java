@@ -5,6 +5,7 @@ import backgrounds.Background;
 import backgrounds.BackgroundAberhart;
 import backgrounds.Tile;
 import sprites.Barrier;
+import sprites.Player;
 import sprites.Sprite;
 
 import java.awt.*;
@@ -138,6 +139,9 @@ public class GameLoop extends JFrame {
     private void createSprites() {
    		
     	sprites.add(new Barrier(500,500));
+    	Player p = new Player();
+    	sprites.add(p);
+    	me = p;
     	
     	for (Sprite sprite : sprites) {
     		sprite.setSprites(sprites);
@@ -260,8 +264,8 @@ public class GameLoop extends JFrame {
 		public void paintComponent(Graphics g)
 		{			 
 			if (CENTER_ON_PLAYER && me != null) {
-				xOffset = - ((int) me.getMinX() - (SCREEN_WIDTH / 2));
-				yOffset = - ((int) me.getMinY() - (SCREEN_HEIGHT / 2));	        
+				xOffset = - ((int) me.getXPos() - (SCREEN_WIDTH / 2));
+				yOffset = - ((int) me.getYPos() - (SCREEN_HEIGHT / 2));	        
 			}
 
 			paintBackground(g, background);
@@ -272,7 +276,7 @@ public class GameLoop extends JFrame {
 //			}
 
 			for (Sprite staticSprite : sprites) {
-				g.drawImage(staticSprite.getImage(), (int)staticSprite.getMinX() + xOffset, (int)staticSprite.getMinY() + yOffset, (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
+				g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos() + xOffset, (int)staticSprite.getYPos() + yOffset, (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
 			}
 
 		}

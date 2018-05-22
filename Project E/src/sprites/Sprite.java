@@ -39,9 +39,6 @@ public abstract class Sprite {
 		defaultImage = img;
 	}
 	
-//	double currentX = 0;
-//	double currentY = 0;
-//	protected Image image_default;
 	
 	public boolean getDispose() {
 		return dispose;
@@ -50,7 +47,6 @@ public abstract class Sprite {
 	public void setDispose() {
 		this.dispose = true;
 	}
-	ArrayList<Rectangle> barriers;
 	ArrayList<Sprite> sprites;
 	KeyboardInput keyboard;
 		
@@ -64,11 +60,6 @@ public abstract class Sprite {
 
 	public abstract void update(KeyboardInput keyboard, long actual_delta_time);
 	
-	public abstract double getMinX();
-	public abstract double getMaxX();
-	public abstract double getMinY();
-	public abstract double getMaxY();
-	public abstract Image getImage();
 	
 	public double getHeight(){
 		return IMAGE_HEIGHT;
@@ -84,12 +75,11 @@ public abstract class Sprite {
 		return currentY;
 	}
 	
-	public abstract void setMinX(double currentX);
-	public abstract void setMinY(double currentY);
-	
-	public void setBarriers(ArrayList<Rectangle> barriers){
-		this.barriers = barriers;
-	}
+	/**
+	 * this methods defines how an object should present itself
+	 * @return the image it is to be displayed as
+	 */
+	public abstract Image getImage();
 	
 	public void setSprites(ArrayList<Sprite> staticSprites){
 		this.sprites = staticSprites;
