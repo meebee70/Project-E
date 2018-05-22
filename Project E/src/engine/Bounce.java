@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import sprites.Sprite;
 
+/**
+ * 
+ * this is a class used for calculating what happens to an objects trajectory when it hits another object
+ * @author Mr Wehnes
+ */
 public class Bounce {
 	
 	private boolean didBounce = false;
@@ -63,9 +68,9 @@ public class Bounce {
 	    this.didBounce = false;
 
 	    long this_top = Math.round(sprite.getYPos());
-	    long this_bottom = this_top + sprite.getHeight();
+	    long this_bottom = (long) (this_top + sprite.getHeight());
 	    long this_left = Math.round(sprite.getXPos());
-	    long this_right = this_left + sprite.getWidth();
+	    long this_right = (long) (this_left + sprite.getWidth());
 		 
 	    for (Rectangle barrier : barriers) {
 			//colliding with top edge of barrier?

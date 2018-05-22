@@ -1,6 +1,11 @@
 package backgrounds;
 import java.awt.Image;
 
+/**
+ * A Tile is a repeating image used in backgrounds
+ * @author Mr Wehnes
+ *
+ */
 public class Tile {
 
 	Image image = null;
@@ -10,6 +15,15 @@ public class Tile {
 	int width = 0;
 	boolean outOfBounds = false;
 		
+	/**
+	 *
+	 * @param image the image for this tile
+	 * @param x 
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param outOfBounds
+	 */
 	public Tile(Image image, int x, int y, int width, int height, boolean outOfBounds) {
 		super();
 		this.image = image;

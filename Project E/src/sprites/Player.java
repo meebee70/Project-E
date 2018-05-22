@@ -17,7 +17,7 @@ public class Player extends Sprite {
 		super (starterX,starterY);
 		
 		try{
-			setDefaultImage(ImageIO.read(new File("res/download.jpg")));
+			setDefaultImage(ImageIO.read(new File("res/character sprites/download.jpg")));
 		}catch(Exception e){e.printStackTrace();}
 	}
 	

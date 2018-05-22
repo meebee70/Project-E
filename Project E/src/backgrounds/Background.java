@@ -1,13 +1,20 @@
 package backgrounds;
-import java.awt.Image;
 
+/**
+ * this is a generic superclass to group together various forms of backgrounds
+ * @author Mr Wehnes
+ *
+ */
 public abstract class Background {
 
-    private Image background;
-    private int backgroundWidth = 0;
-    private int backgroundHeight = 0;
-
+    /**
+     * returns the tile located at the4 specified position
+     * @param col
+     * @param row
+     * @return
+     */
 	public abstract Tile getTile(int col, int row);
+	
 	/**
 	 * which column is position x siting in? 
 	 * @param x

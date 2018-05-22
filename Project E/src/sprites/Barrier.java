@@ -14,7 +14,7 @@ public class Barrier extends Sprite{
 		super(x,y);
 		
 		try {
-			setDefaultImage(ImageIO.read(new File("res/test barrier.png")));
+			setDefaultImage(ImageIO.read(new File("res/barriers/test barrier.png")));
 		} catch (IOException e) {e.printStackTrace();}
 	}
 	

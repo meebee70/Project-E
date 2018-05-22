@@ -15,19 +15,27 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-
+/**
+ * the main meat of the program, where all the stuff actually happens
+ * @author Mr Wehnes
+ *
+ */
 public class GameLoop extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6025644422779754466L;
 
+	
+	/**
+	 * the speed at which the program should run
+	 */
 	final public static int FRAMES_PER_SECOND = 60;
+	
 	final public static int SCREEN_HEIGHT = 900;
 	final public static int SCREEN_WIDTH = 900;
-	final public static Color BARRIER_COLOR = Color.RED;
 
+	/**
+	 * if the camera should follow the player
+	 */
 	final public static boolean CENTER_ON_PLAYER = false;
 	
     private JPanel panel = null;
@@ -38,9 +46,6 @@ public class GameLoop extends JFrame {
     private static Thread loop;
     private BackgroundAberhart background = new BackgroundAberhart();    
     private KeyboardInput keyboard = new KeyboardInput();
-    
-
-	
 
 	long current_time = 0;								//MILLISECONDS
 	long next_refresh_time = 0;							//MILLISECONDS
@@ -50,13 +55,21 @@ public class GameLoop extends JFrame {
 	long elapsed_time = 0;
 	private boolean isPaused = false;
 
+	/**
+	 * the amount by which the player has moved in the x direction
+	 */
 	int xOffset = 0;
+	/**
+	 * the amount by which the player has moved in the y direction
+	 */
 	int yOffset = 0;
 
 
     ArrayList<Sprite> sprites = new ArrayList<Sprite>();
     ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
-    Sprite me = null;
+    
+    Sprite player1 = null;
+    Sprite player2 = null;
     
     public GameLoop()
     {
@@ -116,7 +129,6 @@ public class GameLoop extends JFrame {
         cp.setComponentZOrder(lblTime, 0);
         cp.setComponentZOrder(btnPauseRun, 0);
         
-        createBarriers();
         createSprites();
         
         setVisible(true); //this should not be touched			    	    
@@ -133,21 +145,39 @@ public class GameLoop extends JFrame {
     	
     }
     
-    private void createBarriers() {
-    }
-    
+    /**
+     * a method used on init to create all the starter sprites that will exist
+     */
     private void createSprites() {
    		
     	sprites.add(new Barrier(500,500));
-    	Player p = new Player();
-    	sprites.add(p);
-    	me = p;
+    	
+    	setPlayer1(new Player());
+    	setPlayer2(new Player());
     	
     	for (Sprite sprite : sprites) {
     		sprite.setSprites(sprites);
     	}
     	
     }
+    /**
+     * sets the new player1 sprite
+     * @param newMe
+     */
+    private void setPlayer1(Sprite newPlayer1){
+    	sprites.add(newPlayer1);
+    	player1 = newPlayer1;
+    }
+    
+    /**
+     * sets the new player2 sprite
+     * @param newPlayer2
+     */
+    private void setPlayer2(Sprite newPlayer2){
+    	sprites.add(newPlayer2);
+    	player1 = newPlayer2;
+    }
+    
 
 
 	public static void main(String[] args)
@@ -166,6 +196,9 @@ public class GameLoop extends JFrame {
 
 	}
 
+	/**
+	 * the main method for the program
+	 */
 	private void gameLoop() {
 		boolean endGame = false;
 		while (!endGame) { // main game loop
@@ -203,8 +236,10 @@ public class GameLoop extends JFrame {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	private void updateTime() {
-
 		current_time = System.currentTimeMillis();
 		actual_delta_time = (isPaused ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
