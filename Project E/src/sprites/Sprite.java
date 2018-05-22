@@ -18,6 +18,31 @@ public abstract class Sprite {
 	protected int IMAGE_HEIGHT = 50; //sprite.get_height()
 	private boolean dispose = false;
 	
+	/**
+	 * a constructor to be used for any object that instantiates at a specific spot
+	 * @param x left boundary
+	 * @param y upper boundary
+	 */
+	public Sprite(double x, double y){
+		currentX = x;
+		currentY = y;
+	}
+	/**
+	 * Instantiate an object at a point with an image
+	 * @param x
+	 * @param y
+	 * @param img
+	 */
+	public Sprite(double x, double y, Image img){
+		currentX = x;
+		currentY = y;
+		defaultImage = img;
+	}
+	
+	public void setDefaultImage(Image img){
+		defaultImage = img;
+	}
+	
 //	double currentX = 0;
 //	double currentY = 0;
 //	protected Image image_default;
@@ -78,7 +103,6 @@ public abstract class Sprite {
 		this.keyboard = keyboard;
 	}
 	
-	public abstract boolean checkCollisionWithSprites(double x, double y);
-	public abstract boolean checkCollisionWithBarrier(double x, double y);
+	public abstract boolean checkCollisions(double x, double y);
 	
 }

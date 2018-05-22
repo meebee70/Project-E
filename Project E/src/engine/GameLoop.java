@@ -4,6 +4,7 @@ import javax.swing.*;
 import backgrounds.Background;
 import backgrounds.BackgroundAberhart;
 import backgrounds.Tile;
+import sprites.Barrier;
 import sprites.Sprite;
 
 import java.awt.*;
@@ -50,7 +51,6 @@ public class GameLoop extends JFrame {
 	int xOffset = 0;
 	int yOffset = 0;
 
-	ArrayList<Rectangle> barriers = new ArrayList<Rectangle>();
     ArrayList<Sprite> sprites = new ArrayList<Sprite>();
     ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
     Sprite me = null;
@@ -135,10 +135,9 @@ public class GameLoop extends JFrame {
     
     private void createSprites() {
    		
-    	
+    	sprites.add(new Barrier(500,500));
     	
     	for (Sprite sprite : sprites) {
-    		sprite.setBarriers(barriers);
     		sprite.setSprites(sprites);
     	}
     	
@@ -260,10 +259,10 @@ public class GameLoop extends JFrame {
 
 			paintBackground(g, background);
 
-			g.setColor(BARRIER_COLOR);
-			for (Rectangle barrier : barriers) {
-				g.fillRect((int)barrier.getX() + xOffset,(int) barrier.getY() + yOffset, (int)barrier.getWidth(), (int)barrier.getHeight());       	
-			}
+//			g.setColor(BARRIER_COLOR);
+//			for (Rectangle barrier : barriers) {
+//				g.fillRect((int)barrier.getX() + xOffset,(int) barrier.getY() + yOffset, (int)barrier.getWidth(), (int)barrier.getHeight());       	
+//			}
 
 			for (Sprite staticSprite : sprites) {
 				g.drawImage(staticSprite.getImage(), (int)staticSprite.getMinX() + xOffset, (int)staticSprite.getMinY() + yOffset, (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
