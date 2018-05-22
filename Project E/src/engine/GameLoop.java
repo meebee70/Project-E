@@ -158,7 +158,9 @@ public class GameLoop extends JFrame {
 		boolean endGame = false;
 		while (!endGame) { // main game loop
 
-			//adapted from http://www.java-gaming.org/index.php?topic=24220.0
+			/*
+			 * adapted from http://www.java-gaming.org/index.php?topic=24220.0
+			 */
 			last_refresh_time = System.currentTimeMillis();
 			next_refresh_time = current_time + minimum_delta_time;
 
