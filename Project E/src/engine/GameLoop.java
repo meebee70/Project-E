@@ -4,6 +4,7 @@ import javax.swing.*;
 import backgrounds.Background;
 import backgrounds.BackgroundAberhart;
 import backgrounds.Tile;
+import sprites.Barrier;
 import sprites.Sprite;
 
 import java.awt.*;
@@ -25,6 +26,19 @@ public class GameLoop extends JFrame {
 	final public static int SCREEN_HEIGHT = 900;
 	final public static int SCREEN_WIDTH = 900;
 	final public static Color BARRIER_COLOR = Color.RED;
+
+	final public static boolean CENTER_ON_PLAYER = falsee;
+	
+    private JPanel panel = null;
+    private JButton btnPauseRun;
+    private JLabel lblTimeLabel;
+    private JLabel lblTime;
+
+    private static Thread loop;
+    private BackgroundAberhart background = new BackgroundAberhart();    
+    private KeyboardInput keyboard = new KeyboardInput();
+    
+
 	final public static boolean CENTER_ON_PLAYER = false;
 
 	private JPanel panel = null;
@@ -36,6 +50,7 @@ public class GameLoop extends JFrame {
 	private BackgroundAberhart background = new BackgroundAberhart();    
 	private KeyboardInput keyboard = new KeyboardInput();
 
+
 	long current_time = 0;								//MILLISECONDS
 	long next_refresh_time = 0;							//MILLISECONDS
 	long last_refresh_time = 0;
@@ -46,6 +61,100 @@ public class GameLoop extends JFrame {
 
 	int xOffset = 0;
 	int yOffset = 0;
+
+
+    ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+    ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
+    Sprite me = null;
+    
+    public GameLoop()
+    {
+        //super("Space Shooter"); replaced with "init()"
+    	init("Space Shooter");
+    	
+    	
+
+        addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent arg0) {
+        		keyboard.keyPressed(arg0);
+        	}
+        	@Override
+        	public void keyReleased(KeyEvent arg0) {
+        		keyboard.keyReleased(arg0);
+        	}
+        });
+        this.setFocusable(true);
+        
+        getContentPane().setBackground(Color.WHITE);
+        Container cp = getContentPane();
+        
+        panel = new DrawPanel();
+        cp.add(panel, BorderLayout.CENTER);
+        cp.setLayout(null);
+        
+        btnPauseRun = new JButton("||");
+        btnPauseRun.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent arg0) {
+        		btnPauseRun_mouseClicked(arg0);
+        	}
+        });
+        
+        btnPauseRun.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btnPauseRun.setBounds(20, 20, 48, 32);
+        cp.add(btnPauseRun);
+        
+        lblTime = new JLabel("000");
+        lblTime.setForeground(Color.WHITE);
+        lblTime.setFont(new Font("Tahoma", Font.BOLD, 30));
+        lblTime.setBounds(171, 22, 302, 30);
+        cp.add(lblTime);
+
+        panel.setLayout(null);
+        panel.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        //setSize(SCREEN_WIDTH + 20, SCREEN_HEIGHT + 36);
+                        
+        lblTimeLabel = new JLabel("Time: ");
+        lblTimeLabel.setForeground(Color.WHITE);
+        lblTimeLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
+        lblTimeLabel.setBounds(78, 22, 97, 30);
+        cp.add(lblTimeLabel);
+        
+        cp.setComponentZOrder(lblTimeLabel, 0);
+        cp.setComponentZOrder(lblTime, 0);
+        cp.setComponentZOrder(btnPauseRun, 0);
+        
+        createBarriers();
+        createSprites();
+        
+        setVisible(true); //this should not be touched			    	    
+    }
+    
+    /**
+     * Initializes all setting of the screen itself
+     * @param title this is the title of the program
+     */
+    private void init(String title){
+    	setTitle(title);
+    	setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    	setDefaultCloseOperation(EXIT_ON_CLOSE);
+    	
+    }
+    
+    private void createBarriers() {
+    }
+    
+    private void createSprites() {
+   		
+    	sprites.add(new Barrier(500,500));
+    	
+    	for (Sprite sprite : sprites) {
+    		sprite.setSprites(sprites);
+    	}
+    	
+    }
+    
 
 	ArrayList<Rectangle> barriers = new ArrayList<Rectangle>();
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
@@ -137,6 +246,7 @@ public class GameLoop extends JFrame {
 		}
 
 	}
+
 
 	public static void main(String[] args)
 	{
@@ -258,10 +368,10 @@ public class GameLoop extends JFrame {
 
 			paintBackground(g, background);
 
-			g.setColor(BARRIER_COLOR);
-			for (Rectangle barrier : barriers) {
-				g.fillRect((int)barrier.getX() + xOffset,(int) barrier.getY() + yOffset, (int)barrier.getWidth(), (int)barrier.getHeight());       	
-			}
+//			g.setColor(BARRIER_COLOR);
+//			for (Rectangle barrier : barriers) {
+//				g.fillRect((int)barrier.getX() + xOffset,(int) barrier.getY() + yOffset, (int)barrier.getWidth(), (int)barrier.getHeight());       	
+//			}
 
 			for (Sprite staticSprite : sprites) {
 				g.drawImage(staticSprite.getImage(), (int)staticSprite.getMinX() + xOffset, (int)staticSprite.getMinY() + yOffset, (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
