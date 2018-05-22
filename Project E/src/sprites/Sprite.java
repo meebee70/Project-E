@@ -89,6 +89,19 @@ public abstract class Sprite {
 		this.keyboard = keyboard;
 	}
 	
-	public abstract boolean checkCollisions(double x, double y);
+	/**
+	 * This method checks to see if this object is colliding with another object
+	 * @param other The object to check the collision with
+	 */
+	public boolean checkCollisions(Sprite other) {
+		return false;
+	}
+	
+	/**
+	 * This method is used for determining if a point is within this object's frame perimeter
+	 */
+	private boolean isWithin(int x, int y) {
+		return false;
+	}
 	
 }
