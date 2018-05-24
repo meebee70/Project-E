@@ -3,9 +3,19 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-
+/**
+ * a class that can be used to rotate images
+ * @author Mr Wehnes
+ *
+ */
 public class ImageRotator {
 
+	/**
+	 * rotates the specified image by the specified angle clockwise
+	 * @param original original image
+	 * @param angle angle to rotate (in degrees)
+	 * @return the rotated image
+	 */
 	public static Image rotate(Image original, int angle) {
 	    		
 	    AffineTransform tx = new AffineTransform();

@@ -237,7 +237,7 @@ public class GameLoop extends JFrame {
 	}
 
 	/**
-	 * 
+	 * uses the built in system functions to update the timer
 	 */
 	private void updateTime() {
 		current_time = System.currentTimeMillis();
@@ -248,12 +248,19 @@ public class GameLoop extends JFrame {
 		this.lblTime.setText(Long.toString(elapsed_time));
 	}
 
+	
+	/**
+	 * calls all sprites to update themselves according to their own update methods
+	 */
 	private void updateSprites() {
 		for (Sprite sprite : sprites) {
 			sprite.update(keyboard, actual_delta_time);
 		}    	
 	}
 
+	/**
+	 * removes all sprites that need to be "disposed" of
+	 */
 	private void disposeSprites() {
 		for (Sprite sprite : sprites) {
 			if (sprite.getDispose() == true) {
@@ -268,6 +275,10 @@ public class GameLoop extends JFrame {
 		}
 	}
 
+	/**
+	 * pauses the timer when the pause button is clicked
+	 * @param arg0
+	 */
 	protected void btnPauseRun_mouseClicked(MouseEvent arg0) {
 		if (isPaused) {
 			isPaused = false;
@@ -279,6 +290,9 @@ public class GameLoop extends JFrame {
 		}
 	}
 
+	/**
+	 * allows the interface to respond to specific key inputs
+	 */
 	private void handleKeyboardInput() {
 		//if the interface needs to respond to certain keyboard events
 		if (keyboard.keyDown(80) && ! isPaused) {
@@ -289,6 +303,11 @@ public class GameLoop extends JFrame {
 		}
 	}
 
+	/**
+	 * a custom JPanel that can be used for drawing the game more easily
+	 * @author Mr Wehnes
+	 *
+	 */
 	class DrawPanel extends JPanel {
 
 		/**
@@ -296,19 +315,18 @@ public class GameLoop extends JFrame {
 		 */
 		private static final long serialVersionUID = 7200442706585427853L;
 
+		/**
+		 * paints the JPanel
+		 */
 		public void paintComponent(Graphics g)
 		{			 
-			if (CENTER_ON_PLAYER && me != null) {
-				xOffset = - ((int) me.getXPos() - (SCREEN_WIDTH / 2));
-				yOffset = - ((int) me.getYPos() - (SCREEN_HEIGHT / 2));	        
+			if (CENTER_ON_PLAYER && player1 != null) {
+				xOffset = - ((int) player1.getXPos() - (SCREEN_WIDTH / 2));
+				yOffset = - ((int) player1.getYPos() - (SCREEN_HEIGHT / 2));	        
 			}
 
 			paintBackground(g, background);
 
-//			g.setColor(BARRIER_COLOR);
-//			for (Rectangle barrier : barriers) {
-//				g.fillRect((int)barrier.getX() + xOffset,(int) barrier.getY() + yOffset, (int)barrier.getWidth(), (int)barrier.getHeight());       	
-//			}
 
 			for (Sprite staticSprite : sprites) {
 				g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos() + xOffset, (int)staticSprite.getYPos() + yOffset, (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
@@ -316,6 +334,11 @@ public class GameLoop extends JFrame {
 
 		}
 
+		/**
+		 * draws the background of the game
+		 * @param g the graphics object to draw it to
+		 * @param background the background to draw
+		 */
 		private void paintBackground(Graphics g, Background background) {
 			//what tile covers the top-left corner?
 			int xTopLeft = - xOffset;
