@@ -2,9 +2,9 @@ package sprites;
 
 public abstract class Baddie extends Sprite{
 
-	protected int score;
+	protected double score;
 	
-	public Baddie(int score){
+	public Baddie(double score){
 		this.score = score;
 	}
 	
