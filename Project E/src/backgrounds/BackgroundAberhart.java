@@ -12,16 +12,19 @@ public class BackgroundAberhart extends Background {
     private int backgroundWidth = 0;
     private int backgroundHeight = 0;
 
+    /**
+     * a specific background that came with the engine
+     */
     public BackgroundAberhart() {
     	try {
-    		this.aberhart = ImageIO.read(new File("res/aberhart.png"));
-    		this.blank = ImageIO.read(new File("res/blank.png"));
+    		this.aberhart = ImageIO.read(new File("res/backgrounds/aberhart.png"));
+    		this.blank = ImageIO.read(new File("res/backgrounds/blank.png"));
     		backgroundWidth = aberhart.getWidth(null);
     		backgroundHeight = blank.getHeight(null);
     		
     	}
     	catch (IOException e) {
-    		//System.out.println(e.toString());
+    		e.printStackTrace();
     	}		
     }
 	

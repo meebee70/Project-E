@@ -15,19 +15,27 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-
+/**
+ * the main meat of the program, where all the stuff actually happens
+ * @author Mr Wehnes
+ *
+ */
 public class GameLoop extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6025644422779754466L;
 
+	
+	/**
+	 * the speed at which the program should run
+	 */
 	final public static int FRAMES_PER_SECOND = 60;
+	
 	final public static int SCREEN_HEIGHT = 900;
 	final public static int SCREEN_WIDTH = 900;
-	final public static Color BARRIER_COLOR = Color.RED;
 
+	/**
+	 * if the camera should follow the player
+	 */
 	final public static boolean CENTER_ON_PLAYER = false;
 	
     private JPanel panel = null;
@@ -38,9 +46,6 @@ public class GameLoop extends JFrame {
     private static Thread loop;
     private BackgroundAberhart background = new BackgroundAberhart();    
     private KeyboardInput keyboard = new KeyboardInput();
-    
-
-	
 
 	long current_time = 0;								//MILLISECONDS
 	long next_refresh_time = 0;							//MILLISECONDS
@@ -50,13 +55,21 @@ public class GameLoop extends JFrame {
 	long elapsed_time = 0;
 	private boolean isPaused = false;
 
+	/**
+	 * the amount by which the player has moved in the x direction
+	 */
 	int xOffset = 0;
+	/**
+	 * the amount by which the player has moved in the y direction
+	 */
 	int yOffset = 0;
 
 
     ArrayList<Sprite> sprites = new ArrayList<Sprite>();
     ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
-    Sprite me = null;
+    
+    Sprite player1 = null;
+    Sprite player2 = null;
     
     public GameLoop()
     {
@@ -116,7 +129,6 @@ public class GameLoop extends JFrame {
         cp.setComponentZOrder(lblTime, 0);
         cp.setComponentZOrder(btnPauseRun, 0);
         
-        createBarriers();
         createSprites();
         
         setVisible(true); //this should not be touched			    	    
@@ -133,21 +145,39 @@ public class GameLoop extends JFrame {
     	
     }
     
-    private void createBarriers() {
-    }
-    
+    /**
+     * a method used on init to create all the starter sprites that will exist
+     */
     private void createSprites() {
    		
     	sprites.add(new Barrier(500,500));
-    	Player p = new Player();
-    	sprites.add(p);
-    	me = p;
+    	
+    	setPlayer1(new Player());
+    	setPlayer2(new Player());
     	
     	for (Sprite sprite : sprites) {
     		sprite.setSprites(sprites);
     	}
     	
     }
+    /**
+     * sets the new player1 sprite
+     * @param newMe
+     */
+    private void setPlayer1(Sprite newPlayer1){
+    	sprites.add(newPlayer1);
+    	player1 = newPlayer1;
+    }
+    
+    /**
+     * sets the new player2 sprite
+     * @param newPlayer2
+     */
+    private void setPlayer2(Sprite newPlayer2){
+    	sprites.add(newPlayer2);
+    	player1 = newPlayer2;
+    }
+    
 
 
 	public static void main(String[] args)
@@ -166,6 +196,9 @@ public class GameLoop extends JFrame {
 
 	}
 
+	/**
+	 * the main method for the program
+	 */
 	private void gameLoop() {
 		boolean endGame = false;
 		while (!endGame) { // main game loop
@@ -203,8 +236,10 @@ public class GameLoop extends JFrame {
 		}
 	}
 
+	/**
+	 * uses the built in system functions to update the timer
+	 */
 	private void updateTime() {
-
 		current_time = System.currentTimeMillis();
 		actual_delta_time = (isPaused ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
@@ -213,12 +248,19 @@ public class GameLoop extends JFrame {
 		this.lblTime.setText(Long.toString(elapsed_time));
 	}
 
+	
+	/**
+	 * calls all sprites to update themselves according to their own update methods
+	 */
 	private void updateSprites() {
 		for (Sprite sprite : sprites) {
 			sprite.update(keyboard, actual_delta_time);
 		}    	
 	}
 
+	/**
+	 * removes all sprites that need to be "disposed" of
+	 */
 	private void disposeSprites() {
 		for (Sprite sprite : sprites) {
 			if (sprite.getDispose() == true) {
@@ -233,6 +275,10 @@ public class GameLoop extends JFrame {
 		}
 	}
 
+	/**
+	 * pauses the timer when the pause button is clicked
+	 * @param arg0
+	 */
 	protected void btnPauseRun_mouseClicked(MouseEvent arg0) {
 		if (isPaused) {
 			isPaused = false;
@@ -244,6 +290,9 @@ public class GameLoop extends JFrame {
 		}
 	}
 
+	/**
+	 * allows the interface to respond to specific key inputs
+	 */
 	private void handleKeyboardInput() {
 		//if the interface needs to respond to certain keyboard events
 		if (keyboard.keyDown(80) && ! isPaused) {
@@ -254,6 +303,11 @@ public class GameLoop extends JFrame {
 		}
 	}
 
+	/**
+	 * a custom JPanel that can be used for drawing the game more easily
+	 * @author Mr Wehnes
+	 *
+	 */
 	class DrawPanel extends JPanel {
 
 		/**
@@ -261,19 +315,18 @@ public class GameLoop extends JFrame {
 		 */
 		private static final long serialVersionUID = 7200442706585427853L;
 
+		/**
+		 * paints the JPanel
+		 */
 		public void paintComponent(Graphics g)
 		{			 
-			if (CENTER_ON_PLAYER && me != null) {
-				xOffset = - ((int) me.getXPos() - (SCREEN_WIDTH / 2));
-				yOffset = - ((int) me.getYPos() - (SCREEN_HEIGHT / 2));	        
+			if (CENTER_ON_PLAYER && player1 != null) {
+				xOffset = - ((int) player1.getXPos() - (SCREEN_WIDTH / 2));
+				yOffset = - ((int) player1.getYPos() - (SCREEN_HEIGHT / 2));	        
 			}
 
 			paintBackground(g, background);
 
-//			g.setColor(BARRIER_COLOR);
-//			for (Rectangle barrier : barriers) {
-//				g.fillRect((int)barrier.getX() + xOffset,(int) barrier.getY() + yOffset, (int)barrier.getWidth(), (int)barrier.getHeight());       	
-//			}
 
 			for (Sprite staticSprite : sprites) {
 				g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos() + xOffset, (int)staticSprite.getYPos() + yOffset, (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
@@ -281,6 +334,11 @@ public class GameLoop extends JFrame {
 
 		}
 
+		/**
+		 * draws the background of the game
+		 * @param g the graphics object to draw it to
+		 * @param background the background to draw
+		 */
 		private void paintBackground(Graphics g, Background background) {
 			//what tile covers the top-left corner?
 			int xTopLeft = - xOffset;

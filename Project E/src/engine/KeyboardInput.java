@@ -3,7 +3,11 @@ package engine;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
+/**
+ * 
+ * @author Mr Wehnes
+ *
+ */
 public class KeyboardInput implements KeyListener {
         
   private static final int KEY_COUNT = 256;
@@ -20,6 +24,7 @@ public class KeyboardInput implements KeyListener {
   // Polled keyboard state
   private KeyState[] keys = null;
         
+  
   public KeyboardInput() {
     currentKeys = new boolean[ KEY_COUNT ];
     keys = new KeyState[ KEY_COUNT ];
@@ -28,6 +33,9 @@ public class KeyboardInput implements KeyListener {
     }
   }
         
+  /**
+   * updates the states of the pressed keys
+   */
   public synchronized void poll() {
     for( int i = 0; i < KEY_COUNT; ++i ) {
       // Set the key state 
@@ -44,16 +52,29 @@ public class KeyboardInput implements KeyListener {
       }
     }
   }
-        
+   
+  /**
+   * checks if the given jey code is currently being pressed
+   * @param keyCode
+   * @return
+   */
   public boolean keyDown( int keyCode ) {
     return keys[ keyCode ] == KeyState.ONCE ||
            keys[ keyCode ] == KeyState.PRESSED;
   }
         
+  /**
+   * check if the given key code has been pressed down this frame
+   * @param keyCode
+   * @return
+   */
   public boolean keyDownOnce( int keyCode ) {
     return keys[ keyCode ] == KeyState.ONCE;
   }
         
+  /**
+   * internal method to update the boolean array of keydown
+   */
   public synchronized void keyPressed( KeyEvent e ) {
     int keyCode = e.getKeyCode();
 //    System.out.println(e.getKeyCode());
@@ -62,6 +83,9 @@ public class KeyboardInput implements KeyListener {
     }
   }
 
+  /**
+   * internal method to update the boolean array of keydown
+   */
   public synchronized void keyReleased( KeyEvent e ) {
     int keyCode = e.getKeyCode();
     if( keyCode >= 0 && keyCode < KEY_COUNT ) {
@@ -69,7 +93,8 @@ public class KeyboardInput implements KeyListener {
     }
   }
 
-  public void keyTyped( KeyEvent e ) {
-    // Not needed
-  }
+  /**
+   * not required
+   */
+  public void keyTyped( KeyEvent e ) {}
 }
