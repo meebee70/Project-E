@@ -42,9 +42,4 @@ public class Player extends Sprite {
 		return defaultImage;
 	}
 
-	@Override
-	public boolean checkCollisions(double x, double y) {
-		return false;
-	}
-
 }

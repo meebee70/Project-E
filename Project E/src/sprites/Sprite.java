@@ -1,6 +1,5 @@
 package sprites;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import engine.KeyboardInput;
@@ -61,18 +60,18 @@ public abstract class Sprite {
 	public abstract void update(KeyboardInput keyboard, long actual_delta_time);
 	
 	
-	public double getHeight(){
+	public int getHeight(){
 		return IMAGE_HEIGHT;
 	}
-	public double getWidth(){
+	public int getWidth(){
 		return IMAGE_WIDTH;
 	}
 	
-	public final double getXPos(){
-		return currentX;
+	public final int getXPos(){
+		return (int) Math.round(currentX);
 	}
-	public final double getYPos(){
-		return currentY;
+	public final int getYPos(){
+		return (int) Math.round(currentY);
 	}
 	
 	/**
@@ -94,14 +93,24 @@ public abstract class Sprite {
 	 * @param other The object to check the collision with
 	 */
 	public boolean checkCollisions(Sprite other) {
-		return false;
+		//TODO: Test this!
+		boolean bottomLeft, bottomRight, topLeft, topRight;
+		topLeft = isWithin(other.getXPos(), other.getYPos());
+		topRight = isWithin(other.getXPos() + other.getWidth(), other.getYPos());
+		bottomLeft = isWithin(other.getXPos(), other.getYPos() + other.getHeight());
+		bottomRight = isWithin(other.getXPos() + other.getWidth(), other.getYPos() + other.getHeight());
+		
+		return bottomLeft || bottomRight || topLeft || topRight;
 	}
 	
 	/**
 	 * This method is used for determining if a point is within this object's frame perimeter
 	 */
 	private boolean isWithin(int x, int y) {
-		return false;
+		boolean xWithin, yWithin;
+		xWithin = this.getXPos() <= x && x <= this.getXPos() + this.getWidth();
+		yWithin = this.getYPos() <= y && y <= this.getYPos() + this.getHeight();
+		return xWithin && yWithin;
 	}
 	
 }

@@ -35,13 +35,6 @@ public class Barrier extends Sprite{
 	}
 
 
-
-	@Override
-	public boolean checkCollisions(double x, double y) {
-		return false;
-	}
-
-
 	
 	
 }
