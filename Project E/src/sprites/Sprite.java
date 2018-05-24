@@ -103,6 +103,7 @@ public abstract class Sprite {
 		return bottomLeft || bottomRight || topLeft || topRight;
 	}
 	
+	
 	/**
 	 * This method is used for determining if a point is within this object's frame perimeter
 	 */

@@ -68,8 +68,7 @@ public class GameLoop extends JFrame {
     ArrayList<Sprite> sprites = new ArrayList<Sprite>();
     ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
     
-    Sprite player1 = null;
-    Sprite player2 = null;
+    Sprite player1, player2;
     
     public GameLoop()
     {
@@ -152,14 +151,30 @@ public class GameLoop extends JFrame {
    		
     	sprites.add(new Barrier(500,500));
     	
-    	setPlayer1(new Player());
-    	setPlayer2(new Player());
+    	setPlayer1(new Player(this));
+    	setPlayer2(new Player(this));
     	
     	for (Sprite sprite : sprites) {
     		sprite.setSprites(sprites);
     	}
     	
     }
+    
+    /**
+     * Returns all collidable objects on screen
+     */
+    public ArrayList<Barrier> getBarriers() {
+    	ArrayList<Barrier> output = new ArrayList<Barrier>();
+    	for (Sprite sprite : sprites) {
+    		if (sprite instanceof Barrier) {
+    			output.add((Barrier) sprite);
+    		}
+    	}
+    	return output;
+    }
+    
+    
+    
     /**
      * sets the new player1 sprite
      * @param newMe
