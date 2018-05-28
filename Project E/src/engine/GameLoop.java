@@ -111,17 +111,16 @@ public class GameLoop extends JFrame {
         lblTime = new JLabel("000");
         lblTime.setForeground(Color.WHITE);
         lblTime.setFont(new Font("Tahoma", Font.BOLD, 30));
-        lblTime.setBounds(171, 22, 302, 30);
+        lblTime.setBounds(180, 25, 310, 30);
         cp.add(lblTime);
 
         panel.setLayout(null);
         panel.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        //setSize(SCREEN_WIDTH + 20, SCREEN_HEIGHT + 36);
                         
-        lblTimeLabel = new JLabel("Time: ");
+        lblTimeLabel = new JLabel("Score: ");
         lblTimeLabel.setForeground(Color.WHITE);
         lblTimeLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
-        lblTimeLabel.setBounds(78, 22, 97, 30);
+        lblTimeLabel.setBounds(78, 22, 125, 30);
         cp.add(lblTimeLabel);
         
         cp.setComponentZOrder(lblTimeLabel, 0);
@@ -149,7 +148,7 @@ public class GameLoop extends JFrame {
      */
     private void createSprites() {
    		
-    	sprites.add(new Barrier(500,500));
+    	addSprite(new Barrier(500,500));
     	
     	setPlayer1(new Player(this));
     	setPlayer2(new Player(this));
@@ -159,6 +158,7 @@ public class GameLoop extends JFrame {
     	}
     	
     }
+
     
     /**
      * Returns all collidable objects on screen
@@ -211,11 +211,13 @@ public class GameLoop extends JFrame {
 
 	}
 
+	private double score = 0;
+	private boolean endGame = false;
+	
 	/**
 	 * the main method for the program
 	 */
 	private void gameLoop() {
-		boolean endGame = false;
 		while (!endGame) { // main game loop
 
 			/*
@@ -241,6 +243,10 @@ public class GameLoop extends JFrame {
 			handleKeyboardInput();
 
 			//UPDATE STATE
+			
+			score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
+			lblTime.setText(String.valueOf((int)score));
+			
 			updateTime();
 			updateSprites();
 			disposeSprites();
@@ -249,6 +255,10 @@ public class GameLoop extends JFrame {
 			this.repaint();
 
 		}
+	}
+	
+	public void endGame(){
+		endGame = true;
 	}
 
 	/**
@@ -259,8 +269,6 @@ public class GameLoop extends JFrame {
 		actual_delta_time = (isPaused ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
 		elapsed_time += actual_delta_time;
-
-		this.lblTime.setText(Long.toString(elapsed_time));
 	}
 
 	
@@ -271,6 +279,10 @@ public class GameLoop extends JFrame {
 		for (Sprite sprite : sprites) {
 			sprite.update(keyboard, actual_delta_time);
 		}    	
+	}
+	
+	public void addSprite(Sprite s){
+		sprites.add(s);
 	}
 
 	/**
