@@ -1,16 +1,19 @@
 package misc;
 
-public class Constants {
+public final class Constants {
 	
 	//PlayerInputs
-	public static int playerOneLeft = 65;	//A
-	public static int playerOneRight = 68;	//D
-	public static int playerOneUp = 87;		//W
-	public static int playerOneDown = 83;	//S
+	final public static int playerOneLeft = 65;	//A
+	final public static int playerOneRight = 68;	//D
+	final public static int playerOneUp = 87;		//W
+	final public static int playerOneDown = 83;	//S
 	
-	public static int playerTwoLeft = 37;	// <-
-	public static int playerTwoRight = 39;	// ->
-	public static int playerTwoUp = 38;		//Up Arrow
-	public static int playerTwoDown = 40;	//Down Arrow
+	final public static int playerTwoLeft = 37;	// <-
+	final public static int playerTwoRight = 39;	// ->
+	final public static int playerTwoUp = 38;		//Up Arrow
+	final public static int playerTwoDown = 40;	//Down Arrow
+	
+	//Stats
+	final public static double moveSpeed = 2.0;
 	
 }

@@ -2,6 +2,7 @@ package sprites;
 
 import java.awt.Image;
 import java.io.File;
+import java.lang.invoke.ConstantCallSite;
 
 import javax.imageio.ImageIO;
 
@@ -29,31 +30,30 @@ public class Player extends Sprite {
 	
 	@Override
 	public void update(KeyboardInput keyboard, long actual_delta_time) {
-		double xSpeed = 0;
-		double ySpeed = 0;
+		double xDirection = 0.0;
+		double yDirection = 0.0;
 		
 		//Get Inputs
 		if (keyboard.keyDown(Constants.playerOneLeft)){
-			xSpeed--;
+			xDirection--;
 		}
 		if (keyboard.keyDown(Constants.playerOneDown)){
-			ySpeed++;
+			yDirection++;
 		}
 		if (keyboard.keyDown(Constants.playerOneRight)){
-			xSpeed++;
+			xDirection++;
 		}
 		if (keyboard.keyDown(Constants.playerOneUp)){
-			ySpeed--;
+			yDirection--;
 		}
 		
-		this.currentX += xSpeed;
-		this.currentY += ySpeed;
+		this.currentX += xDirection * Constants.moveSpeed;
+		this.currentY += yDirection * Constants.moveSpeed;
 		
 		for (Barrier wall : game.getBarriers()) {
-			if (this.checkCollisions(wall)) {
-				this.currentX -= xSpeed;
-				this.currentY -= ySpeed;
-				break;
+			while (this.checkCollisions(wall)) {
+				this.currentX -= xDirection;
+				this.currentY -= yDirection;
 			}
 		}
 		
