@@ -6,7 +6,8 @@ import backgrounds.BackgroundAberhart;
 import backgrounds.Tile;
 import sprites.Barrier;
 import sprites.Dylan;
-import sprites.Player;
+import sprites.Player1;
+import sprites.Player2;
 import sprites.Sprite;
 
 import java.awt.*;
@@ -152,8 +153,8 @@ public class GameLoop extends JFrame {
     	addSprite(new Barrier(500,500));
     	addSprite(new Dylan(200, 200));
     	
-    	setPlayer1(new Player(this));
-    	setPlayer2(new Player(this));
+    	setPlayer1(new Player1());
+    	setPlayer2(new Player2());
     	
     	for (Sprite sprite : sprites) {
     		sprite.setSprites(sprites);
@@ -192,7 +193,7 @@ public class GameLoop extends JFrame {
      */
     private void setPlayer2(Sprite newPlayer2){
     	sprites.add(newPlayer2);
-    	player1 = newPlayer2;
+    	player2 = newPlayer2;
     }
     
 

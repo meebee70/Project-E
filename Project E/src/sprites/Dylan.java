@@ -15,19 +15,17 @@ public class Dylan extends Baddie {
 	private String spriteLocation = "res/baddies/fireball.png";
 	private static double score = 5.0;
 	private Random generator = new Random();
-	private int targetPlayer;
+	private int targetPlayer = generator.nextInt(2) + 1;
 	
 
 	public Dylan() {
 		super(score);
 		setDefaultImage(spriteLocation);
-		targetPlayer = generator.nextInt(2) + 1;
 	}
 
 	public Dylan(int x, int y) {
 		super(x, y, score);
 		setDefaultImage(spriteLocation);
-		targetPlayer = generator.nextInt(2) + 1;
 	}
 
 	@Override

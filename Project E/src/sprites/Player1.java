@@ -6,24 +6,22 @@ import engine.GameLoop;
 import engine.KeyboardInput;
 import misc.Constants;
 
-public class Player extends Sprite {
+public class Player1 extends Sprite {
 
 	
 	private static double starterX = 300;
 	private static double starterY = 300;
-	private GameLoop game;
 	
-	public Player(GameLoop game){
+	public Player1(){
 		super (starterX, starterY);
-		this.game = game;
 		
 		setDefaultImage("res/character sprites/snake.jpg");
 	}
 	
 	@Override
 	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
-		double xDirection = 0.0;
-		double yDirection = 0.0;
+		int xDirection = 0;
+		int yDirection = 0;
 		
 		//Get Inputs
 		if (keyboard.keyDown(Constants.playerOneLeft)){
@@ -39,6 +37,10 @@ public class Player extends Sprite {
 			yDirection--;
 		}
 		
+		this.move(xDirection, yDirection, game);
+	}
+	
+	protected void move(int xDirection, int yDirection, GameLoop game) {
 		this.currentX += xDirection * Constants.moveSpeed;
 		this.currentY += yDirection * Constants.moveSpeed;
 		
@@ -48,8 +50,6 @@ public class Player extends Sprite {
 				this.currentY -= yDirection;
 			}
 		}
-		
-
 	}
 
 	@Override
