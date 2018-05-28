@@ -1,10 +1,6 @@
 package sprites;
 
 import java.awt.Image;
-import java.io.File;
-import java.lang.invoke.ConstantCallSite;
-
-import javax.imageio.ImageIO;
 
 import engine.GameLoop;
 import engine.KeyboardInput;
@@ -21,15 +17,11 @@ public class Player extends Sprite {
 		super (starterX, starterY);
 		this.game = game;
 		
-		try{
-			setDefaultImage(ImageIO.read(new File("res/character sprites/download.jpg")));
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		setDefaultImage("res/character sprites/snake.jpg");
 	}
 	
 	@Override
-	public void update(KeyboardInput keyboard, long actual_delta_time) {
+	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
 		double xDirection = 0.0;
 		double yDirection = 0.0;
 		

@@ -7,10 +7,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import engine.GameLoop;
 import engine.KeyboardInput;
 /**
  * a generic barrier object that extends sprite so as to be easier to use
- * @author 50071004
+ * @author Chris Kozbial
  *
  */
 public class Barrier extends Sprite{
@@ -42,8 +43,7 @@ public class Barrier extends Sprite{
 	/**
 	 * basic barriers have no need to update their state, as they are static objects in the game
 	 */
-	public void update(KeyboardInput keyboard, long actual_delta_time) {
-		
+	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
 		
 	}
 

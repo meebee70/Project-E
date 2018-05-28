@@ -5,6 +5,7 @@ import backgrounds.Background;
 import backgrounds.BackgroundAberhart;
 import backgrounds.Tile;
 import sprites.Barrier;
+import sprites.Dylan;
 import sprites.Player;
 import sprites.Sprite;
 
@@ -149,6 +150,7 @@ public class GameLoop extends JFrame {
     private void createSprites() {
    		
     	addSprite(new Barrier(500,500));
+    	addSprite(new Dylan(200, 200));
     	
     	setPlayer1(new Player(this));
     	setPlayer2(new Player(this));
@@ -277,7 +279,7 @@ public class GameLoop extends JFrame {
 	 */
 	private void updateSprites() {
 		for (Sprite sprite : sprites) {
-			sprite.update(keyboard, actual_delta_time);
+			sprite.update(keyboard, actual_delta_time, this);
 		}    	
 	}
 	
@@ -401,5 +403,13 @@ public class GameLoop extends JFrame {
 				}
 			}
 		}				
+	}
+
+	public Point getPlayerLocation(int playerID) {
+		if (playerID == 1) {
+			return new Point(player1.getXPos(), player1.getYPos());
+		} else {
+			return new Point(player2.getXPos(), player2.getYPos());
+		}
 	}
 }

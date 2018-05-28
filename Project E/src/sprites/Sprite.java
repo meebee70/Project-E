@@ -1,7 +1,11 @@
 package sprites;
 import java.awt.Image;
+import java.io.File;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
+import engine.GameLoop;
 import engine.KeyboardInput;
 
 public abstract class Sprite {
@@ -38,6 +42,14 @@ public abstract class Sprite {
 		defaultImage = img;
 	}
 	
+	public void setDefaultImage(String location){
+		try{
+			setDefaultImage(ImageIO.read(new File(location)));
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public boolean getDispose() {
 		return dispose;
@@ -57,7 +69,7 @@ public abstract class Sprite {
 //		}
 	}
 
-	public abstract void update(KeyboardInput keyboard, long actual_delta_time);
+	public abstract void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game);
 	
 	
 	public int getHeight(){
