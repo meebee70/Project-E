@@ -229,7 +229,7 @@ public class GameLoop extends JFrame {
 
 			//UPDATE STATE
 			
-			score += ((double)actual_delta_time / 1000)* ((double)elapsed_time / 1000); // adds score based on time elapsed
+			score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
 			lblTime.setText(String.valueOf((int)score));
 			
 			updateTime();
