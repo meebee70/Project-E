@@ -93,23 +93,34 @@ public abstract class Sprite {
 	 * @param other The object to check the collision with
 	 */
 	public boolean checkCollisions(Sprite other) {
-		//TODO: Test this!
-		boolean bottomLeft, bottomRight, topLeft, topRight;
-		topLeft = isWithin(other.getXPos(), other.getYPos());
-		topRight = isWithin(other.getXPos() + other.getWidth(), other.getYPos());
-		bottomLeft = isWithin(other.getXPos(), other.getYPos() + other.getHeight());
-		bottomRight = isWithin(other.getXPos() + other.getWidth(), other.getYPos() + other.getHeight());
-		
-		return bottomLeft || bottomRight || topLeft || topRight;
+		int xPos, yPos, width, height;
+		xPos = other.getXPos();
+		yPos = other.getYPos();
+		width = other.getWidth();
+		height = other.getHeight();
+		if (isWithin(xPos, yPos)) {
+			return true;
+		}
+		if (isWithin(xPos + width, yPos)){
+			return true;
+		}
+		if (isWithin(xPos, yPos + height)){
+			return true;
+		}
+		if (isWithin(xPos + width, yPos + height)){
+			return true;
+		}
+		return false;
 	}
+	
 	
 	/**
 	 * This method is used for determining if a point is within this object's frame perimeter
 	 */
 	private boolean isWithin(int x, int y) {
 		boolean xWithin, yWithin;
-		xWithin = this.getXPos() <= x && x <= this.getXPos() + this.getWidth();
-		yWithin = this.getYPos() <= y && y <= this.getYPos() + this.getHeight();
+		xWithin = this.getXPos() <= x && x < this.getXPos() + this.getWidth();
+		yWithin = this.getYPos() <= y && y < this.getYPos() + this.getHeight();
 		return xWithin && yWithin;
 	}
 	
