@@ -1,8 +1,13 @@
 package sprites;
 import java.awt.Image;
+import java.io.File;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
+import engine.GameLoop;
 import engine.KeyboardInput;
+import misc.Constants;
 
 public abstract class Sprite {
 
@@ -12,6 +17,7 @@ public abstract class Sprite {
 	protected int IMAGE_WIDTH = 50; // sprite.get_width()
 	protected int IMAGE_HEIGHT = 50; //sprite.get_height()
 	private boolean dispose = false;
+	private boolean collidable = false;
 	
 	/**
 	 * a constructor to be used for any object that instantiates at a specific spot
@@ -38,6 +44,14 @@ public abstract class Sprite {
 		defaultImage = img;
 	}
 	
+	public void setDefaultImage(String location){
+		try{
+			setDefaultImage(ImageIO.read(new File(location)));
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public boolean getDispose() {
 		return dispose;
@@ -57,7 +71,7 @@ public abstract class Sprite {
 //		}
 	}
 
-	public abstract void update(KeyboardInput keyboard, long actual_delta_time);
+	public abstract void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game);
 	
 	
 	public int getHeight(){
@@ -86,6 +100,41 @@ public abstract class Sprite {
 	
 	public void setKeyboard(KeyboardInput keyboard){
 		this.keyboard = keyboard;
+	}
+	
+	/**
+	 * Move the sprite in a direction
+	 * Checks whether or not it can collide with objects
+	 * @param xDirection
+	 * @param yDirection
+	 * @param game
+	 */
+	protected void move(int xDistance, int yDistance, GameLoop game) {
+		this.currentX += xDistance;
+		if (this.isCollideable()) {
+			for (Barrier wall : game.getBarriers()) {
+				while (this.checkCollisions(wall)) {
+					this.currentX -= xDistance;
+				}
+			}
+		}
+		
+		this.currentY += yDistance;
+		if (this.isCollideable()) {
+			for (Barrier wall : game.getBarriers()) {
+				while (this.checkCollisions(wall)) {
+					this.currentY -= yDistance;
+				}
+			} 
+		}
+	}
+	
+	public boolean isCollideable() {
+		return this.collidable;
+	}
+	
+	protected void setCollidable(boolean collidable) {
+		this.collidable = collidable;
 	}
 	
 	/**
