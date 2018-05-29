@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import backgrounds.Background;
 import backgrounds.BackgroundAberhart;
+import backgrounds.GameBackGround;
 import backgrounds.Tile;
 import sprites.Barrier;
 import sprites.Dylan;
@@ -46,7 +47,7 @@ public class GameLoop extends JFrame {
     private JLabel lblTime;
 
     private static Thread loop;
-    private BackgroundAberhart background = new BackgroundAberhart();    
+    private Background background = new GameBackGround("res/backgrounds/grass.jpg");    
     private KeyboardInput keyboard = new KeyboardInput();
 
 	long current_time = 0;								//MILLISECONDS
@@ -210,6 +211,7 @@ public class GameLoop extends JFrame {
 				m.gameLoop();
 			}
 		};
+		
 		loop.start();
 
 	}
@@ -370,39 +372,8 @@ public class GameLoop extends JFrame {
 		 * @param background the background to draw
 		 */
 		private void paintBackground(Graphics g, Background background) {
-			//what tile covers the top-left corner?
-			int xTopLeft = - xOffset;
-			int yTopLeft = - yOffset;
-			int row = background.getRow(yTopLeft);
-			int col = background.getCol(xTopLeft);
-			Tile tile = null;
-
-			boolean rowDrawn = false;
-			boolean colDrawn = false;
-			while (colDrawn == false) {
-				while (rowDrawn == false) {
-					tile = background.getTile(col, row);
-					g.drawImage(tile.getImage(), tile.getX() + xOffset, tile.getY() + yOffset, tile.getWidth(), tile.getHeight(), null);
-					//does the RHE of this tile extend past the RHE of the visible area?
-					int rheTile = tile.getX() + xOffset + tile.getWidth();
-					if (rheTile > SCREEN_WIDTH || tile.isOutOfBounds()) {
-						rowDrawn = true;
-					}
-					else {
-						col++;
-					}
-				}
-				//does the bottom edge of this tile extend past the bottom edge of the visible area?
-				int bottomEdgeTile = tile.getY() + yOffset + tile.getHeight();
-				if (bottomEdgeTile > SCREEN_HEIGHT || tile.isOutOfBounds()) {
-					colDrawn = true;
-				}
-				else {
-					col = background.getCol(xTopLeft);
-					row++;
-					rowDrawn = false;
-				}
-			}
+			Tile i = background.getTile(0, 0);
+			g.drawImage(i.getImage(), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, i.getWidth(), i.getHeight(), null);
 		}				
 	}
 
