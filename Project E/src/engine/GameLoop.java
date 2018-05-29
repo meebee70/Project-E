@@ -47,7 +47,7 @@ public class GameLoop extends JFrame {
     private JLabel lblTime;
 
     private static Thread loop;
-    private Background background = new GameBackGround("res/backgrounds/grass.jpg");    
+    private Background background = new GameBackGround("res/backgrounds/8bitGrass.png");    
     private KeyboardInput keyboard = new KeyboardInput();
 
 	long current_time = 0;								//MILLISECONDS
