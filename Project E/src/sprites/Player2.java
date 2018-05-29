@@ -6,13 +6,15 @@ import misc.Constants;
 
 public class Player2 extends Player1 {
 	
+	protected static int starterX = 364;
+	protected static int starterY = 300;
+	
 	public Player2(){
-		super();
+		super(starterX, starterY);
 		setDefaultImage("res/character sprites/snake.jpg");
 	}
 	
-	@Override
-	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
+	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
 		int xDirection = 0;
 		int yDirection = 0;
 		
@@ -30,7 +32,8 @@ public class Player2 extends Player1 {
 			yDirection--;
 		}
 		
-		this.move(xDirection, yDirection, game);
+		this.setXDirection(xDirection);
+		this.setYDirection(yDirection);
 	}
 
 }

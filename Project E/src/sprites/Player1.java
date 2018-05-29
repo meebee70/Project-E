@@ -6,20 +6,29 @@ import engine.GameLoop;
 import engine.KeyboardInput;
 import misc.Constants;
 
-public class Player1 extends Sprite {
+public class Player1 extends MovingSprite {
 
 	
-	private static double starterX = 300;
-	private static double starterY = 300;
+	protected static int starterX = 300;
+	protected static int starterY = 300;
 	
-	public Player1(){
-		super (starterX, starterY);
-		
+	public Player1() {
+		super(starterX, starterY, Constants.moveSpeed);
+		setCollidable(true);
 		setDefaultImage("res/character sprites/snake.jpg");
 	}
 	
-	@Override
-	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
+	public Player1(int starterX, int starterY) {
+		super(starterX, starterY, Constants.moveSpeed);
+		setCollidable(true);
+		setDefaultImage("res/character sprites/snake.jpg");
+	}
+	
+	/**
+	 * Use the keyboard inputs to determin the movement direction
+	 * @param keyboard
+	 */
+	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
 		int xDirection = 0;
 		int yDirection = 0;
 		
@@ -37,22 +46,10 @@ public class Player1 extends Sprite {
 			yDirection--;
 		}
 		
-		this.move(xDirection, yDirection, game);
-	}
-	
-	protected void move(int xDirection, int yDirection, GameLoop game) {
-		this.currentX += xDirection * Constants.moveSpeed;
-		this.currentY += yDirection * Constants.moveSpeed;
-		
-		for (Barrier wall : game.getBarriers()) {
-			while (this.checkCollisions(wall)) {
-				this.currentX -= xDirection;
-				this.currentY -= yDirection;
-			}
-		}
+		this.setXDirection(xDirection);
+		this.setYDirection(yDirection);
 	}
 
-	@Override
 	public Image getImage() {
 		return defaultImage;
 	}

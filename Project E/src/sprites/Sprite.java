@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 
 import engine.GameLoop;
 import engine.KeyboardInput;
+import misc.Constants;
 
 public abstract class Sprite {
 
@@ -16,6 +17,7 @@ public abstract class Sprite {
 	protected int IMAGE_WIDTH = 50; // sprite.get_width()
 	protected int IMAGE_HEIGHT = 50; //sprite.get_height()
 	private boolean dispose = false;
+	private boolean collidable = false;
 	
 	/**
 	 * a constructor to be used for any object that instantiates at a specific spot
@@ -98,6 +100,41 @@ public abstract class Sprite {
 	
 	public void setKeyboard(KeyboardInput keyboard){
 		this.keyboard = keyboard;
+	}
+	
+	/**
+	 * Move the sprite in a direction
+	 * Checks whether or not it can collide with objects
+	 * @param xDirection
+	 * @param yDirection
+	 * @param game
+	 */
+	protected void move(int xDistance, int yDistance, GameLoop game) {
+		this.currentX += xDistance;
+		if (this.isCollideable()) {
+			for (Barrier wall : game.getBarriers()) {
+				while (this.checkCollisions(wall)) {
+					this.currentX -= xDistance;
+				}
+			}
+		}
+		
+		this.currentY += yDistance;
+		if (this.isCollideable()) {
+			for (Barrier wall : game.getBarriers()) {
+				while (this.checkCollisions(wall)) {
+					this.currentY -= yDistance;
+				}
+			} 
+		}
+	}
+	
+	public boolean isCollideable() {
+		return this.collidable;
+	}
+	
+	protected void setCollidable(boolean collidable) {
+		this.collidable = collidable;
 	}
 	
 	/**
