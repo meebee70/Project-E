@@ -3,7 +3,9 @@ import javax.swing.*;
 
 import backgrounds.Background;
 import backgrounds.GameBackGround;
+import backgrounds.ShopBackground;
 import backgrounds.Tile;
+import misc.Constants;
 import misc.Direction;
 import sprites.Barrier;
 import sprites.Dylan;
@@ -34,8 +36,8 @@ public class GameLoop extends JFrame {
 	 */
 	final public static int FRAMES_PER_SECOND = 60;
 	
-	final public static int SCREEN_HEIGHT = 900;
-	final public static int SCREEN_WIDTH = 900;
+	public static int SCREEN_HEIGHT = 900;
+	public static int SCREEN_WIDTH = 900;
 
 	/**
 	 * if the camera should follow the player
@@ -48,25 +50,53 @@ public class GameLoop extends JFrame {
     private JLabel lblTime;
 
     private static Thread loop;
-    private Background background = new GameBackGround("res/backgrounds/8bitGrass.png");    
-    private KeyboardInput keyboard = new KeyboardInput();
 
+    private Background gameBackground = new GameBackGround("res/backgrounds/grass.jpg"); 
+    private Background shopBackground = new ShopBackground("res/backgrounds/money bag.png");
+
+    private KeyboardInput keyboard = new KeyboardInput();
+    
+	private double score = 0;
+	private State gameState = State.running;
+	private State prevState = State.paused;
+	
+	/**
+	 * 
+	 * @author Chris k
+	 *
+	 */
+	private enum State{
+		paused,
+		running,
+		shop,
+		done;
+		
+		public boolean isPaused(){
+			return this == paused;
+		}
+		
+		public boolean isRunning(){
+			return this == running;
+		}
+		
+		public boolean isShopping(){
+			return this == shop;
+		}
+		
+		public boolean isDone(){
+			return this == done;
+		}
+	}
+	
 	long current_time = 0;								//MILLISECONDS
 	long next_refresh_time = 0;							//MILLISECONDS
 	long last_refresh_time = 0;
 	long minimum_delta_time = 1000 / FRAMES_PER_SECOND;	//MILLISECONDS
 	long actual_delta_time = 0;							//MILLISECONDS
 	long elapsed_time = 0;
-	private boolean isPaused = false;
+	//private boolean isPaused = false;
 
-	/**
-	 * the amount by which the player has moved in the x direction
-	 */
-	int xOffset = 0;
-	/**
-	 * the amount by which the player has moved in the y direction
-	 */
-	int yOffset = 0;
+	
 
 
     ArrayList<Sprite> sprites = new ArrayList<Sprite>();
@@ -110,6 +140,7 @@ public class GameLoop extends JFrame {
         
         btnPauseRun.setFont(new Font("Tahoma", Font.BOLD, 12));
         btnPauseRun.setBounds(20, 20, 48, 32);
+        btnPauseRun.setFocusable(false);
         cp.add(btnPauseRun);
         
         lblTime = new JLabel("000");
@@ -219,14 +250,12 @@ public class GameLoop extends JFrame {
 
 	}
 
-	private double score = 0;
-	private boolean endGame = false;
 	
 	/**
 	 * the main method for the program
 	 */
 	private void gameLoop() {
-		while (!endGame) { // main game loop
+		while (!gameState.isDone()) { // main game loop
 
 			/*
 			 * adapted from http://www.java-gaming.org/index.php?topic=24220.0
@@ -247,18 +276,38 @@ public class GameLoop extends JFrame {
 			}
 
 			//read input
-			keyboard.poll();
-			handleKeyboardInput();
+				keyboard.poll();
+				handleKeyboardInput();
 
 			//UPDATE STATE
 			
-			score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
-			lblTime.setText(String.valueOf((int)score));
+			SCREEN_HEIGHT = getHeight();
+			SCREEN_WIDTH = getWidth();
+			panel.setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
 			
-			updateTime();
-			updateSprites();
-			disposeSprites();
-
+			if (gameState.isRunning()){
+				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
+				lblTime.setText(String.valueOf((int)score));
+			
+				if (keyboard.keyDownOnce(Constants.spaceBar)){
+					prevState = gameState;
+					gameState = State.shop;
+					
+				}
+			
+				updateTime();
+				updateSprites();
+				disposeSprites();
+			}
+			
+			else if (gameState.isShopping()){
+				
+				if (keyboard.keyDownOnce(Constants.spaceBar)){
+					gameState = prevState;
+				}
+				
+				
+			}
 			//REFRESH
 			this.repaint();
 
@@ -266,7 +315,7 @@ public class GameLoop extends JFrame {
 	}
 	
 	public void endGame(){
-		endGame = true;
+		gameState = State.done;
 	}
 
 	/**
@@ -274,7 +323,7 @@ public class GameLoop extends JFrame {
 	 */
 	private void updateTime() {
 		current_time = System.currentTimeMillis();
-		actual_delta_time = (isPaused ? 0 : current_time - last_refresh_time);
+		actual_delta_time = (gameState.isPaused() ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
 		elapsed_time += actual_delta_time;
 	}
@@ -287,6 +336,7 @@ public class GameLoop extends JFrame {
 		for (Sprite sprite : sprites) {
 			sprite.update(keyboard, actual_delta_time, this);
 		}    	
+
 	}
 	
 	public void addSprite(Sprite s){
@@ -315,12 +365,12 @@ public class GameLoop extends JFrame {
 	 * @param arg0
 	 */
 	protected void btnPauseRun_mouseClicked(MouseEvent arg0) {
-		if (isPaused) {
-			isPaused = false;
+		if (gameState.isPaused()) {
+			gameState = State.running;
 			this.btnPauseRun.setText("||");
 		}
-		else {
-			isPaused = true;
+		else if (gameState.isRunning()){
+			gameState = State.paused;
 			this.btnPauseRun.setText(">");
 		}
 	}
@@ -330,10 +380,10 @@ public class GameLoop extends JFrame {
 	 */
 	private void handleKeyboardInput() {
 		//if the interface needs to respond to certain keyboard events
-		if (keyboard.keyDown(80) && ! isPaused) {
+		if (keyboard.keyDown(80) && ! (gameState.isPaused())) {
 			btnPauseRun_mouseClicked(null);	
 		}
-		if (keyboard.keyDown(79) && isPaused ) {
+		if (keyboard.keyDown(79) && (gameState.isPaused())) {
 			btnPauseRun_mouseClicked(null);
 		}
 	}
@@ -354,17 +404,17 @@ public class GameLoop extends JFrame {
 		 * paints the JPanel
 		 */
 		public void paintComponent(Graphics g)
-		{			 
-			if (CENTER_ON_PLAYER && player1 != null) {
-				xOffset = - ((int) player1.getXPos() - (SCREEN_WIDTH / 2));
-				yOffset = - ((int) player1.getYPos() - (SCREEN_HEIGHT / 2));	        
+		{
+
+			if (gameState.isRunning() || gameState.isPaused()){
+				paintBackground(g, gameBackground);
+	
+				for (Sprite staticSprite : sprites) {
+					g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos(), (int)staticSprite.getYPos(), (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
+				}
 			}
-
-			paintBackground(g, background);
-
-
-			for (Sprite staticSprite : sprites) {
-				g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos() + xOffset, (int)staticSprite.getYPos() + yOffset, (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
+			else if (gameState.isShopping()){
+				paintBackground(g, shopBackground);
 			}
 
 		}
