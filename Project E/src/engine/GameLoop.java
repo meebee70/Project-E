@@ -8,7 +8,9 @@ import backgrounds.ShopBackground;
 import backgrounds.Tile;
 import misc.Constants;
 import sprites.Barrier;
-import sprites.Player;
+import sprites.Dylan;
+import sprites.Player1;
+import sprites.Player2;
 import sprites.Sprite;
 
 import java.awt.*;
@@ -47,8 +49,10 @@ public class GameLoop extends JFrame {
     private JLabel lblTime;
 
     private static Thread loop;
+
     private Background gameBackground = new GameBackGround("res/backgrounds/grass.jpg"); 
     private Background shopBackground = new ShopBackground("res/backgrounds/money bag.png");
+
     private KeyboardInput keyboard = new KeyboardInput();
     
 	private double score = 0;
@@ -179,9 +183,10 @@ public class GameLoop extends JFrame {
     private void createSprites() {
    		
     	addSprite(new Barrier(500,500));
+    	addSprite(new Dylan(200, 200));
     	
-    	setPlayer1(new Player(this));
-    	setPlayer2(new Player(this));
+    	setPlayer1(new Player1());
+    	setPlayer2(new Player2());
     	
     	for (Sprite sprite : sprites) {
     		sprite.setSprites(sprites);
@@ -220,7 +225,7 @@ public class GameLoop extends JFrame {
      */
     private void setPlayer2(Sprite newPlayer2){
     	sprites.add(newPlayer2);
-    	player1 = newPlayer2;
+    	player2 = newPlayer2;
     }
     
 
@@ -326,8 +331,9 @@ public class GameLoop extends JFrame {
 	 */
 	private void updateSprites() {
 		for (Sprite sprite : sprites) {
-			sprite.update(keyboard, actual_delta_time);
-		}   
+			sprite.update(keyboard, actual_delta_time, this);
+		}    	
+
 	}
 	
 	public void addSprite(Sprite s){
@@ -419,5 +425,13 @@ public class GameLoop extends JFrame {
 			Tile i = background.getTile(0, 0);
 			g.drawImage(i.getImage(), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, i.getWidth(), i.getHeight(), null);
 		}				
+	}
+
+	public Point getPlayerLocation(int playerID) {
+		if (playerID == 1) {
+			return new Point(player1.getXPos(), player1.getYPos());
+		} else {
+			return new Point(player2.getXPos(), player2.getYPos());
+		}
 	}
 }
