@@ -7,17 +7,18 @@ import javax.imageio.ImageIO;
 
 import engine.GameLoop;
 import engine.KeyboardInput;
-import misc.Constants;
 
 public abstract class Sprite {
 
 	protected Image defaultImage;
-	protected double currentX = 0;
-	protected double currentY = 0;
-	protected int IMAGE_WIDTH = 50; // sprite.get_width()
-	protected int IMAGE_HEIGHT = 50; //sprite.get_height()
+	private double currentX = 0;
+	private double currentY = 0;
+	private int IMAGE_WIDTH = 50; // sprite.get_width()
+	private int IMAGE_HEIGHT = 50; //sprite.get_height()
 	private boolean dispose = false;
 	private boolean collidable = false;
+	ArrayList<Sprite> sprites;
+	KeyboardInput keyboard;
 	
 	/**
 	 * a constructor to be used for any object that instantiates at a specific spot
@@ -28,6 +29,7 @@ public abstract class Sprite {
 		currentX = x;
 		currentY = y;
 	}
+	
 	/**
 	 * Instantiate an object at a point with an image
 	 * @param x
@@ -60,8 +62,6 @@ public abstract class Sprite {
 	public void setDispose() {
 		this.dispose = true;
 	}
-	ArrayList<Sprite> sprites;
-	KeyboardInput keyboard;
 		
 	public Sprite() {
 //		try {
@@ -75,10 +75,10 @@ public abstract class Sprite {
 	
 	
 	public int getHeight(){
-		return IMAGE_HEIGHT;
+		return this.IMAGE_HEIGHT;
 	}
 	public int getWidth(){
-		return IMAGE_WIDTH;
+		return this.IMAGE_WIDTH;
 	}
 	
 	public final int getXPos(){
@@ -88,11 +88,24 @@ public abstract class Sprite {
 		return (int) Math.round(currentY);
 	}
 	
+	public final int getCenterX() {
+		return this.getXPos() + this.getWidth() / 2;
+	}
+	
+	public final int getCenterY() {
+		return this.getYPos() + this.getHeight() / 2;
+	}
+	
 	/**
 	 * this methods defines how an object should present itself
 	 * @return the image it is to be displayed as
 	 */
 	public abstract Image getImage();
+	
+	protected void setSize(int width, int height) {
+		this.IMAGE_WIDTH = width;
+		this.IMAGE_HEIGHT = height;
+	}
 	
 	public void setSprites(ArrayList<Sprite> staticSprites){
 		this.sprites = staticSprites;
@@ -113,7 +126,8 @@ public abstract class Sprite {
 		this.currentX += xDistance;
 		if (this.isCollideable()) {
 			for (Barrier wall : game.getBarriers()) {
-				while (this.checkCollisions(wall)) {
+				//Potentially uses lazy evaluation
+				while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
 					this.currentX -= xDistance;
 				}
 			}
@@ -122,7 +136,8 @@ public abstract class Sprite {
 		this.currentY += yDistance;
 		if (this.isCollideable()) {
 			for (Barrier wall : game.getBarriers()) {
-				while (this.checkCollisions(wall)) {
+				//Potentially uses lazy evaluation
+				while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
 					this.currentY -= yDistance;
 				}
 			} 
@@ -147,6 +162,7 @@ public abstract class Sprite {
 		yPos = other.getYPos();
 		width = other.getWidth();
 		height = other.getHeight();
+		
 		if (isWithin(xPos, yPos)) {
 			return true;
 		}
@@ -159,6 +175,7 @@ public abstract class Sprite {
 		if (isWithin(xPos + width, yPos + height)){
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -168,8 +185,8 @@ public abstract class Sprite {
 	 */
 	private boolean isWithin(int x, int y) {
 		boolean xWithin, yWithin;
-		xWithin = this.getXPos() <= x && x < this.getXPos() + this.getWidth();
-		yWithin = this.getYPos() <= y && y < this.getYPos() + this.getHeight();
+		xWithin = this.getXPos() <= x && x <= this.getXPos() + this.getWidth();
+		yWithin = this.getYPos() <= y && y <= this.getYPos() + this.getHeight();
 		return xWithin && yWithin;
 	}
 	

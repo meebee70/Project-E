@@ -12,7 +12,7 @@ import engine.KeyboardInput;
  * @author Alexander Aldridge
  */
 public class Dylan extends Baddie {
-	private String spriteLocation = "res/baddies/fireball.png";
+	private String spriteLocation = "res/baddies/goomba.gif";
 	private static double score = 5.0;
 	private static final double SPEED = 1.0;
 	private Random generator = new Random();
@@ -23,12 +23,14 @@ public class Dylan extends Baddie {
 		super(score, SPEED);
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
+		this.setSize(25, 25);
 	}
 
 	public Dylan(int x, int y) {
 		super(x, y, score, SPEED);
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
+		this.setSize(25, 25);
 	}
 
 	@Override
