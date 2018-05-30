@@ -45,7 +45,8 @@ public class GameLoop extends JFrame {
     private JLabel lblTime;
 
     private static Thread loop;
-    private Background background = new GameBackGround("res/backgrounds/grass.jpg");    
+    private Background gameBackground = new GameBackGround("res/backgrounds/grass.jpg"); 
+    private Background shopBackground = new ShopBackground();
     private KeyboardInput keyboard = new KeyboardInput();
     
 	private double score = 0;
@@ -64,24 +65,19 @@ public class GameLoop extends JFrame {
 		done;
 		
 		public boolean isPaused(){
-			if (this == running){
-				return false;
-			}
-			return true;
+			return this == paused;
 		}
 		
 		public boolean isRunning(){
-			if (this == running){
-				return true;
-			}
-			return false;
+			return this == running;
+		}
+		
+		public boolean isShopping(){
+			return this == shop;
 		}
 		
 		public boolean isDone(){
-			if (this == done){
-				return true;
-			}
-			return false;
+			return this == done;
 		}
 	}
 	
@@ -288,6 +284,12 @@ public class GameLoop extends JFrame {
 				updateSprites();
 				disposeSprites();
 			}
+			
+			else if (gameState.isShopping()){
+				
+				
+				
+			}
 			//REFRESH
 			this.repaint();
 
@@ -385,11 +387,15 @@ public class GameLoop extends JFrame {
 		public void paintComponent(Graphics g)
 		{
 
-			paintBackground(g, background);
-
-
-			for (Sprite staticSprite : sprites) {
-				g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos(), (int)staticSprite.getYPos(), (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
+			if (gameState.isRunning() || gameState.isPaused()){
+				paintBackground(g, gameBackground);
+	
+				for (Sprite staticSprite : sprites) {
+					g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos(), (int)staticSprite.getYPos(), (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
+				}
+			}
+			else if (gameState.isShopping()){
+				
 			}
 
 		}
