@@ -4,7 +4,9 @@ import javax.swing.*;
 import backgrounds.Background;
 import backgrounds.BackgroundAberhart;
 import backgrounds.GameBackGround;
+import backgrounds.ShopBackground;
 import backgrounds.Tile;
+import misc.Constants;
 import sprites.Barrier;
 import sprites.Player;
 import sprites.Sprite;
@@ -46,7 +48,7 @@ public class GameLoop extends JFrame {
 
     private static Thread loop;
     private Background gameBackground = new GameBackGround("res/backgrounds/grass.jpg"); 
-    private Background shopBackground = new ShopBackground();
+    private Background shopBackground = new ShopBackground("res/backgrounds/money bag.png");
     private KeyboardInput keyboard = new KeyboardInput();
     
 	private double score = 0;
@@ -279,6 +281,11 @@ public class GameLoop extends JFrame {
 				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
 				lblTime.setText(String.valueOf((int)score));
 			
+				if (keyboard.keyDownOnce(Constants.spaceBar)){
+					prevState = gameState;
+					gameState = State.shop;
+					
+				}
 			
 				updateTime();
 				updateSprites();
@@ -287,6 +294,9 @@ public class GameLoop extends JFrame {
 			
 			else if (gameState.isShopping()){
 				
+				if (keyboard.keyDownOnce(Constants.spaceBar)){
+					gameState = prevState;
+				}
 				
 				
 			}
@@ -395,7 +405,7 @@ public class GameLoop extends JFrame {
 				}
 			}
 			else if (gameState.isShopping()){
-				
+				paintBackground(g, shopBackground);
 			}
 
 		}

@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 
 public class ShopBackground extends Background {
 
-
 	private Image img;
 	private int width, height;
 	

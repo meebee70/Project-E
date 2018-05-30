@@ -13,6 +13,8 @@ public final class Constants {
 	final public static int playerTwoUp = 38;		//Up Arrow
 	final public static int playerTwoDown = 40;	//Down Arrow
 	
+	final public static int spaceBar = 32;
+	
 	//Stats
 	final public static double moveSpeed = 2.0;
 	
