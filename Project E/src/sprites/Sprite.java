@@ -126,7 +126,8 @@ public abstract class Sprite {
 		this.currentX += xDistance;
 		if (this.isCollideable()) {
 			for (Barrier wall : game.getBarriers()) {
-				while (this.checkCollisions(wall)) {
+				//Potentially uses lazy evaluation
+				while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
 					this.currentX -= xDistance;
 				}
 			}

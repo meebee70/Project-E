@@ -2,11 +2,12 @@ package engine;
 import javax.swing.*;
 
 import backgrounds.Background;
-import backgrounds.BackgroundAberhart;
 import backgrounds.GameBackGround;
 import backgrounds.Tile;
+import misc.Direction;
 import sprites.Barrier;
 import sprites.Dylan;
+import sprites.Fireball;
 import sprites.Player1;
 import sprites.Player2;
 import sprites.Sprite;
@@ -71,7 +72,7 @@ public class GameLoop extends JFrame {
     ArrayList<Sprite> sprites = new ArrayList<Sprite>();
     ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
     
-    Sprite player1, player2;
+    Player1 player1, player2;
     
     public GameLoop()
     {
@@ -157,6 +158,8 @@ public class GameLoop extends JFrame {
     	setPlayer1(new Player1());
     	setPlayer2(new Player2());
     	
+    	addSprite(new Fireball((Player1) player1, Direction.RIGHT));
+    	
     	for (Sprite sprite : sprites) {
     		sprite.setSprites(sprites);
     	}
@@ -183,7 +186,7 @@ public class GameLoop extends JFrame {
      * sets the new player1 sprite
      * @param newMe
      */
-    private void setPlayer1(Sprite newPlayer1){
+    private void setPlayer1(Player1 newPlayer1){
     	sprites.add(newPlayer1);
     	player1 = newPlayer1;
     }
@@ -192,7 +195,7 @@ public class GameLoop extends JFrame {
      * sets the new player2 sprite
      * @param newPlayer2
      */
-    private void setPlayer2(Sprite newPlayer2){
+    private void setPlayer2(Player1 newPlayer2){
     	sprites.add(newPlayer2);
     	player2 = newPlayer2;
     }
