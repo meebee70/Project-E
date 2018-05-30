@@ -51,7 +51,7 @@ public class GameLoop extends JFrame {
 
     private static Thread loop;
 
-    private Background gameBackground = new GameBackGround("res/backgrounds/grass.jpg"); 
+    private Background gameBackground = new GameBackGround("res/backgrounds/8bitGrass.png"); 
     private Background shopBackground = new ShopBackground("res/backgrounds/money bag.png");
 
     private KeyboardInput keyboard = new KeyboardInput();
@@ -288,7 +288,10 @@ public class GameLoop extends JFrame {
 			if (gameState.isRunning()){
 				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
 				lblTime.setText(String.valueOf((int)score));
-			
+				
+				/*
+				 * Add Fireball creation here
+				 */
 				if (keyboard.keyDownOnce(Constants.spaceBar)){
 					prevState = gameState;
 					gameState = State.shop;
@@ -435,6 +438,14 @@ public class GameLoop extends JFrame {
 			return new Point(player1.getXPos(), player1.getYPos());
 		} else {
 			return new Point(player2.getXPos(), player2.getYPos());
+		}
+	}
+	
+	public Point getPlayerLocationCentered(int playerID) {
+		if (playerID == 1) {
+			return new Point(player1.getCenterX(), player1.getCenterY());
+		} else {
+			return new Point(player2.getCenterX(), player2.getCenterY());
 		}
 	}
 }
