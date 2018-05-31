@@ -49,6 +49,10 @@ public class Player1 extends MovingSprite {
 		this.setXDirection(xDirection);
 		this.setYDirection(yDirection);
 	}
+	
+	public void loseLife() {
+		//TODO Lose a life :(
+	}
 
 	public Image getImage() {
 		return defaultImage;

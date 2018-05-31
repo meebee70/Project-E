@@ -189,8 +189,6 @@ public class GameLoop extends JFrame {
 		setPlayer1(new Player1());
 		setPlayer2(new Player2());
 
-		addSprite(new Fireball((Player1) player1, Direction.RIGHT));
-
 		for (Sprite sprite : sprites) {
 			sprite.setSprites(sprites);
 		}
@@ -372,6 +370,10 @@ public class GameLoop extends JFrame {
 
 	public void addSprite(Sprite s){
 		sprites.add(s);
+	}
+	
+	public ArrayList<Sprite> getSprites() {
+		return sprites;
 	}
 
 	/**

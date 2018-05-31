@@ -14,4 +14,8 @@ public abstract class Baddie extends MovingSprite{
 		this.score = score;
 	}
 	
+	public void loseLife() {
+		//TODO Lose a life when hit
+	}
+	
 }
