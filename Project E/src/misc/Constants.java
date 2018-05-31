@@ -13,6 +13,17 @@ public final class Constants {
 	final public static int playerTwoUp = 38;	//Up Arrow
 	final public static int playerTwoDown = 40;	//Down Arrow
 	
+	//FireBalls
+	final public static int playerOneFireLeft = 74;	//J
+	final public static int playerOneFireRight = 76;//L
+	final public static int playerOneFireUp = 73;	//I
+	final public static int playerOneFireDown = 75;	//K
+	
+	final public static int playerTwoFireLeft = 97;	//1
+	final public static int playerTwoFireRight = 99;//3
+	final public static int playerTwoFireUp = 101;	//5
+	final public static int playerTwoFireDown = 98;	//2
+	
 	final public static int spaceBar = 32;
 	
 	//Stats
