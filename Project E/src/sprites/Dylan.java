@@ -44,7 +44,7 @@ public class Dylan extends Baddie {
 
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
-		Point goal = game.getPlayerLocation(targetPlayer);
+		Point goal = game.getPlayerLocationCentered(targetPlayer);
 		int xDirection = 0;
 		int yDirection = 0;
 		if (goal.getX() > this.getXPos()) {

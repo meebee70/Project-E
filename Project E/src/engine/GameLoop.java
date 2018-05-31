@@ -30,12 +30,12 @@ public class GameLoop extends JFrame {
 
 	private static final long serialVersionUID = 6025644422779754466L;
 
-	
+
 	/**
 	 * the speed at which the program should run
 	 */
 	final public static int FRAMES_PER_SECOND = 60;
-	
+
 	public static int SCREEN_HEIGHT = 900;
 	public static int SCREEN_WIDTH = 900;
 
@@ -43,23 +43,23 @@ public class GameLoop extends JFrame {
 	 * if the camera should follow the player
 	 */
 	final public static boolean CENTER_ON_PLAYER = false;
-	
-    private JPanel panel = null;
-    private JButton btnPauseRun;
-    private JLabel lblTimeLabel;
-    private JLabel lblTime;
 
-    private static Thread loop;
+	private JPanel panel = null;
+	private JButton btnPauseRun;
+	private JLabel lblTimeLabel;
+	private JLabel lblTime;
 
-    private Background gameBackground = new GameBackGround("res/backgrounds/grass.jpg"); 
-    private Background shopBackground = new ShopBackground("res/backgrounds/money bag.png");
+	private static Thread loop;
 
-    private KeyboardInput keyboard = new KeyboardInput();
-    
+	private Background gameBackground = new GameBackGround("res/backgrounds/8bitGrass.png"); 
+	private Background shopBackground = new ShopBackground("res/backgrounds/money bag.png");
+
+	private KeyboardInput keyboard = new KeyboardInput();
+
 	private double score = 0;
 	private State gameState = State.running;
 	private State prevState = State.paused;
-	
+
 	/**
 	 * 
 	 * @author Chris k
@@ -70,24 +70,24 @@ public class GameLoop extends JFrame {
 		running,
 		shop,
 		done;
-		
+
 		public boolean isPaused(){
 			return this == paused;
 		}
-		
+
 		public boolean isRunning(){
 			return this == running;
 		}
-		
+
 		public boolean isShopping(){
 			return this == shop;
 		}
-		
+
 		public boolean isDone(){
 			return this == done;
 		}
 	}
-	
+
 	long current_time = 0;								//MILLISECONDS
 	long next_refresh_time = 0;							//MILLISECONDS
 	long last_refresh_time = 0;
@@ -96,141 +96,141 @@ public class GameLoop extends JFrame {
 	long elapsed_time = 0;
 	//private boolean isPaused = false;
 
-	
 
 
-    ArrayList<Sprite> sprites = new ArrayList<Sprite>();
-    ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
-    
-    Player1 player1, player2;
-    
-    public GameLoop()
-    {
-        //super("Space Shooter"); replaced with "init()"
-    	init("Space Shooter");
-    	
-    	
 
-        addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyPressed(KeyEvent arg0) {
-        		keyboard.keyPressed(arg0);
-        	}
-        	@Override
-        	public void keyReleased(KeyEvent arg0) {
-        		keyboard.keyReleased(arg0);
-        	}
-        });
-        this.setFocusable(true);
-        
-        getContentPane().setBackground(Color.WHITE);
-        Container cp = getContentPane();
-        
-        panel = new DrawPanel();
-        cp.add(panel, BorderLayout.CENTER);
-        cp.setLayout(null);
-        
-        btnPauseRun = new JButton("||");
-        btnPauseRun.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent arg0) {
-        		btnPauseRun_mouseClicked(arg0);
-        	}
-        });
-        
-        btnPauseRun.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btnPauseRun.setBounds(20, 20, 48, 32);
-        btnPauseRun.setFocusable(false);
-        cp.add(btnPauseRun);
-        
-        lblTime = new JLabel("000");
-        lblTime.setForeground(Color.WHITE);
-        lblTime.setFont(new Font("Tahoma", Font.BOLD, 30));
-        lblTime.setBounds(180, 25, 310, 30);
-        cp.add(lblTime);
+	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+	ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
 
-        panel.setLayout(null);
-        panel.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-                        
-        lblTimeLabel = new JLabel("Score: ");
-        lblTimeLabel.setForeground(Color.WHITE);
-        lblTimeLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
-        lblTimeLabel.setBounds(78, 22, 125, 30);
-        cp.add(lblTimeLabel);
-        
-        cp.setComponentZOrder(lblTimeLabel, 0);
-        cp.setComponentZOrder(lblTime, 0);
-        cp.setComponentZOrder(btnPauseRun, 0);
-        
-        createSprites();
-        
-        setVisible(true); //this should not be touched			    	    
-    }
-    
-    /**
-     * Initializes all setting of the screen itself
-     * @param title this is the title of the program
-     */
-    private void init(String title){
-    	setTitle(title);
-    	setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    	setDefaultCloseOperation(EXIT_ON_CLOSE);
-    	
-    }
-    
-    /**
-     * a method used on init to create all the starter sprites that will exist
-     */
-    private void createSprites() {
-   		
-    	addSprite(new Barrier(500,500));
-    	addSprite(new Dylan(200, 200));
-    	
-    	setPlayer1(new Player1());
-    	setPlayer2(new Player2());
-    	
-    	addSprite(new Fireball((Player1) player1, Direction.RIGHT));
-    	
-    	for (Sprite sprite : sprites) {
-    		sprite.setSprites(sprites);
-    	}
-    	
-    }
+	Player1 player1, player2;
 
-    
-    /**
-     * Returns all collidable objects on screen
-     */
-    public ArrayList<Barrier> getBarriers() {
-    	ArrayList<Barrier> output = new ArrayList<Barrier>();
-    	for (Sprite sprite : sprites) {
-    		if (sprite instanceof Barrier) {
-    			output.add((Barrier) sprite);
-    		}
-    	}
-    	return output;
-    }
-    
-    
-    
-    /**
-     * sets the new player1 sprite
-     * @param newMe
-     */
-    private void setPlayer1(Player1 newPlayer1){
-    	sprites.add(newPlayer1);
-    	player1 = newPlayer1;
-    }
-    
-    /**
-     * sets the new player2 sprite
-     * @param newPlayer2
-     */
-    private void setPlayer2(Player1 newPlayer2){
-    	sprites.add(newPlayer2);
-    	player2 = newPlayer2;
-    }
-    
+	public GameLoop()
+	{
+		//super("Space Shooter"); replaced with "init()"
+		init("Space Shooter");
+
+
+
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				keyboard.keyPressed(arg0);
+			}
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				keyboard.keyReleased(arg0);
+			}
+		});
+		this.setFocusable(true);
+
+		getContentPane().setBackground(Color.WHITE);
+		Container cp = getContentPane();
+
+		panel = new DrawPanel();
+		cp.add(panel, BorderLayout.CENTER);
+		cp.setLayout(null);
+
+		btnPauseRun = new JButton("||");
+		btnPauseRun.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				btnPauseRun_mouseClicked(arg0);
+			}
+		});
+
+		btnPauseRun.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btnPauseRun.setBounds(20, 20, 48, 32);
+		btnPauseRun.setFocusable(false);
+		cp.add(btnPauseRun);
+
+		lblTime = new JLabel("000");
+		lblTime.setForeground(Color.WHITE);
+		lblTime.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblTime.setBounds(180, 25, 310, 30);
+		cp.add(lblTime);
+
+		panel.setLayout(null);
+		panel.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		lblTimeLabel = new JLabel("Score: ");
+		lblTimeLabel.setForeground(Color.WHITE);
+		lblTimeLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblTimeLabel.setBounds(78, 22, 125, 30);
+		cp.add(lblTimeLabel);
+
+		cp.setComponentZOrder(lblTimeLabel, 0);
+		cp.setComponentZOrder(lblTime, 0);
+		cp.setComponentZOrder(btnPauseRun, 0);
+
+		createSprites();
+
+		setVisible(true); //this should not be touched    	    
+	}
+
+	/**
+	 * Initializes all setting of the screen itself
+	 * @param title this is the title of the program
+	 */
+	private void init(String title){
+		setTitle(title);
+		setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+	}
+
+	/**
+	 * a method used on init to create all the starter sprites that will exist
+	 */
+	private void createSprites() {
+
+		addSprite(new Barrier(500,500));
+		addSprite(new Dylan(200, 200));
+
+		setPlayer1(new Player1());
+		setPlayer2(new Player2());
+
+		addSprite(new Fireball((Player1) player1, Direction.RIGHT));
+
+		for (Sprite sprite : sprites) {
+			sprite.setSprites(sprites);
+		}
+
+	}
+
+
+	/**
+	 * Returns all collidable objects on screen
+	 */
+	public ArrayList<Barrier> getBarriers() {
+		ArrayList<Barrier> output = new ArrayList<Barrier>();
+		for (Sprite sprite : sprites) {
+			if (sprite instanceof Barrier) {
+				output.add((Barrier) sprite);
+			}
+		}
+		return output;
+	}
+
+
+
+	/**
+	 * sets the new player1 sprite
+	 * @param newMe
+	 */
+	private void setPlayer1(Player1 newPlayer1){
+		sprites.add(newPlayer1);
+		player1 = newPlayer1;
+	}
+
+	/**
+	 * sets the new player2 sprite
+	 * @param newPlayer2
+	 */
+	private void setPlayer2(Player1 newPlayer2){
+		sprites.add(newPlayer2);
+		player2 = newPlayer2;
+	}
+
 
 
 	public static void main(String[] args)
@@ -245,12 +245,12 @@ public class GameLoop extends JFrame {
 				m.gameLoop();
 			}
 		};
-		
+
 		loop.start();
 
 	}
 
-	
+
 	/**
 	 * the main method for the program
 	 */
@@ -276,44 +276,75 @@ public class GameLoop extends JFrame {
 			}
 
 			//read input
-				keyboard.poll();
-				handleKeyboardInput();
+			keyboard.poll();
+			handleKeyboardInput();
 
 			//UPDATE STATE
-			
+
 			SCREEN_HEIGHT = getHeight();
 			SCREEN_WIDTH = getWidth();
 			panel.setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
-			
+
 			if (gameState.isRunning()){
 				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
 				lblTime.setText(String.valueOf((int)score));
-			
+
+				this.generateFireballs();
 				if (keyboard.keyDownOnce(Constants.spaceBar)){
 					prevState = gameState;
 					gameState = State.shop;
-					
+
 				}
-			
+
 				updateTime();
 				updateSprites();
 				disposeSprites();
 			}
-			
+
 			else if (gameState.isShopping()){
-				
+
 				if (keyboard.keyDownOnce(Constants.spaceBar)){
 					gameState = prevState;
 				}
-				
-				
+
+
 			}
 			//REFRESH
 			this.repaint();
 
 		}
 	}
-	
+
+	private void generateFireballs() {
+		Direction direction = Direction.NULL;
+		if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
+			direction = Direction.UP;
+		} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
+			direction = Direction.DOWN;
+		} else if (keyboard.keyDownOnce(Constants.playerOneFireRight)) {
+			direction = Direction.RIGHT;
+		} else if (keyboard.keyDownOnce(Constants.playerOneFireLeft)) {
+			direction = Direction.LEFT;
+		}
+		if (direction != Direction.NULL) {
+			this.addSprite(new Fireball(player1, direction));
+		}
+		
+		direction = Direction.NULL;
+		if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
+			direction = Direction.UP;
+		} else if (keyboard.keyDownOnce(Constants.playerTwoFireDown)) {
+			direction = Direction.DOWN;
+		} else if (keyboard.keyDownOnce(Constants.playerTwoFireRight)) {
+			direction = Direction.RIGHT;
+		} else if (keyboard.keyDownOnce(Constants.playerTwoFireLeft)) {
+			direction = Direction.LEFT;
+		}
+		if (direction != Direction.NULL) {
+			this.addSprite(new Fireball(player2, direction));
+		}
+	}
+
 	public void endGame(){
 		gameState = State.done;
 	}
@@ -328,7 +359,7 @@ public class GameLoop extends JFrame {
 		elapsed_time += actual_delta_time;
 	}
 
-	
+
 	/**
 	 * calls all sprites to update themselves according to their own update methods
 	 */
@@ -338,7 +369,7 @@ public class GameLoop extends JFrame {
 		}    	
 
 	}
-	
+
 	public void addSprite(Sprite s){
 		sprites.add(s);
 	}
@@ -408,7 +439,7 @@ public class GameLoop extends JFrame {
 
 			if (gameState.isRunning() || gameState.isPaused()){
 				paintBackground(g, gameBackground);
-	
+
 				for (Sprite staticSprite : sprites) {
 					g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos(), (int)staticSprite.getYPos(), (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
 				}
@@ -435,6 +466,14 @@ public class GameLoop extends JFrame {
 			return new Point(player1.getXPos(), player1.getYPos());
 		} else {
 			return new Point(player2.getXPos(), player2.getYPos());
+		}
+	}
+
+	public Point getPlayerLocationCentered(int playerID) {
+		if (playerID == 1) {
+			return new Point(player1.getCenterX(), player1.getCenterY());
+		} else {
+			return new Point(player2.getCenterX(), player2.getCenterY());
 		}
 	}
 }
