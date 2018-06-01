@@ -42,17 +42,24 @@ public class Fireball extends MovingSprite {
 			ArrayList<Sprite> sprites = game.getSprites();
 			for (Sprite object : sprites) {
 				if (object != this) {
-					if (object.checkCollisions(this)) {
-						System.out.println(object.toString());
-						if (object instanceof Player1) {
-							((Player1) object).loseLife();
+					if (object instanceof Fireball) {
+						object.setCollidable(true);
+						this.setCollidable(true);
+						if (object.checkCollisions(this)) {
 							this.setDispose();
-							break;
-						} else if (object instanceof Baddie) {
-							((Baddie) object).loseLife();
-							this.setDispose();
+							object.setDispose();
 							break;
 						}
+						object.setCollidable(false);
+						this.setCollidable(false);
+					} else if (object.checkCollisions(this)) {
+						if (object instanceof Player1) {
+							((Player1) object).loseLife();
+						} else if (object instanceof Baddie) {
+							((Baddie) object).loseLife();
+						}
+						this.setDispose();
+						break;
 					}
 				}
 			}
@@ -88,6 +95,10 @@ public class Fireball extends MovingSprite {
 	@Override
 	public Image getImage() {
 		return defaultImage;
+	}
+	
+	public String toString() {
+		return "[FireBall]";
 	}
 
 }

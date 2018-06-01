@@ -13,7 +13,7 @@ import engine.KeyboardInput;
  */
 public class Dylan extends Baddie {
 	private String spriteLocation = "res/baddies/goomba.gif";
-	private static double score = 5.0;
+	private static int score = 50;
 	private static final double SPEED = 1.0;
 	private Random generator = new Random();
 	private int targetPlayer = generator.nextInt(2) + 1;

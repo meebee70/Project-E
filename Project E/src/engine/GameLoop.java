@@ -7,6 +7,7 @@ import backgrounds.ShopBackground;
 import backgrounds.Tile;
 import misc.Constants;
 import misc.Direction;
+import sprites.Baddie;
 import sprites.Barrier;
 import sprites.Dylan;
 import sprites.Fireball;
@@ -315,31 +316,35 @@ public class GameLoop extends JFrame {
 
 	private void generateFireballs() {
 		Direction direction = Direction.NULL;
-		if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
-			direction = Direction.UP;
-		} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
-			direction = Direction.DOWN;
-		} else if (keyboard.keyDownOnce(Constants.playerOneFireRight)) {
-			direction = Direction.RIGHT;
-		} else if (keyboard.keyDownOnce(Constants.playerOneFireLeft)) {
-			direction = Direction.LEFT;
-		}
-		if (direction != Direction.NULL) {
-			this.addSprite(new Fireball(player1, direction));
+		if (player1.getDispose() == false) {
+			if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
+				direction = Direction.UP;
+			} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
+				direction = Direction.DOWN;
+			} else if (keyboard.keyDownOnce(Constants.playerOneFireRight)) {
+				direction = Direction.RIGHT;
+			} else if (keyboard.keyDownOnce(Constants.playerOneFireLeft)) {
+				direction = Direction.LEFT;
+			}
+			if (direction != Direction.NULL) {
+				this.addSprite(new Fireball(player1, direction));
+			}
 		}
 		
-		direction = Direction.NULL;
-		if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
-			direction = Direction.UP;
-		} else if (keyboard.keyDownOnce(Constants.playerTwoFireDown)) {
-			direction = Direction.DOWN;
-		} else if (keyboard.keyDownOnce(Constants.playerTwoFireRight)) {
-			direction = Direction.RIGHT;
-		} else if (keyboard.keyDownOnce(Constants.playerTwoFireLeft)) {
-			direction = Direction.LEFT;
-		}
-		if (direction != Direction.NULL) {
-			this.addSprite(new Fireball(player2, direction));
+		if (player1.getDispose() == false) {
+			direction = Direction.NULL;
+			if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
+				direction = Direction.UP;
+			} else if (keyboard.keyDownOnce(Constants.playerTwoFireDown)) {
+				direction = Direction.DOWN;
+			} else if (keyboard.keyDownOnce(Constants.playerTwoFireRight)) {
+				direction = Direction.RIGHT;
+			} else if (keyboard.keyDownOnce(Constants.playerTwoFireLeft)) {
+				direction = Direction.LEFT;
+			}
+			if (direction != Direction.NULL) {
+				this.addSprite(new Fireball(player2, direction));
+			}
 		}
 	}
 
@@ -387,6 +392,9 @@ public class GameLoop extends JFrame {
 		}
 		for (Sprite sprite : spritesToDispose) {
 			sprites.remove(sprite);
+			if (sprite instanceof Baddie) {
+				this.score += ((Baddie) sprite).getScore();
+			}
 		}
 		if (spritesToDispose.size() > 0) {
 			spritesToDispose.clear();

@@ -52,10 +52,15 @@ public class Player1 extends MovingSprite {
 	
 	public void loseLife() {
 		//TODO Lose a life :(
+		this.setDispose();
 	}
 
 	public Image getImage() {
 		return defaultImage;
+	}
+	
+	public String toString() {
+		return "[Player 1]";
 	}
 
 }
