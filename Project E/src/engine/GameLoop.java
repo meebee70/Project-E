@@ -59,6 +59,11 @@ public class GameLoop extends JFrame {
 	private double score = 0;
 	private State gameState = State.running;
 	private State prevState = State.paused;
+	
+	private String[] playerOneUpgrades = {"Move Speed","Fire Rate",""};
+	private String[] playerTwoUpgrades = new String[5];
+	private String[] generalUpgrades = new String[5];
+	
 
 	/**
 	 * 
@@ -288,11 +293,7 @@ public class GameLoop extends JFrame {
 				lblTime.setText(String.valueOf((int)score));
 
 				this.generateFireballs();
-				if (keyboard.keyDownOnce(Constants.spaceBar)){
-					prevState = gameState;
-					gameState = State.shop;
-
-				}
+				
 
 				updateTime();
 				updateSprites();
@@ -301,9 +302,6 @@ public class GameLoop extends JFrame {
 
 			else if (gameState.isShopping()){
 
-				if (keyboard.keyDownOnce(Constants.spaceBar)){
-					gameState = prevState;
-				}
 
 
 			}
@@ -418,6 +416,15 @@ public class GameLoop extends JFrame {
 		}
 		if (keyboard.keyDown(79) && (gameState.isPaused())) {
 			btnPauseRun_mouseClicked(null);
+		}
+		if (keyboard.keyDownOnce(Constants.spaceBar)){
+			if (gameState.isShopping()){
+				gameState = prevState;
+			}else{
+				prevState = gameState;
+				gameState = State.shop;
+			}
+
 		}
 	}
 
