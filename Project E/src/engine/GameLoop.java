@@ -272,7 +272,7 @@ public class GameLoop extends JFrame {
 
 	private void generateFireballs() {
 		Direction direction = Direction.NULL;
-		if (player1.isAlive()) {
+		if (player1.isAlive() && player1.getCooldown() <= 0) {
 			if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
 				direction = Direction.UP;
 			} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
@@ -287,7 +287,7 @@ public class GameLoop extends JFrame {
 			}
 		}
 
-		if (player2.isAlive()) {
+		if (player2.isAlive() && player2.getCooldown() <= 0) {
 			direction = Direction.NULL;
 			if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
 				direction = Direction.UP;
@@ -366,6 +366,14 @@ public class GameLoop extends JFrame {
 
 	public ArrayList<Sprite> getSprites() {
 		return sprites;
+	}
+	
+	public Player1 getPlayer(int playerID) {
+		if (playerID == 1) {
+			return player1;
+		} else {
+			return player2;
+		}
 	}
 
 	/**

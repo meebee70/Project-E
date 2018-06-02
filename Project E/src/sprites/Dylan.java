@@ -37,11 +37,14 @@ public class Dylan extends Baddie {
 	public Image getImage() {
 		return this.defaultImage;
 	}
-	
-	protected void getDirection() {
-		
-	}
 
+	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
+		if (game.getPlayer(targetPlayer).isAlive() == false) {
+			targetPlayer = (targetPlayer + 1) % 2;
+		}
+		super.update(keyboard, actual_delta_time, game);
+	}
+	
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
 		Point goal = game.getPlayerLocationCentered(targetPlayer);

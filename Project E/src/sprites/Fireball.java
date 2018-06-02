@@ -26,6 +26,7 @@ public class Fireball extends MovingSprite {
 		this.setSize(20, 20);
 		this.setWrapAround(true);
 		this.age = 0;
+		player.resetCooldown();
 	}
 	
 	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game){

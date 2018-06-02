@@ -19,24 +19,21 @@ public abstract class MovingSprite extends Sprite{
 		xSpeed = (int) (this.getXDirection() * moveSpeed);
 		ySpeed = (int) (this.yDirection * moveSpeed);
 		
-		this.move(xSpeed, ySpeed, game);
-		
 		if (this.isWrapAround()) {
-			int deltaX = 0;
-			int deltaY = 0;
 			if (this.getXPos() + this.getWidth() < 0) {	//Too far left
-				deltaX += game.SCREEN_WIDTH;
-			} else if (this.getXPos() > game.SCREEN_WIDTH) {//Too far right
-				deltaX -= game.SCREEN_WIDTH;
+				xSpeed += game.SCREEN_WIDTH;
+			} else if (this.getXPos() + this.getWidth() > game.SCREEN_WIDTH) {//Too far right
+				xSpeed -= game.SCREEN_WIDTH;
 			}
 			
-			if (this.getYPos() + this.getWidth() < 0) {
-				deltaY += game.SCREEN_HEIGHT;
-			} else if (this.getYPos() > game.SCREEN_HEIGHT) {
-				deltaY -= game.SCREEN_HEIGHT;
+			if (this.getYPos() + this.getHeight() < 0) {
+				ySpeed += game.SCREEN_HEIGHT;
+			} else if (this.getYPos() + this.getHeight() > game.SCREEN_HEIGHT) {
+				ySpeed -= game.SCREEN_HEIGHT;
 			}
-			this.move(deltaX, deltaY, game);
 		}
+		
+		this.move(xSpeed, ySpeed, game);
 	}
 	
 	protected abstract void setDirection(KeyboardInput keyboard, GameLoop game);
