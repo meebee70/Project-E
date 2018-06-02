@@ -50,6 +50,10 @@ public class Player1 extends MovingSprite {
 		this.setYDirection(yDirection);
 	}
 	
+	public boolean isAlive() {
+		return this.getDispose() == false;
+	}
+	
 	public void loseLife() {
 		//TODO Lose a life :(
 		this.setDispose();

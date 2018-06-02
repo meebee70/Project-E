@@ -17,6 +17,9 @@ public abstract class Sprite {
 	private int IMAGE_HEIGHT = 50; //sprite.get_height()
 	private boolean dispose = false;
 	private boolean collidable = false;
+	private boolean wrapAround = false;
+
+
 	ArrayList<Sprite> sprites;
 	KeyboardInput keyboard;
 	
@@ -61,14 +64,6 @@ public abstract class Sprite {
 
 	public void setDispose() {
 		this.dispose = true;
-	}
-		
-	public Sprite() {
-//		try {
-//			this.image_default = ImageIO.read(new File("res/player-left.png"));
-//		}
-//		catch (IOException e) {
-//		}
 	}
 
 	public abstract void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game);
@@ -189,5 +184,22 @@ public abstract class Sprite {
 		yWithin = this.getYPos() <= y && y <= this.getYPos() + this.getHeight();
 		return xWithin && yWithin;
 	}
+	
+	/**
+	 * Does this sprite wrap around the universe?
+	 * @return
+	 */
+	public boolean isWrapAround() {
+		return wrapAround;
+	}
+	
+	/**
+	 * Set whether or not this sprite wraps around the universe
+	 * @param wrapAround
+	 */
+	public void setWrapAround(boolean wrapAround) {
+		this.wrapAround = wrapAround;
+	}
+	
 	
 }

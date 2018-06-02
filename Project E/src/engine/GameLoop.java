@@ -168,6 +168,22 @@ public class GameLoop extends JFrame {
 		setVisible(true); //this should not be touched    	    
 	}
 
+	public static void main(String[] args)
+	{
+		GameLoop m = new GameLoop();
+
+		loop = new Thread()
+		{
+			public void run()
+			{
+				m.gameLoop();
+			}
+		};
+
+		loop.start();
+
+	}
+	
 	/**
 	 * Initializes all setting of the screen itself
 	 * @param title this is the title of the program
@@ -193,59 +209,6 @@ public class GameLoop extends JFrame {
 		for (Sprite sprite : sprites) {
 			sprite.setSprites(sprites);
 		}
-
-	}
-
-
-	/**
-	 * Returns all collidable objects on screen
-	 */
-	public ArrayList<Barrier> getBarriers() {
-		ArrayList<Barrier> output = new ArrayList<Barrier>();
-		for (Sprite sprite : sprites) {
-			if (sprite instanceof Barrier) {
-				output.add((Barrier) sprite);
-			}
-		}
-		return output;
-	}
-
-
-
-	/**
-	 * sets the new player1 sprite
-	 * @param newMe
-	 */
-	private void setPlayer1(Player1 newPlayer1){
-		sprites.add(newPlayer1);
-		player1 = newPlayer1;
-	}
-
-	/**
-	 * sets the new player2 sprite
-	 * @param newPlayer2
-	 */
-	private void setPlayer2(Player1 newPlayer2){
-		sprites.add(newPlayer2);
-		player2 = newPlayer2;
-	}
-
-
-
-	public static void main(String[] args)
-	{
-		GameLoop m = new GameLoop();
-
-
-		loop = new Thread()
-		{
-			public void run()
-			{
-				m.gameLoop();
-			}
-		};
-
-		loop.start();
 
 	}
 
@@ -292,31 +255,24 @@ public class GameLoop extends JFrame {
 				if (keyboard.keyDownOnce(Constants.spaceBar)){
 					prevState = gameState;
 					gameState = State.shop;
-
 				}
 
 				updateTime();
 				updateSprites();
 				disposeSprites();
-			}
-
-			else if (gameState.isShopping()){
-
+			} else if (gameState.isShopping()){
 				if (keyboard.keyDownOnce(Constants.spaceBar)){
 					gameState = prevState;
 				}
-
-
 			}
 			//REFRESH
 			this.repaint();
-
 		}
 	}
 
 	private void generateFireballs() {
 		Direction direction = Direction.NULL;
-		if (player1.getDispose() == false) {
+		if (player1.isAlive()) {
 			if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
 				direction = Direction.UP;
 			} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
@@ -330,8 +286,8 @@ public class GameLoop extends JFrame {
 				this.addSprite(new Fireball(player1, direction));
 			}
 		}
-		
-		if (player1.getDispose() == false) {
+
+		if (player2.isAlive()) {
 			direction = Direction.NULL;
 			if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
 				direction = Direction.UP;
@@ -372,11 +328,42 @@ public class GameLoop extends JFrame {
 		}    	
 
 	}
+	
+	/**
+	 * Returns all collidable objects on screen
+	 */
+	public ArrayList<Barrier> getBarriers() {
+		ArrayList<Barrier> output = new ArrayList<Barrier>();
+		for (Sprite sprite : sprites) {
+			if (sprite instanceof Barrier) {
+				output.add((Barrier) sprite);
+			}
+		}
+		return output;
+	}
+
+	/**
+	 * sets the new player1 sprite
+	 * @param newMe
+	 */
+	private void setPlayer1(Player1 newPlayer1){
+		sprites.add(newPlayer1);
+		player1 = newPlayer1;
+	}
+
+	/**
+	 * sets the new player2 sprite
+	 * @param newPlayer2
+	 */
+	private void setPlayer2(Player1 newPlayer2){
+		sprites.add(newPlayer2);
+		player2 = newPlayer2;
+	}
 
 	public void addSprite(Sprite s){
 		sprites.add(s);
 	}
-	
+
 	public ArrayList<Sprite> getSprites() {
 		return sprites;
 	}

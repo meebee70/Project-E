@@ -24,18 +24,14 @@ public class Fireball extends MovingSprite {
 		this.direction = direction;
 		this.setDefaultImage("res/character sprites/fireball.png");
 		this.setSize(20, 20);
+		this.setWrapAround(true);
 		this.age = 0;
 	}
 	
 	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game){
 		this.age++;
 		
-		if (this.getXPos() < 0 || this.getYPos() < 0 || this.getXPos() > game.SCREEN_WIDTH || this.getYPos() > game.SCREEN_HEIGHT) {
-			this.setDispose();
-			return;
-		} else {
-			super.update(keyboard, actual_delta_time, game);
-		}
+		super.update(keyboard, actual_delta_time, game);
 		
 		//Does the fireball hit anything?
 		if (age > 30) {
