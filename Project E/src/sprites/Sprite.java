@@ -17,6 +17,9 @@ public abstract class Sprite {
 	private int IMAGE_HEIGHT = 50; //sprite.get_height()
 	private boolean dispose = false;
 	private boolean collidable = false;
+	private boolean wrapAround = false;
+
+
 	ArrayList<Sprite> sprites;
 	KeyboardInput keyboard;
 	
@@ -42,6 +45,35 @@ public abstract class Sprite {
 		defaultImage = img;
 	}
 	
+	/**
+	 * Move the sprite in a direction
+	 * Checks whether or not it can collide with objects
+	 * @param xDirection
+	 * @param yDirection
+	 * @param game
+	 */
+	protected void move(double xDistance, double yDistance, GameLoop game) {
+		this.currentX += xDistance;
+		if (this.isCollideable()) {
+			for (Barrier wall : game.getBarriers()) {
+				//Potentially uses lazy evaluation
+				while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
+					this.currentX -= xDistance;
+				}
+			}
+		}
+		
+		this.currentY += yDistance;
+		if (this.isCollideable()) {
+			for (Barrier wall : game.getBarriers()) {
+				//Potentially uses lazy evaluation
+				while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
+					this.currentY -= yDistance;
+				}
+			} 
+		}
+	}
+	
 	public void setDefaultImage(Image img){
 		defaultImage = img;
 	}
@@ -62,14 +94,6 @@ public abstract class Sprite {
 	public void setDispose() {
 		this.dispose = true;
 	}
-		
-	public Sprite() {
-//		try {
-//			this.image_default = ImageIO.read(new File("res/player-left.png"));
-//		}
-//		catch (IOException e) {
-//		}
-	}
 
 	public abstract void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game);
 	
@@ -89,11 +113,11 @@ public abstract class Sprite {
 	}
 	
 	public final int getCenterX() {
-		return this.getXPos() + this.getWidth() / 2;
+		return this.getXPos() + (this.getWidth() / 2);
 	}
 	
 	public final int getCenterY() {
-		return this.getYPos() + this.getHeight() / 2;
+		return this.getYPos() + (this.getHeight() / 2);
 	}
 	
 	/**
@@ -113,35 +137,6 @@ public abstract class Sprite {
 	
 	public void setKeyboard(KeyboardInput keyboard){
 		this.keyboard = keyboard;
-	}
-	
-	/**
-	 * Move the sprite in a direction
-	 * Checks whether or not it can collide with objects
-	 * @param xDirection
-	 * @param yDirection
-	 * @param game
-	 */
-	protected void move(int xDistance, int yDistance, GameLoop game) {
-		this.currentX += xDistance;
-		if (this.isCollideable()) {
-			for (Barrier wall : game.getBarriers()) {
-				//Potentially uses lazy evaluation
-				while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
-					this.currentX -= xDistance;
-				}
-			}
-		}
-		
-		this.currentY += yDistance;
-		if (this.isCollideable()) {
-			for (Barrier wall : game.getBarriers()) {
-				//Potentially uses lazy evaluation
-				while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
-					this.currentY -= yDistance;
-				}
-			} 
-		}
 	}
 	
 	public boolean isCollideable() {
@@ -185,9 +180,26 @@ public abstract class Sprite {
 	 */
 	private boolean isWithin(int x, int y) {
 		boolean xWithin, yWithin;
-		xWithin = this.getXPos() <= x && x <= this.getXPos() + this.getWidth();
-		yWithin = this.getYPos() <= y && y <= this.getYPos() + this.getHeight();
+		xWithin = this.getXPos() < x && x <= this.getXPos() + this.getWidth();
+		yWithin = this.getYPos() < y && y <= this.getYPos() + this.getHeight();
 		return xWithin && yWithin;
 	}
+	
+	/**
+	 * Does this sprite wrap around the universe?
+	 * @return
+	 */
+	public boolean isWrapAround() {
+		return wrapAround;
+	}
+	
+	/**
+	 * Set whether or not this sprite wraps around the universe
+	 * @param wrapAround
+	 */
+	public void setWrapAround(boolean wrapAround) {
+		this.wrapAround = wrapAround;
+	}
+	
 	
 }

@@ -7,6 +7,7 @@ import backgrounds.ShopBackground;
 import backgrounds.Tile;
 import misc.Constants;
 import misc.Direction;
+import sprites.Baddie;
 import sprites.Barrier;
 import sprites.Dylan;
 import sprites.Fireball;
@@ -36,8 +37,8 @@ public class GameLoop extends JFrame {
 	 */
 	final public static int FRAMES_PER_SECOND = 60;
 
-	public static int SCREEN_HEIGHT = 900;
-	public static int SCREEN_WIDTH = 900;
+	public int SCREEN_HEIGHT = 900;
+	public int SCREEN_WIDTH = 900;
 
 	/**
 	 * if the camera should follow the player
@@ -65,7 +66,7 @@ public class GameLoop extends JFrame {
 	 * @author Chris k
 	 *
 	 */
-	private enum State{
+	private enum State{	//So like why is this here instead of it's own class?
 		paused,
 		running,
 		shop,
@@ -96,16 +97,12 @@ public class GameLoop extends JFrame {
 	long elapsed_time = 0;
 	//private boolean isPaused = false;
 
-
-
-
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 	ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
 
 	Player1 player1, player2;
 
-	public GameLoop()
-	{
+	public GameLoop() {
 		//super("Space Shooter"); replaced with "init()"
 		init("Space Shooter");
 
@@ -167,6 +164,22 @@ public class GameLoop extends JFrame {
 		setVisible(true); //this should not be touched    	    
 	}
 
+	public static void main(String[] args)
+	{
+		GameLoop m = new GameLoop();
+
+		loop = new Thread()
+		{
+			public void run()
+			{
+				m.gameLoop();
+			}
+		};
+
+		loop.start();
+
+	}
+	
 	/**
 	 * Initializes all setting of the screen itself
 	 * @param title this is the title of the program
@@ -192,59 +205,6 @@ public class GameLoop extends JFrame {
 		for (Sprite sprite : sprites) {
 			sprite.setSprites(sprites);
 		}
-
-	}
-
-
-	/**
-	 * Returns all collidable objects on screen
-	 */
-	public ArrayList<Barrier> getBarriers() {
-		ArrayList<Barrier> output = new ArrayList<Barrier>();
-		for (Sprite sprite : sprites) {
-			if (sprite instanceof Barrier) {
-				output.add((Barrier) sprite);
-			}
-		}
-		return output;
-	}
-
-
-
-	/**
-	 * sets the new player1 sprite
-	 * @param newMe
-	 */
-	private void setPlayer1(Player1 newPlayer1){
-		sprites.add(newPlayer1);
-		player1 = newPlayer1;
-	}
-
-	/**
-	 * sets the new player2 sprite
-	 * @param newPlayer2
-	 */
-	private void setPlayer2(Player1 newPlayer2){
-		sprites.add(newPlayer2);
-		player2 = newPlayer2;
-	}
-
-
-
-	public static void main(String[] args)
-	{
-		GameLoop m = new GameLoop();
-
-
-		loop = new Thread()
-		{
-			public void run()
-			{
-				m.gameLoop();
-			}
-		};
-
-		loop.start();
 
 	}
 
@@ -291,58 +251,55 @@ public class GameLoop extends JFrame {
 				if (keyboard.keyDownOnce(Constants.spaceBar)){
 					prevState = gameState;
 					gameState = State.shop;
-
 				}
 
 				updateTime();
 				updateSprites();
 				disposeSprites();
-			}
-
-			else if (gameState.isShopping()){
-
+			} else if (gameState.isShopping()){
 				if (keyboard.keyDownOnce(Constants.spaceBar)){
 					gameState = prevState;
 				}
-
-
 			}
 			//REFRESH
 			this.repaint();
-
 		}
 	}
 
 	private void generateFireballs() {
 		Direction direction = Direction.NULL;
-		if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
-			direction = Direction.UP;
-		} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
-			direction = Direction.DOWN;
-		} else if (keyboard.keyDownOnce(Constants.playerOneFireRight)) {
-			direction = Direction.RIGHT;
-		} else if (keyboard.keyDownOnce(Constants.playerOneFireLeft)) {
-			direction = Direction.LEFT;
+		if (player1.isAlive() && player1.getCooldown() <= 0) {
+			if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
+				direction = Direction.UP;
+			} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
+				direction = Direction.DOWN;
+			} else if (keyboard.keyDownOnce(Constants.playerOneFireRight)) {
+				direction = Direction.RIGHT;
+			} else if (keyboard.keyDownOnce(Constants.playerOneFireLeft)) {
+				direction = Direction.LEFT;
+			}
+			if (direction != Direction.NULL) {
+				this.addSprite(new Fireball(player1, direction));
+			}
 		}
-		if (direction != Direction.NULL) {
-			this.addSprite(new Fireball(player1, direction));
-		}
-		
-		direction = Direction.NULL;
-		if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
-			direction = Direction.UP;
-		} else if (keyboard.keyDownOnce(Constants.playerTwoFireDown)) {
-			direction = Direction.DOWN;
-		} else if (keyboard.keyDownOnce(Constants.playerTwoFireRight)) {
-			direction = Direction.RIGHT;
-		} else if (keyboard.keyDownOnce(Constants.playerTwoFireLeft)) {
-			direction = Direction.LEFT;
-		}
-		if (direction != Direction.NULL) {
-			this.addSprite(new Fireball(player2, direction));
+
+		if (player2.isAlive() && player2.getCooldown() <= 0) {
+			direction = Direction.NULL;
+			if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
+				direction = Direction.UP;
+			} else if (keyboard.keyDownOnce(Constants.playerTwoFireDown)) {
+				direction = Direction.DOWN;
+			} else if (keyboard.keyDownOnce(Constants.playerTwoFireRight)) {
+				direction = Direction.RIGHT;
+			} else if (keyboard.keyDownOnce(Constants.playerTwoFireLeft)) {
+				direction = Direction.LEFT;
+			}
+			if (direction != Direction.NULL) {
+				this.addSprite(new Fireball(player2, direction));
+			}
 		}
 	}
-
+	
 	public void endGame(){
 		gameState = State.done;
 	}
@@ -367,13 +324,52 @@ public class GameLoop extends JFrame {
 		}    	
 
 	}
+	
+	/**
+	 * Returns all collidable objects on screen
+	 */
+	public ArrayList<Barrier> getBarriers() {
+		ArrayList<Barrier> output = new ArrayList<Barrier>();
+		for (Sprite sprite : sprites) {
+			if (sprite instanceof Barrier) {
+				output.add((Barrier) sprite);
+			}
+		}
+		return output;
+	}
+
+	/**
+	 * sets the new player1 sprite
+	 * @param newMe
+	 */
+	private void setPlayer1(Player1 newPlayer1){
+		sprites.add(newPlayer1);
+		player1 = newPlayer1;
+	}
+
+	/**
+	 * sets the new player2 sprite
+	 * @param newPlayer2
+	 */
+	private void setPlayer2(Player1 newPlayer2){
+		sprites.add(newPlayer2);
+		player2 = newPlayer2;
+	}
 
 	public void addSprite(Sprite s){
 		sprites.add(s);
 	}
-	
+
 	public ArrayList<Sprite> getSprites() {
 		return sprites;
+	}
+	
+	public Player1 getPlayer(int playerID) {
+		if (playerID == 1) {
+			return player1;
+		} else {
+			return player2;
+		}
 	}
 
 	/**
@@ -387,6 +383,9 @@ public class GameLoop extends JFrame {
 		}
 		for (Sprite sprite : spritesToDispose) {
 			sprites.remove(sprite);
+			if (sprite instanceof Baddie) {
+				this.score += ((Baddie) sprite).getScore();
+			}
 		}
 		if (spritesToDispose.size() > 0) {
 			spritesToDispose.clear();
@@ -464,18 +463,12 @@ public class GameLoop extends JFrame {
 	}
 
 	public Point getPlayerLocation(int playerID) {
-		if (playerID == 1) {
-			return new Point(player1.getXPos(), player1.getYPos());
-		} else {
-			return new Point(player2.getXPos(), player2.getYPos());
-		}
+		Player1 selectedPlayer = this.getPlayer(playerID);
+		return new Point(selectedPlayer.getXPos(), selectedPlayer.getYPos());
 	}
 
 	public Point getPlayerLocationCentered(int playerID) {
-		if (playerID == 1) {
-			return new Point(player1.getCenterX(), player1.getCenterY());
-		} else {
-			return new Point(player2.getCenterX(), player2.getCenterY());
-		}
+		Player1 selectedPlayer = this.getPlayer(playerID);
+		return new Point(selectedPlayer.getCenterX(), selectedPlayer.getCenterY());
 	}
 }

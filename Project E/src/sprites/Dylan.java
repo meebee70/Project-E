@@ -13,7 +13,7 @@ import engine.KeyboardInput;
  */
 public class Dylan extends Baddie {
 	private String spriteLocation = "res/baddies/goomba.gif";
-	private static double score = 5.0;
+	private static int score = 50;
 	private static final double SPEED = 1.0;
 	private Random generator = new Random();
 	private int targetPlayer = generator.nextInt(2) + 1;
@@ -24,6 +24,7 @@ public class Dylan extends Baddie {
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(25, 25);
+		this.setWrapAround(true);
 	}
 
 	public Dylan(int x, int y) {
@@ -31,17 +32,21 @@ public class Dylan extends Baddie {
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(25, 25);
+		this.setWrapAround(true);
 	}
 
 	@Override
 	public Image getImage() {
 		return this.defaultImage;
 	}
-	
-	protected void getDirection() {
-		
-	}
 
+	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
+		if (game.getPlayer(targetPlayer).isAlive() == false) {
+			targetPlayer = (targetPlayer + 1) % 2;
+		}
+		super.update(keyboard, actual_delta_time, game);
+	}
+	
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
 		Point goal = game.getPlayerLocationCentered(targetPlayer);
