@@ -37,8 +37,8 @@ public class GameLoop extends JFrame {
 	 */
 	final public static int FRAMES_PER_SECOND = 60;
 
-	public static int SCREEN_HEIGHT = 900;
-	public static int SCREEN_WIDTH = 900;
+	public int SCREEN_HEIGHT = 900;
+	public int SCREEN_WIDTH = 900;
 
 	/**
 	 * if the camera should follow the player
@@ -66,7 +66,7 @@ public class GameLoop extends JFrame {
 	 * @author Chris k
 	 *
 	 */
-	private enum State{
+	private enum State{	//So like why is this here instead of it's own class?
 		paused,
 		running,
 		shop,
@@ -97,16 +97,12 @@ public class GameLoop extends JFrame {
 	long elapsed_time = 0;
 	//private boolean isPaused = false;
 
-
-
-
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 	ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
 
 	Player1 player1, player2;
 
-	public GameLoop()
-	{
+	public GameLoop() {
 		//super("Space Shooter"); replaced with "init()"
 		init("Space Shooter");
 
@@ -303,7 +299,7 @@ public class GameLoop extends JFrame {
 			}
 		}
 	}
-
+	
 	public void endGame(){
 		gameState = State.done;
 	}
@@ -467,18 +463,12 @@ public class GameLoop extends JFrame {
 	}
 
 	public Point getPlayerLocation(int playerID) {
-		if (playerID == 1) {
-			return new Point(player1.getXPos(), player1.getYPos());
-		} else {
-			return new Point(player2.getXPos(), player2.getYPos());
-		}
+		Player1 selectedPlayer = this.getPlayer(playerID);
+		return new Point(selectedPlayer.getXPos(), selectedPlayer.getYPos());
 	}
 
 	public Point getPlayerLocationCentered(int playerID) {
-		if (playerID == 1) {
-			return new Point(player1.getCenterX(), player1.getCenterY());
-		} else {
-			return new Point(player2.getCenterX(), player2.getCenterY());
-		}
+		Player1 selectedPlayer = this.getPlayer(playerID);
+		return new Point(selectedPlayer.getCenterX(), selectedPlayer.getCenterY());
 	}
 }

@@ -7,7 +7,6 @@ public abstract class Baddie extends MovingSprite{
 	public Baddie(int score, double speed){
 		super(50, 50, speed);
 		this.score = score;
-		this.setWrapAround(true);
 	}
 	
 	public Baddie(int x, int y, int score, double speed){

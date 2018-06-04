@@ -5,8 +5,8 @@ import engine.KeyboardInput;
 
 public abstract class MovingSprite extends Sprite{
 	
-	protected int xSpeed, ySpeed, xDirection, yDirection;
-	private double moveSpeed;
+	protected int xDirection, yDirection;
+	private double moveSpeed, xSpeed, ySpeed;
 	
 	public MovingSprite(int startingX, int startingY, double moveSpeed) {
 		super(startingX, startingY);
@@ -16,8 +16,8 @@ public abstract class MovingSprite extends Sprite{
 	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
 		this.setDirection(keyboard, game);
 		
-		xSpeed = (int) (this.getXDirection() * moveSpeed);
-		ySpeed = (int) (this.yDirection * moveSpeed);
+		xSpeed = this.getXDirection() * moveSpeed;
+		ySpeed = this.yDirection * moveSpeed;
 		
 		if (this.isWrapAround()) {
 			if (this.getXPos() + this.getWidth() < 0) {	//Too far left

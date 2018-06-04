@@ -28,7 +28,7 @@ public final class Constants {
 	
 	//Stats
 	final public static double moveSpeed = 2.5;
-	final public static double fireballSpeed = moveSpeed * 1.2;
+	final public static double fireballSpeed = moveSpeed * 1.6;
 	final public static int shotCooldown = 20;
 	
 }

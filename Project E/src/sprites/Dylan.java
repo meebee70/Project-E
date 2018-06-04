@@ -24,6 +24,7 @@ public class Dylan extends Baddie {
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(25, 25);
+		this.setWrapAround(true);
 	}
 
 	public Dylan(int x, int y) {
@@ -31,6 +32,7 @@ public class Dylan extends Baddie {
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(25, 25);
+		this.setWrapAround(true);
 	}
 
 	@Override
