@@ -55,20 +55,24 @@ public abstract class Sprite {
 	protected void move(double xDistance, double yDistance, GameLoop game) {
 		this.currentX += xDistance;
 		if (this.isCollideable()) {
-			for (Barrier wall : game.getBarriers()) {
-				//Potentially uses lazy evaluation
-				while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
-					this.currentX -= xDistance;
+			for (Sprite wall : game.getBarriers()) {
+				if (wall != this) {
+					//Potentially uses lazy evaluation
+					while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
+						this.currentX -= xDistance;
+					}
 				}
 			}
 		}
 		
 		this.currentY += yDistance;
 		if (this.isCollideable()) {
-			for (Barrier wall : game.getBarriers()) {
-				//Potentially uses lazy evaluation
-				while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
-					this.currentY -= yDistance;
+			for (Sprite wall : game.getBarriers()) {
+				if (wall != this) {
+					//Potentially uses lazy evaluation
+					while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
+						this.currentY -= yDistance;
+					}
 				}
 			} 
 		}

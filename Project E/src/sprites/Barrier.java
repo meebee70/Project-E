@@ -23,6 +23,7 @@ public class Barrier extends Sprite{
 	 */
 	public Barrier(double x, double y){
 		super(x,y);
+		this.setCollidable(true);
 		
 		try {
 			setDefaultImage(ImageIO.read(new File("res/barriers/test barrier.png")));
