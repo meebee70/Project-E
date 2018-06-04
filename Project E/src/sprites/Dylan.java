@@ -15,16 +15,18 @@ public class Dylan extends Baddie {
 	private String spriteLocation = "res/baddies/goomba.gif";
 	private static int score = 50;
 	private static final double SPEED = 1.0;
+	private static final int xDefault = 350;
+	private static final int yDefault = -30;
 	private Random generator = new Random();
 	private int targetPlayer = generator.nextInt(2) + 1;
 	
 
 	public Dylan() {
-		super(score, SPEED);
+		super(xDefault, yDefault, score, SPEED);
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(25, 25);
-		this.setWrapAround(true);
+		this.setCollidable(true);
 	}
 
 	public Dylan(int x, int y) {
@@ -32,7 +34,7 @@ public class Dylan extends Baddie {
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(25, 25);
-		this.setWrapAround(true);
+		this.setCollidable(true);
 	}
 
 	@Override

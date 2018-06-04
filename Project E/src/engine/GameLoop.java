@@ -101,6 +101,7 @@ public class GameLoop extends JFrame {
 	ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
 
 	Player1 player1, player2;
+	BaddieGenerator dylanGenerator = new BaddieGenerator(5, 65);
 
 	public GameLoop() {
 		//super("Space Shooter"); replaced with "init()"
@@ -248,6 +249,9 @@ public class GameLoop extends JFrame {
 				lblTime.setText(String.valueOf((int)score));
 
 				this.generateFireballs();
+				
+				dylanGenerator.update(this);
+				
 				if (keyboard.keyDownOnce(Constants.spaceBar)){
 					prevState = gameState;
 					gameState = State.shop;
@@ -328,11 +332,11 @@ public class GameLoop extends JFrame {
 	/**
 	 * Returns all collidable objects on screen
 	 */
-	public ArrayList<Barrier> getBarriers() {
-		ArrayList<Barrier> output = new ArrayList<Barrier>();
+	public ArrayList<Sprite> getBarriers() {
+		ArrayList<Sprite> output = new ArrayList<Sprite>();
 		for (Sprite sprite : sprites) {
-			if (sprite instanceof Barrier) {
-				output.add((Barrier) sprite);
+			if (sprite.isCollideable()) {
+				output.add(sprite);
 			}
 		}
 		return output;
@@ -470,5 +474,9 @@ public class GameLoop extends JFrame {
 	public Point getPlayerLocationCentered(int playerID) {
 		Player1 selectedPlayer = this.getPlayer(playerID);
 		return new Point(selectedPlayer.getCenterX(), selectedPlayer.getCenterY());
+	}
+	
+	public int getScore() {
+		return (int) this.score;
 	}
 }
