@@ -101,7 +101,7 @@ public class GameLoop extends JFrame {
 	ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
 
 	Player1 player1, player2;
-	BaddieGenerator dylanGenerator = new BaddieGenerator();
+	BaddieGenerator dylanGenerator = new BaddieGenerator(5, 65);
 
 	public GameLoop() {
 		//super("Space Shooter"); replaced with "init()"

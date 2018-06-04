@@ -2,11 +2,6 @@ package sprites;
 
 import java.awt.Image;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import engine.GameLoop;
 import engine.KeyboardInput;
 /**
@@ -25,9 +20,7 @@ public class Barrier extends Sprite{
 		super(x,y);
 		this.setCollidable(true);
 		
-		try {
-			setDefaultImage(ImageIO.read(new File("res/barriers/test barrier.png")));
-		} catch (IOException e) {e.printStackTrace();}
+		setDefaultImage("res/barriers/test barrier.png");
 	}
 	
 	/**
