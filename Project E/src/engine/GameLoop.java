@@ -67,11 +67,13 @@ public class GameLoop extends JFrame {
 	
 
 	/**
-	 * 
+	 * this is all possible "states" the game may exist in, and due to the way the game is set up, other game
+	 * objects need not know the current state of the game.  Should that change, feel free to move this to its
+	 * own class.
 	 * @author Chris k
 	 *
 	 */
-	private enum State{	//So like why is this here instead of it's own class?
+	private enum State{
 		paused,
 		running,
 		shop,
@@ -169,22 +171,6 @@ public class GameLoop extends JFrame {
 
 		setVisible(true); //this should not be touched    	    
 	}
-
-	public static void main(String[] args)
-	{
-		GameLoop m = new GameLoop();
-
-		loop = new Thread()
-		{
-			public void run()
-			{
-				m.gameLoop();
-			}
-		};
-
-		loop.start();
-
-	}
 	
 	/**
 	 * Initializes all setting of the screen itself
@@ -194,9 +180,10 @@ public class GameLoop extends JFrame {
 		setTitle(title);
 		setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 	}
-
+	
 	/**
 	 * a method used on init to create all the starter sprites that will exist
 	 */
@@ -212,8 +199,23 @@ public class GameLoop extends JFrame {
 		}
 
 	}
+	
+	public static void main(String[] args)
+	{
+		GameLoop m = new GameLoop();
 
+		loop = new Thread()
+		{
+			public void run()
+			{
+				m.gameLoop();//why is this it's own thread?
+			}
+		};
 
+		loop.start();
+
+	}
+	
 	/**
 	 * the main method for the program
 	 */
