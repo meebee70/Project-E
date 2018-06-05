@@ -13,7 +13,7 @@ import misc.Constants;
  * @author Alexander Aldridge
  */
 public class Dylan extends Baddie {
-	private static String spriteLocation = "res/baddies/goomba.gif";
+	private static String spriteLocation = "res/baddies/Dylan V2.0.png";
 	private static final int score = 50;
 	private static final double SPEED = Constants.dylanSpeed;
 	private static final int xDefault = 350;
@@ -26,7 +26,7 @@ public class Dylan extends Baddie {
 		super(xDefault, yDefault, score, SPEED);
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
-		this.setSize(25, 25);
+		this.setSize(32, 32);
 		this.setCollidable(true);
 	}
 
