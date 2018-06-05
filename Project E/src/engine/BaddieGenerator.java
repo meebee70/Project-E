@@ -8,11 +8,10 @@ import sprites.Dylan;
 import sprites.Sprite;
 
 public class BaddieGenerator {
-	
-	private final int cyclesPerDylan = 10;
-	private final int hardMax = 35;
+	private final int cyclesPerDylan = 20;
+	private final int hardMax = 50;
 	private int maxBaddies = 5;
-	private int scorePerBaddie = 75;
+	private final int scorePerBaddie = 75;
 	private int cycle = 0;
 	private int baddies = 0;
 	private int usedScore = 0;
@@ -53,8 +52,8 @@ public class BaddieGenerator {
 		}
 		
 		
-		if (cycle % cyclesPerDylan == 0 && baddies <= maxBaddies) {
-			game.addSprite(new Dylan(generator.nextInt(500), -50));
+		if (cycle % cyclesPerDylan == 0 && baddies < maxBaddies) {
+			game.addSprite(new Dylan(generator.nextInt(900), -50));
 		}
 	}
 	

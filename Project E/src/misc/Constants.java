@@ -2,6 +2,8 @@ package misc;
 
 public final class Constants {
 	
+	final public static int FPS = 90;
+	
 	//PlayerInputs
 	final public static int playerOneLeft = 65;	//A
 	final public static int playerOneRight = 68;//D
@@ -27,8 +29,9 @@ public final class Constants {
 	final public static int spaceBar = 32;
 	
 	//Stats
-	final public static double moveSpeed = 2.5;
+	final public static double moveSpeed = 2.5 * 60 / FPS;
 	final public static double fireballSpeed = moveSpeed * 1.6;
-	final public static int shotCooldown = 20;
+	final public static double dylanSpeed = moveSpeed * 0.6;
+	final public static int shotCooldown = 16 * 60 / FPS;
 	
 }

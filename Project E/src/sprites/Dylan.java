@@ -6,18 +6,19 @@ import java.util.Random;
 
 import engine.GameLoop;
 import engine.KeyboardInput;
+import misc.Constants;
 
 /**
  * A basic enemy who chooses a player at random to follow
  * @author Alexander Aldridge
  */
 public class Dylan extends Baddie {
-	private String spriteLocation = "res/baddies/goomba.gif";
-	private static int score = 50;
-	private static final double SPEED = 1.0;
+	private static String spriteLocation = "res/baddies/goomba.gif";
+	private static final int score = 50;
+	private static final double SPEED = Constants.dylanSpeed;
 	private static final int xDefault = 350;
 	private static final int yDefault = -30;
-	private Random generator = new Random();
+	private static Random generator = new Random();
 	private int targetPlayer = generator.nextInt(2) + 1;
 	
 

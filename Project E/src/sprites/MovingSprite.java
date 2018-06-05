@@ -36,6 +36,43 @@ public abstract class MovingSprite extends Sprite{
 		this.move(xSpeed, ySpeed, game);
 	}
 	
+	/**
+	 * Move the sprite in a direction
+	 * Checks whether or not it can collide with objects
+	 * @param xDirection
+	 * @param yDirection
+	 * @param game
+	 */
+	protected void move(double xDistance, double yDistance, GameLoop game) {
+		if (xDistance != 0) {
+			this.addX(xDistance);
+			if (this.isCollideable()) {
+				for (Sprite wall : game.getBarriers()) {
+					if (wall != this) {
+						//Potentially uses lazy evaluation
+						while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
+							this.addX(-xDirection);
+						}
+					}
+				}
+			}
+		}
+		
+		if (yDistance != 0) {
+			this.addY(yDistance);
+			if (this.isCollideable()) {
+				for (Sprite wall : game.getBarriers()) {
+					if (wall != this) {
+						//Potentially uses lazy evaluation
+						while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
+							this.addY(-yDirection);
+						}
+					}
+				} 
+			}
+		}
+	}
+	
 	protected abstract void setDirection(KeyboardInput keyboard, GameLoop game);
 	
 	protected int getXDirection() {

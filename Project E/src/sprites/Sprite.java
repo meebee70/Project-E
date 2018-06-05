@@ -45,43 +45,6 @@ public abstract class Sprite {
 		defaultImage = img;
 	}
 	
-	/**
-	 * Move the sprite in a direction
-	 * Checks whether or not it can collide with objects
-	 * @param xDirection
-	 * @param yDirection
-	 * @param game
-	 */
-	protected void move(double xDistance, double yDistance, GameLoop game) {
-		if (xDistance != 0) {
-			this.currentX += xDistance;
-			if (this.isCollideable()) {
-				for (Sprite wall : game.getBarriers()) {
-					if (wall != this) {
-						//Potentially uses lazy evaluation
-						while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
-							this.currentX -= xDistance;
-						}
-					}
-				}
-			}
-		}
-		
-		if (yDistance != 0) {
-			this.currentY += yDistance;
-			if (this.isCollideable()) {
-				for (Sprite wall : game.getBarriers()) {
-					if (wall != this) {
-						//Potentially uses lazy evaluation
-						while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
-							this.currentY -= yDistance;
-						}
-					}
-				} 
-			}
-		}
-	}
-	
 	public void setDefaultImage(Image img){
 		defaultImage = img;
 	}
@@ -126,6 +89,14 @@ public abstract class Sprite {
 	
 	public final int getCenterY() {
 		return this.getYPos() + (this.getHeight() / 2);
+	}
+	
+	protected void addX(double xDistance) {
+		this.currentX += xDistance;
+	}
+	
+	protected void addY(double yDistance) {
+		this.currentY += yDistance;
 	}
 	
 	/**
