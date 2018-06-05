@@ -17,9 +17,9 @@ public class Player1 extends MovingSprite {
 	public Player1() {
 		super(starterX, starterY, Constants.moveSpeed);
 		setCollidable(true);
-		setDefaultImage("res/character sprites/snake.jpg");
-		this.cooldown = 0;
-		this.setWrapAround(true);
+		setDefaultImage("res/character sprites/player one.png");
+    this.cooldown = 0;
+    this.setWrapAround(true);
 	}
 	
 	public Player1(int starterX, int starterY) {
