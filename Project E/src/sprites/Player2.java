@@ -35,5 +35,9 @@ public class Player2 extends Player1 {
 		this.setXDirection(xDirection);
 		this.setYDirection(yDirection);
 	}
+	
+	public String toString() {
+		return "[Player 2]";
+	}
 
 }

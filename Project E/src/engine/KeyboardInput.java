@@ -77,7 +77,7 @@ public class KeyboardInput implements KeyListener {
    */
   public synchronized void keyPressed( KeyEvent e ) {
     int keyCode = e.getKeyCode();
-    System.out.println(e.getKeyCode());
+//    System.out.println(e.getKeyCode());
     if( keyCode >= 0 && keyCode < KEY_COUNT ) {
       currentKeys[ keyCode ] = true;
     }

@@ -6,24 +6,28 @@ import java.util.Random;
 
 import engine.GameLoop;
 import engine.KeyboardInput;
+import misc.Constants;
 
 /**
  * A basic enemy who chooses a player at random to follow
  * @author Alexander Aldridge
  */
 public class Dylan extends Baddie {
-	private String spriteLocation = "res/baddies/goomba.gif";
-	private static double score = 5.0;
-	private static final double SPEED = 1.0;
-	private Random generator = new Random();
+	private static String spriteLocation = "res/baddies/goomba.gif";
+	private static final int score = 50;
+	private static final double SPEED = Constants.dylanSpeed;
+	private static final int xDefault = 350;
+	private static final int yDefault = -30;
+	private static Random generator = new Random();
 	private int targetPlayer = generator.nextInt(2) + 1;
 	
 
 	public Dylan() {
-		super(score, SPEED);
+		super(xDefault, yDefault, score, SPEED);
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(25, 25);
+		this.setCollidable(true);
 	}
 
 	public Dylan(int x, int y) {
@@ -31,17 +35,21 @@ public class Dylan extends Baddie {
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(25, 25);
+		this.setCollidable(true);
 	}
 
 	@Override
 	public Image getImage() {
 		return this.defaultImage;
 	}
-	
-	protected void getDirection() {
-		
-	}
 
+	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
+		if (game.getPlayer(targetPlayer).isAlive() == false) {
+			targetPlayer = (targetPlayer + 1) % 2;
+		}
+		super.update(keyboard, actual_delta_time, game);
+	}
+	
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
 		Point goal = game.getPlayerLocationCentered(targetPlayer);
