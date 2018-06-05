@@ -24,35 +24,39 @@ public class Fireball extends MovingSprite {
 		this.direction = direction;
 		this.setDefaultImage("res/character sprites/fireball.png");
 		this.setSize(20, 20);
+		this.setWrapAround(true);
 		this.age = 0;
+		player.resetCooldown();
 	}
 	
 	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game){
 		this.age++;
 		
-		if (this.getXPos() < 0 || this.getYPos() < 0 || this.getXPos() > game.SCREEN_WIDTH || this.getYPos() > game.SCREEN_HEIGHT) {
-			this.setDispose();
-			return;
-		} else {
-			super.update(keyboard, actual_delta_time, game);
-		}
+		super.update(keyboard, actual_delta_time, game);
 		
 		//Does the fireball hit anything?
 		if (age > 30) {
 			ArrayList<Sprite> sprites = game.getSprites();
 			for (Sprite object : sprites) {
 				if (object != this) {
-					if (object.checkCollisions(this)) {
-						System.out.println(object.toString());
-						if (object instanceof Player1) {
-							((Player1) object).loseLife();
+					if (object instanceof Fireball) {
+						object.setCollidable(true);
+						this.setCollidable(true);
+						if (object.checkCollisions(this)) {
 							this.setDispose();
-							break;
-						} else if (object instanceof Baddie) {
-							((Baddie) object).loseLife();
-							this.setDispose();
+							object.setDispose();
 							break;
 						}
+						object.setCollidable(false);
+						this.setCollidable(false);
+					} else if (object.checkCollisions(this)) {
+						if (object instanceof Player1) {
+							((Player1) object).loseLife();
+						} else if (object instanceof Baddie) {
+							((Baddie) object).loseLife();
+						}
+						this.setDispose();
+						break;
 					}
 				}
 			}
@@ -88,6 +92,10 @@ public class Fireball extends MovingSprite {
 	@Override
 	public Image getImage() {
 		return defaultImage;
+	}
+	
+	public String toString() {
+		return "[FireBall]";
 	}
 
 }
