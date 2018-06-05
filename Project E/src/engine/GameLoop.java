@@ -19,6 +19,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -61,10 +65,15 @@ public class GameLoop extends JFrame {
 	private State gameState = State.running;
 	private State prevState = State.paused;
 	
-	private String[] playerOneUpgrades = {"Move Speed","Fire Rate",""};
-	private String[] playerTwoUpgrades = new String[5];
-	private String[] generalUpgrades = new String[5];
 	
+	private int selectedRow = 0;
+	private int selectedCol = 0;
+	private String[] playerOneUpgrades = 	{"Move Speed","Fire Rate",""};
+	private String[] playerTwoUpgrades = 	{"Move Speed","Fire Rate",""};
+	private String[] generalUpgrades = 		{"score multiplyer","extra life",""};//these are subject to change
+	
+	private Font shopFont;
+	private Font shopFontBold;
 
 	/**
 	 * 
@@ -112,7 +121,11 @@ public class GameLoop extends JFrame {
 		//super("Space Shooter"); replaced with "init()"
 		init("Space Shooter");
 
-
+		try {
+			shopFont = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("res/retroComputerFont.ttf"))).deriveFont(Font.PLAIN, 20);
+			shopFontBold = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("res/retroComputerFont.ttf"))).deriveFont(Font.BOLD, 25);
+		} catch (Exception e){}
+		
 
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -258,18 +271,12 @@ public class GameLoop extends JFrame {
 
 				dylanGenerator.update(this);
 				
-				if (keyboard.keyDownOnce(Constants.spaceBar)){
-					prevState = gameState;
-					gameState = State.shop;
-				}
 
 				updateTime();
 				updateSprites();
 				disposeSprites();
 			} else if (gameState.isShopping()){
-				if (keyboard.keyDownOnce(Constants.spaceBar)){
-					gameState = prevState;
-				}
+				
 
 			}
 			//REFRESH
@@ -429,15 +436,47 @@ public class GameLoop extends JFrame {
 		if (keyboard.keyDown(79) && (gameState.isPaused())) {
 			btnPauseRun_mouseClicked(null);
 		}
-		if (keyboard.keyDownOnce(Constants.spaceBar)){
+		//System.out.println(keyboard.keyDownOnce(Constants.spaceBar));
+        if (keyboard.keyDownOnce(Constants.spaceBar)){
 			if (gameState.isShopping()){
 				gameState = prevState;
+
+				lblTime.setVisible(true);
+				lblTimeLabel.setVisible(true);
 			}else{
 				prevState = gameState;
 				gameState = State.shop;
+				lblTime.setVisible(false);
+				lblTimeLabel.setVisible(false);
 			}
-
+			
 		}
+        
+        if (gameState.isShopping()){
+        	if (keyboard.keyDownOnce(Constants.playerTwoUp)){
+        		selectedRow--;
+        	}
+        	if (keyboard.keyDownOnce(Constants.playerTwoDown)){
+        		selectedRow++;
+        	}
+        	if (keyboard.keyDownOnce(Constants.playerTwoLeft)){
+        		selectedCol--;
+        	}if (keyboard.keyDownOnce(Constants.playerTwoRight)){
+        		selectedCol++;
+        	}
+        	
+        	if (selectedRow < 0){
+        		selectedRow = generalUpgrades.length-1;
+        	}else if (selectedRow > generalUpgrades.length-1){
+        		selectedRow = 0;
+        	}
+        	
+        	if (selectedCol < 0){
+        		selectedCol = 2;
+        	}else if (selectedCol > 2){
+        		selectedCol = 0;
+        	}
+        }
 	}
 
 	/**
@@ -452,6 +491,10 @@ public class GameLoop extends JFrame {
 		 */
 		private static final long serialVersionUID = 7200442706585427853L;
 
+		private final int LEFT_SHOP_COL = 15;
+		private final int RIGHT_SHOP_COL = 475;
+		private final int CENTER_SHOP_COL = 225;
+		
 		/**
 		 * paints the JPanel
 		 */
@@ -467,6 +510,53 @@ public class GameLoop extends JFrame {
 			}
 			else if (gameState.isShopping()){
 				paintBackground(g, shopBackground);
+				
+				//draw player one upgrades
+				g.setFont(shopFontBold);
+				g.drawString("Player one upgrades", LEFT_SHOP_COL, 100);
+				g.setFont(shopFont);
+				for (int i = 0; i < playerOneUpgrades.length;i++){
+					if (selectedRow == i && selectedCol == 0){
+						g.setFont(shopFontBold);
+						g.setColor(Color.RED);
+						g.drawString(playerOneUpgrades[i], LEFT_SHOP_COL + 25, 150 + 35*i);
+						
+						g.setColor(Color.BLACK);
+						g.setFont(shopFont);
+					}else g.drawString(playerOneUpgrades[i], LEFT_SHOP_COL + 25, 150 + 35*i);
+				}
+				
+				//draw player two upgrades
+				g.setFont(shopFontBold);
+				g.drawString("player two upgrades", RIGHT_SHOP_COL, 100);
+				g.setFont(shopFont);
+				for (int i = 0; i < playerOneUpgrades.length;i++){
+					if (selectedRow == i && selectedCol == 1){
+						g.setFont(shopFontBold);
+						g.setColor(Color.RED);
+						g.drawString(playerOneUpgrades[i], RIGHT_SHOP_COL + 25, 150 + 35*i);
+						
+						g.setColor(Color.BLACK);
+						g.setFont(shopFont);
+					}else g.drawString(playerTwoUpgrades[i], RIGHT_SHOP_COL + 25, 150 + 35*i);
+				}
+				
+				//draw general upgrades
+				g.setFont(shopFontBold);
+				g.drawString("General game upgrades", CENTER_SHOP_COL, 300);
+				g.setFont(shopFont);
+				for (int i = 0; i < playerOneUpgrades.length;i++){
+					if (selectedRow == i && selectedCol == 2){
+						g.setFont(shopFontBold);
+						g.setColor(Color.RED);
+						g.drawString(playerOneUpgrades[i], CENTER_SHOP_COL + 25, 335 + 35*i);
+						
+						g.setColor(Color.BLACK);
+						g.setFont(shopFont);
+					}else g.drawString(generalUpgrades[i], CENTER_SHOP_COL + 25, 335 + 35*i);
+				}
+				
+				
 			}
 
 		}
