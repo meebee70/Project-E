@@ -35,7 +35,7 @@ public class GameLoop extends JFrame {
 	/**
 	 * the speed at which the program should run
 	 */
-	final public static int FRAMES_PER_SECOND = 60;
+	final public static int FRAMES_PER_SECOND = (int) Constants.FPS;
 
 	public int SCREEN_HEIGHT = 900;
 	public int SCREEN_WIDTH = 900;
@@ -105,7 +105,7 @@ public class GameLoop extends JFrame {
 
 	public GameLoop() {
 		//super("Space Shooter"); replaced with "init()"
-		init("Space Shooter");
+		init("Cross-Fire");
 
 
 
@@ -198,7 +198,6 @@ public class GameLoop extends JFrame {
 	private void createSprites() {
 
 		addSprite(new Barrier(500,500));
-		addSprite(new Dylan(200, 200));
 
 		setPlayer1(new Player1());
 		setPlayer2(new Player2());
@@ -257,7 +256,6 @@ public class GameLoop extends JFrame {
 					gameState = State.shop;
 				}
 
-				updateTime();
 				updateSprites();
 				disposeSprites();
 			} else if (gameState.isShopping()){
@@ -316,6 +314,7 @@ public class GameLoop extends JFrame {
 		actual_delta_time = (gameState.isPaused() ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
 		elapsed_time += actual_delta_time;
+		System.out.println(actual_delta_time);
 	}
 
 
