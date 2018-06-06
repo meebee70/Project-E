@@ -11,7 +11,8 @@ public class Player1 extends MovingSprite {
 	
 	private static int starterX = 300;
 	private static int starterY = 300;
-	private int COOLDOWN_MAX = Constants.shotCooldown;
+	private int BASE_COOLDOWN_MAX = Constants.shotCooldown;
+	private int cooldownMax = BASE_COOLDOWN_MAX;
 	private int cooldown;
 	
 	public Player1() {
@@ -76,7 +77,7 @@ public class Player1 extends MovingSprite {
 	}
 	
 	public void resetCooldown() {
-		this.cooldown = COOLDOWN_MAX;
+		this.cooldown = cooldownMax;
 	}
 
 	public Image getImage() {
@@ -85,6 +86,10 @@ public class Player1 extends MovingSprite {
 	
 	public String toString() {
 		return "[Player 1]";
+	}
+	
+	public void setCooldownMult(double newMult){
+		cooldownMax = (int) (BASE_COOLDOWN_MAX / newMult);
 	}
 
 }
