@@ -461,7 +461,8 @@ public class GameLoop extends JFrame {
 			if (gameState.isRunning() || gameState.isPaused()){
 				paintBackground(g, gameBackground);
 
-				for (Sprite staticSprite : sprites) {
+				for (int i = 0; i < sprites.size(); i++) {
+					Sprite staticSprite = sprites.get(i);
 					g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos(), (int)staticSprite.getYPos(), (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
 				}
 			}
