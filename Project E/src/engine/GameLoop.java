@@ -68,9 +68,9 @@ public class GameLoop extends JFrame {
 	
 	private int selectedRow = 0;
 	private int selectedCol = 0;
-	private String[] playerOneUpgrades = 	{"Move Speed","Fire Rate",""};
-	private String[] playerTwoUpgrades = 	{"Move Speed","Fire Rate",""};
-	private String[] generalUpgrades = 		{"score multiplyer","extra life",""};//these are subject to change
+	private String[] playerOneUpgrades = 	{"Move Speed","Fire Rate",};
+	private String[] playerTwoUpgrades = 	{"Move Speed","Fire Rate",};
+	private String[] generalUpgrades = 		{"score multiplyer","extra life",};//these are subject to change
 	
 	private Font shopFont;
 	private Font shopFontBold;
@@ -440,14 +440,15 @@ public class GameLoop extends JFrame {
         if (keyboard.keyDownOnce(Constants.spaceBar)){
 			if (gameState.isShopping()){
 				gameState = prevState;
+				
+				lblTime.setLocation(178, 20);
+				lblTimeLabel.setLocation(78,22);
 
-				lblTime.setVisible(true);
-				lblTimeLabel.setVisible(true);
 			}else{
 				prevState = gameState;
 				gameState = State.shop;
-				lblTime.setVisible(false);
-				lblTimeLabel.setVisible(false);
+				lblTime.setLocation(150, 600);
+				lblTimeLabel.setLocation(50,602);
 			}
 			
 		}
@@ -549,7 +550,7 @@ public class GameLoop extends JFrame {
 					if (selectedRow == i && selectedCol == 2){
 						g.setFont(shopFontBold);
 						g.setColor(Color.RED);
-						g.drawString(playerOneUpgrades[i], CENTER_SHOP_COL + 25, 335 + 35*i);
+						g.drawString(generalUpgrades[i], CENTER_SHOP_COL + 25, 335 + 35*i);
 						
 						g.setColor(Color.BLACK);
 						g.setFont(shopFont);
