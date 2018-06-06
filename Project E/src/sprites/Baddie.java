@@ -16,8 +16,10 @@ public abstract class Baddie extends MovingSprite{
 		this.score = score;
 	}
 	
-	public void loseLife() {
-		this.setDispose();
+	public Baddie(int x, int y, int score, double speed, int lives){
+		super(x,y,speed);
+		this.score = score;
+		setLives(lives);
 	}
 	
 	public int getScore() {

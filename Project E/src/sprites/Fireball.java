@@ -41,19 +41,20 @@ public class Fireball extends MovingSprite {
 						object.setCollidable(true);
 						this.setCollidable(true);
 						if (object.checkCollisions(this)) {
-							this.setDispose();
-							object.setDispose();
+							this.loseLife();
+							object.loseLife();
 							break;
 						}
 						object.setCollidable(false);
 						this.setCollidable(false);
 					} else if (object.checkCollisions(this)) {
-						if (object instanceof Player1) {
-							((Player1) object).loseLife();
-						} else if (object instanceof Baddie) {
-							((Baddie) object).loseLife();
-						}
-						this.setDispose();
+//						if (object instanceof Player1) {
+//							((Player1) object).loseLife();
+//						} else if (object instanceof Baddie) {
+//							((Baddie) object).loseLife();
+//						}
+						object.loseLife();
+						this.loseLife();
 						break;
 					}
 				}

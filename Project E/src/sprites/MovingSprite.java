@@ -6,10 +6,12 @@ import engine.KeyboardInput;
 public abstract class MovingSprite extends Sprite{
 	
 	protected int xDirection, yDirection;
+	private double baseMoveSpeed;
 	private double moveSpeed, xSpeed, ySpeed;
 	
 	public MovingSprite(int startingX, int startingY, double moveSpeed) {
 		super(startingX, startingY);
+		this.baseMoveSpeed = moveSpeed;
 		this.moveSpeed = moveSpeed;
 	}
 	
@@ -90,6 +92,14 @@ public abstract class MovingSprite extends Sprite{
 
 	protected void setYDirection(int yDirection) {
 		this.yDirection = yDirection;
+	}
+	
+	protected void setSpeed(double newSpeed){
+		this.baseMoveSpeed = newSpeed;
+	}
+	
+	public void speedMult(double newMult){
+		this.moveSpeed = baseMoveSpeed * newMult;
 	}
 
 }

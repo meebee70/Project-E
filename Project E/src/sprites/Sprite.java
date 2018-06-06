@@ -18,6 +18,7 @@ public abstract class Sprite {
 	private boolean dispose = false;
 	private boolean collidable = false;
 	private boolean wrapAround = false;
+	protected int lives = 1;
 
 
 	ArrayList<Sprite> sprites;
@@ -62,12 +63,27 @@ public abstract class Sprite {
 		return dispose;
 	}
 
-	public void setDispose() {
-		this.dispose = true;
+	public void loseLife(){
+		this.lives--;
+		
+		if (this.lives < 1){
+			setDispose();
+		}
+	}
+	
+	private void setDispose() {
+		dispose = true;
 	}
 
 	public abstract void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game);
 	
+	public int getLives(){
+		return lives;
+	}
+	
+	public void setLives(int newLives){
+		lives = newLives;
+	}
 	
 	public int getHeight(){
 		return this.IMAGE_HEIGHT;
