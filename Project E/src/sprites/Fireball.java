@@ -43,8 +43,8 @@ public class Fireball extends MovingSprite {
 						object.setCollidable(true);
 						this.setCollidable(true);
 						if (object.checkCollisions(this)) {
-							this.setDispose();
-							object.setDispose();
+							this.loseLife();
+							object.loseLife();
 							break;
 						}
 						object.setCollidable(false);
@@ -56,7 +56,7 @@ public class Fireball extends MovingSprite {
 //							((Baddie) object).loseLife();
 //						}
 						object.loseLife();
-						this.setDispose();
+						this.loseLife();
 						break;
 					}
 				}

@@ -71,7 +71,7 @@ public abstract class Sprite {
 		}
 	}
 	
-	public void setDispose() {
+	private void setDispose() {
 		dispose = true;
 	}
 
