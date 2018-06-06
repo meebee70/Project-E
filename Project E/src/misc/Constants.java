@@ -35,5 +35,6 @@ public final class Constants {
 	final public static double fireballSpeed = moveSpeed * 2.2;
 	final public static double dylanSpeed = moveSpeed * 0.6;
 	final public static int shotCooldown = 30 * 60 / FPS;
+	final public static int snowmanTeleportCooldown = 60 * 5;
 	
 }

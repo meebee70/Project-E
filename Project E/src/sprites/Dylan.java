@@ -43,11 +43,11 @@ public class Dylan extends Baddie {
 		return this.defaultImage;
 	}
 
-	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
+	public void update(KeyboardInput keyboard, GameLoop game) {
 		if (game.getPlayer(targetPlayer).isAlive() == false) {
 			targetPlayer = (targetPlayer + 1) % 2;
 		}
-		super.update(keyboard, actual_delta_time, game);
+		super.update(keyboard, game);
 	}
 	
 	@Override
@@ -78,7 +78,6 @@ public class Dylan extends Baddie {
 	}
 	
 	public void collideWithPlayer(Player1 player) {
-		System.out.println("I Hit You!");
 	}
 
 }

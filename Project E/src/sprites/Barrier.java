@@ -40,8 +40,7 @@ public class Barrier extends Sprite{
 	/**
 	 * basic barriers have no need to update their state, as they are static objects in the game
 	 */
-	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
-		
+	public void update(KeyboardInput keyboard, GameLoop game) {
 	}
 
 	/**

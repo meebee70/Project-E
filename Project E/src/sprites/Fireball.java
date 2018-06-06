@@ -28,8 +28,8 @@ public class Fireball extends MovingSprite {
 		player.resetCooldown();
 	}
 	
-	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game){
-		super.update(keyboard, actual_delta_time, game);
+	public void update(KeyboardInput keyboard, GameLoop game){
+		super.update(keyboard, game);
 		
 		if (!armed) {
 			armed = !(game.getPlayer(1).checkCollisions(this) || game.getPlayer(2).checkCollisions(this));
@@ -48,11 +48,6 @@ public class Fireball extends MovingSprite {
 						object.setCollidable(false);
 						this.setCollidable(false);
 					} else if (object.checkCollisions(this)) {
-//						if (object instanceof Player1) {
-//							((Player1) object).loseLife();
-//						} else if (object instanceof Baddie) {
-//							((Baddie) object).loseLife();
-//						}
 						object.loseLife();
 						this.loseLife();
 						break;

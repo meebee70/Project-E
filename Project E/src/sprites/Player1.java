@@ -31,9 +31,9 @@ public class Player1 extends MovingSprite {
 		this.setWrapAround(true);
 	}
 	
-	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
+	public void update(KeyboardInput keyboard, GameLoop game) {
 		this.cooldown--;
-		super.update(keyboard, actual_delta_time, game);
+		super.update(keyboard, game);
 	}
 	
 	/**
@@ -64,12 +64,6 @@ public class Player1 extends MovingSprite {
 	
 	public boolean isAlive() {
 		return this.getDispose() == false;
-	}
-	
-	
-	public void loseLife(){
-		super.loseLife();
-		//TODO make custom way of killing players
 	}
 	
 	public int getCooldown() {

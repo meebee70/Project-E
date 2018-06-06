@@ -1,5 +1,6 @@
 package sprites;
 import java.awt.Image;
+import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -75,7 +76,7 @@ public abstract class Sprite {
 		dispose = true;
 	}
 
-	public abstract void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game);
+	public abstract void update(KeyboardInput keyboard, GameLoop game);
 	
 	public int getLives(){
 		return lives;
@@ -113,6 +114,11 @@ public abstract class Sprite {
 	
 	protected void addY(double yDistance) {
 		this.currentY += yDistance;
+	}
+	
+	protected void setLocation(Point point) {
+		this.currentX = point.getX();
+		this.currentY = point.getY();
 	}
 	
 	/**

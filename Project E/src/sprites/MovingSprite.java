@@ -15,7 +15,7 @@ public abstract class MovingSprite extends Sprite{
 		this.moveSpeed = moveSpeed;
 	}
 	
-	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
+	public void update(KeyboardInput keyboard, GameLoop game) {
 		this.setDirection(keyboard, game);
 		
 		xSpeed = this.getXDirection() * moveSpeed;
