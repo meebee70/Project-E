@@ -67,6 +67,7 @@ public class Player1 extends MovingSprite {
 	
 	
 	public void loseLife(){
+		super.loseLife();
 		//TODO make custom way of killing players
 	}
 	
