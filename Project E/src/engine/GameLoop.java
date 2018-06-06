@@ -323,7 +323,6 @@ public class GameLoop extends JFrame {
 		actual_delta_time = (gameState.isPaused() ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
 		elapsed_time += actual_delta_time;
-		System.out.println(actual_delta_time);
 	}
 
 

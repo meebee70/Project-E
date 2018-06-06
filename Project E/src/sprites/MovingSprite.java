@@ -46,6 +46,7 @@ public abstract class MovingSprite extends Sprite{
 	protected void move(double xDistance, double yDistance, GameLoop game) {
 		if (xDistance != 0) {
 			this.addX(xDistance);
+			
 			if (this.isCollideable()) {
 				for (Sprite wall : game.getBarriers()) {
 					if (wall != this) {
