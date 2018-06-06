@@ -275,6 +275,22 @@ public class GameLoop extends JFrame {
 
 				updateSprites();
 				disposeSprites();
+				
+				if (!sprites.contains(player1)){
+					if (!sprites.contains(player2)){
+						if (score > 5000){
+							player1.setLives(1);
+							player2.setLives(1);
+							sprites.clear();
+							sprites.add(player1);
+							sprites.add(player2);
+							score -= 5000;
+						}else{
+							gameState = State.done;
+							//TODO implement a "done" game state
+						}
+					}
+				}
 			} else if (gameState.isShopping()){
 				
 
@@ -437,6 +453,11 @@ public class GameLoop extends JFrame {
 		if (keyboard.keyDown(79) && (gameState.isPaused())) {
 			btnPauseRun_mouseClicked(null);
 		}
+		
+		if (keyboard.keyDown(Constants.m)){ // debug tool for free points
+			score += 10000;
+		}
+		
 		//System.out.println(keyboard.keyDownOnce(Constants.spaceBar));
         if (keyboard.keyDownOnce(Constants.spaceBar)){
 			if (gameState.isShopping()){
