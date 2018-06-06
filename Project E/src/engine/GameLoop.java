@@ -477,6 +477,13 @@ public class GameLoop extends JFrame {
         	}else if (selectedCol > 2){
         		selectedCol = 0;
         	}
+        	
+        	
+        	if (keyboard.keyDown(Constants.enterKey)){
+        		//TODO make shop upgrades do things
+        	}
+        	
+        	
         }
 	}
 

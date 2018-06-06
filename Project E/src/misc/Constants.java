@@ -24,7 +24,9 @@ public final class Constants {
 	final public static int playerTwoFireUp = 101;	//5
 	final public static int playerTwoFireDown = 98;	//2
 	
+	//Misc keyboard
 	final public static int spaceBar = 32;
+	final public static int enterKey = 10;
 	
 	//Stats
 	final public static double moveSpeed = 2.5;
