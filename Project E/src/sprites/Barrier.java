@@ -21,6 +21,7 @@ public class Barrier extends Sprite{
 		this.setCollidable(true);
 		
 		setDefaultImage("res/barriers/test barrier.png");
+		setLives(10);
 	}
 	
 	/**
@@ -31,6 +32,8 @@ public class Barrier extends Sprite{
 	 */
 	public Barrier(double x, double y, Image img){
 		super(x,y,img);
+		
+		setLives(10);
 		
 	}
 
