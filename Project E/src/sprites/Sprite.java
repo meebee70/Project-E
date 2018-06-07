@@ -15,7 +15,7 @@ public abstract class Sprite {
 	private Point position;
 	private int IMAGE_WIDTH = 50; // sprite.get_width()
 	private int IMAGE_HEIGHT = 50; //sprite.get_height()
-	private boolean dispose = false;
+	//private boolean dispose = false;
 	private boolean collidable = false;
 	private boolean wrapAround = false;
 	protected int lives = 1;
@@ -60,20 +60,12 @@ public abstract class Sprite {
 	
 	
 	public boolean getDispose() {
-		return dispose;
+		return this.lives < 1;
 	}
 
 	public void loseLife(){
 		this.lives--;
-		
-		if (this.lives < 1){
-			setDispose();
-		}
-	}
-	
-	private void setDispose() {
-		dispose = true;
-	}
+	}	
 
 	public abstract void update(KeyboardInput keyboard, GameLoop game);
 	

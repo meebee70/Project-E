@@ -42,8 +42,8 @@ public class GameLoop extends JFrame {
 	 */
 	final public static int FRAMES_PER_SECOND = (int) Constants.FPS;
 
-	public int SCREEN_HEIGHT = 900;
-	public int SCREEN_WIDTH = 900;
+	public final int SCREEN_HEIGHT = 750;
+	public final int SCREEN_WIDTH = 900;
 
 	/**
 	 * if the camera should follow the player
@@ -260,11 +260,6 @@ public class GameLoop extends JFrame {
 			handleKeyboardInput();
 
 			//UPDATE STATE
-
-			SCREEN_HEIGHT = getHeight();
-			SCREEN_WIDTH = getWidth();
-			panel.setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
-
 			if (gameState.isRunning()){
 				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
 				lblTime.setText(String.valueOf((int)score));
@@ -277,6 +272,22 @@ public class GameLoop extends JFrame {
 
 				updateSprites();
 				disposeSprites();
+				
+				if (!sprites.contains(player1)){
+					if (!sprites.contains(player2)){
+						if (score > 5000){
+							player1.setLives(1);
+							player2.setLives(1);
+							sprites.clear();
+							sprites.add(player1);
+							sprites.add(player2);
+							score -= 5000;
+						}else{
+							//gameState = State.done;
+							//TODO implement a "done" game state
+						}
+					}
+				}
 			} else if (gameState.isShopping()){
 				
 
@@ -332,6 +343,7 @@ public class GameLoop extends JFrame {
 		actual_delta_time = (gameState.isPaused() ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
 		elapsed_time += actual_delta_time;
+		//System.out.println(actual_delta_time);
 	}
 
 
@@ -438,6 +450,11 @@ public class GameLoop extends JFrame {
 		if (keyboard.keyDown(79) && (gameState.isPaused())) {
 			btnPauseRun_mouseClicked(null);
 		}
+		
+		if (keyboard.keyDown(Constants.m)){ // debug tool for free points
+			score += 10000;
+		}
+		
 		//System.out.println(keyboard.keyDownOnce(Constants.spaceBar));
         if (keyboard.keyDownOnce(Constants.spaceBar)){
 			if (gameState.isShopping()){
@@ -514,9 +531,8 @@ public class GameLoop extends JFrame {
 			if (gameState.isRunning() || gameState.isPaused()){
 				paintBackground(g, gameBackground);
 
-				for (int i = 0; i < sprites.size(); i++) {
-					Sprite staticSprite = sprites.get(i);
-					g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos(), (int)staticSprite.getYPos(), (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
+				for (int i = 0; i < sprites.size();i++) {
+					g.drawImage(sprites.get(i).getImage(), (int)sprites.get(i).getXPos(), (int)sprites.get(i).getYPos(), (int)sprites.get(i).getWidth(), (int)sprites.get(i).getHeight(), null);
 				}
 			}
 			else if (gameState.isShopping()){

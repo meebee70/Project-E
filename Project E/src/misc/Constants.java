@@ -29,6 +29,7 @@ public final class Constants {
 	//Misc keyboard
 	final public static int spaceBar = 32;
 	final public static int enterKey = 10;
+	final public static int m = 77;
 	
 	//Stats
 	final public static double moveSpeed = 2.6 * 60 / FPS;
