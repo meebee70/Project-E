@@ -11,7 +11,7 @@ import misc.Direction;
 public class Fireball extends MovingSprite {
 	
 	private final Direction direction;
-	private long age;
+	private boolean armed = false;
 	
 	/**
 	 * This is a fireball that gets fired at baddies and/or other players
@@ -25,17 +25,15 @@ public class Fireball extends MovingSprite {
 		this.setDefaultImage("res/character sprites/fireball.png");
 		this.setSize(20, 20);
 		this.setWrapAround(true);
-		this.age = 0;
 		player.resetCooldown();
 	}
 	
-	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game){
-		this.age++;
+	public void update(KeyboardInput keyboard, GameLoop game){
+		super.update(keyboard, game);
 		
-		super.update(keyboard, actual_delta_time, game);
-		
-		//Does the fireball hit anything?
-		if (age > 30) {
+		if (!armed) {
+			armed = !(game.getPlayer(1).checkCollisions(this) || game.getPlayer(2).checkCollisions(this));
+		} else {
 			ArrayList<Sprite> sprites = game.getSprites();
 			for (Sprite object : sprites) {
 				if (object != this) {
@@ -50,11 +48,6 @@ public class Fireball extends MovingSprite {
 						object.setCollidable(false);
 						this.setCollidable(false);
 					} else if (object.checkCollisions(this)) {
-//						if (object instanceof Player1) {
-//							((Player1) object).loseLife();
-//						} else if (object instanceof Baddie) {
-//							((Baddie) object).loseLife();
-//						}
 						object.loseLife();
 						this.loseLife();
 						break;

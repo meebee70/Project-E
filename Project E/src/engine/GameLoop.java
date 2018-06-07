@@ -13,6 +13,7 @@ import sprites.Dylan;
 import sprites.Fireball;
 import sprites.Player1;
 import sprites.Player2;
+import sprites.Snowman;
 import sprites.Sprite;
 
 import java.awt.*;
@@ -203,6 +204,7 @@ public class GameLoop extends JFrame {
 	private void createSprites() {
 
 		addSprite(new Barrier(500,500));
+		addSprite(new Snowman(0, 0));
 
 		setPlayer1(new Player1());
 		setPlayer2(new Player2());
@@ -349,8 +351,8 @@ public class GameLoop extends JFrame {
 	 * calls all sprites to update themselves according to their own update methods
 	 */
 	private void updateSprites() {
-		for (Sprite sprite : sprites) {
-			sprite.update(keyboard, actual_delta_time, this);
+		for (int i = 0; i < sprites.size(); i++) {
+			sprites.get(i).update(keyboard, this);
 		}    	
 
 	}

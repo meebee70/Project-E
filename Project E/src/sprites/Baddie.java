@@ -1,5 +1,7 @@
 package sprites;
 
+import engine.GameLoop;
+
 public abstract class Baddie extends MovingSprite{
 
 	protected int score;
@@ -22,6 +24,32 @@ public abstract class Baddie extends MovingSprite{
 	
 	public int getScore() {
 		return this.score;
+	}
+	
+	public abstract void hitPlayer(Player1 player);
+	
+	protected void move(int xDistance, int yDistance, GameLoop game) {
+		this.addX(xDistance);
+		this.addY(yDistance);
+		if (!hittingPlayer(1, game)) {
+			hittingPlayer(2, game);
+		}
+		
+		this.addX(-xDistance);
+		this.addY(-yDistance);
+		super.move(xDistance, yDistance, game);
+	}
+	
+	private boolean hittingPlayer(int playerID, GameLoop game) {
+		if (game.getPlayer(playerID).isAlive() == false) {
+			return false;
+		}
+		if (this.checkCollisions(game.getPlayer(playerID))) {
+			this.hitPlayer(game.getPlayer(playerID));
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 }

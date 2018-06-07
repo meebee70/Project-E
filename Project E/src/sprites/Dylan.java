@@ -43,16 +43,20 @@ public class Dylan extends Baddie {
 		return this.defaultImage;
 	}
 
-	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
+	public void update(KeyboardInput keyboard, GameLoop game) {
 		if (game.getPlayer(targetPlayer).isAlive() == false) {
 			targetPlayer = (targetPlayer + 1) % 2;
 		}
-		super.update(keyboard, actual_delta_time, game);
+		super.update(keyboard, game);
 	}
 	
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
-		if (game.getPlayer(targetPlayer).isAlive()){
+		if (!game.getPlayer(1).isAlive() && !game.getPlayer(2).isAlive()) {
+			this.setXDirection(0);
+			this.setYDirection(0);
+			return;
+		} else {
 			Point goal = game.getPlayerLocationCentered(targetPlayer);
 			int xDirection = 0;
 			int yDirection = 0;
@@ -70,6 +74,10 @@ public class Dylan extends Baddie {
 			
 			this.setXDirection(xDirection);
 			this.setYDirection(yDirection);
+		}
+	}
+	
+	public void hitPlayer(Player1 player) {
 		}else{
 			setXDirection(0);
 			setYDirection(0);

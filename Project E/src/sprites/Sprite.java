@@ -1,5 +1,6 @@
 package sprites;
 import java.awt.Image;
+import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -11,8 +12,7 @@ import engine.KeyboardInput;
 public abstract class Sprite {
 
 	protected Image defaultImage;
-	private double currentX = 0;
-	private double currentY = 0;
+	private Point position;
 	private int IMAGE_WIDTH = 50; // sprite.get_width()
 	private int IMAGE_HEIGHT = 50; //sprite.get_height()
 	//private boolean dispose = false;
@@ -30,8 +30,8 @@ public abstract class Sprite {
 	 * @param y upper boundary
 	 */
 	public Sprite(double x, double y){
-		currentX = x;
-		currentY = y;
+		this.position = new Point();
+		position.setLocation(x, y);
 	}
 	
 	/**
@@ -41,8 +41,8 @@ public abstract class Sprite {
 	 * @param img
 	 */
 	public Sprite(double x, double y, Image img){
-		currentX = x;
-		currentY = y;
+		this.position = new Point();
+		position.setLocation(x, y);
 		defaultImage = img;
 	}
 	
@@ -67,7 +67,7 @@ public abstract class Sprite {
 		this.lives--;
 	}	
 
-	public abstract void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game);
+	public abstract void update(KeyboardInput keyboard, GameLoop game);
 	
 	public int getLives(){
 		return lives;
@@ -85,10 +85,10 @@ public abstract class Sprite {
 	}
 	
 	public final int getXPos(){
-		return (int) Math.round(currentX);
+		return (int) position.getX();
 	}
 	public final int getYPos(){
-		return (int) Math.round(currentY);
+		return (int) position.getY();
 	}
 	
 	public final int getCenterX() {
@@ -100,11 +100,19 @@ public abstract class Sprite {
 	}
 	
 	protected void addX(double xDistance) {
-		this.currentX += xDistance;
+		position.setLocation(position.getX() + xDistance, position.getY());
 	}
 	
 	protected void addY(double yDistance) {
-		this.currentY += yDistance;
+		position.setLocation(position.getX(), position.getY() + yDistance);
+	}
+	
+	protected void setLocation(Point point) {
+		this.position = point;
+	}
+	
+	protected Point getPos() {
+		return position;
 	}
 	
 	/**
