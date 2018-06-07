@@ -341,7 +341,7 @@ public class GameLoop extends JFrame {
 		actual_delta_time = (gameState.isPaused() ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
 		elapsed_time += actual_delta_time;
-		System.out.println(actual_delta_time);
+		//System.out.println(actual_delta_time);
 	}
 
 
@@ -529,8 +529,8 @@ public class GameLoop extends JFrame {
 			if (gameState.isRunning() || gameState.isPaused()){
 				paintBackground(g, gameBackground);
 
-				for (Sprite staticSprite : sprites) {
-					g.drawImage(staticSprite.getImage(), (int)staticSprite.getXPos(), (int)staticSprite.getYPos(), (int)staticSprite.getWidth(), (int)staticSprite.getHeight(), null);
+				for (int i = 0; i < sprites.size();i++) {
+					g.drawImage(sprites.get(i).getImage(), (int)sprites.get(i).getXPos(), (int)sprites.get(i).getYPos(), (int)sprites.get(i).getWidth(), (int)sprites.get(i).getHeight(), null);
 				}
 			}
 			else if (gameState.isShopping()){
