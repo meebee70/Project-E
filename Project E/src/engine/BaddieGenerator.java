@@ -53,7 +53,7 @@ public class BaddieGenerator {
 		
 		
 		if (cycle % cyclesPerDylan == 0 && baddies < maxBaddies) {
-			game.addSprite(new Dylan(generator.nextInt(900), -50));
+			game.addSprite(new Dylan(generator.nextInt(900), -150));
 		}
 	}
 	
