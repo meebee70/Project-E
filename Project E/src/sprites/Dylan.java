@@ -78,10 +78,7 @@ public class Dylan extends Baddie {
 	}
 	
 	public void hitPlayer(Player1 player) {
-		}else{
 			setXDirection(0);
 			setYDirection(0);
 		}
 	}
-
-}
