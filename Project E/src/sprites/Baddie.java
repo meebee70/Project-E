@@ -26,9 +26,9 @@ public abstract class Baddie extends MovingSprite{
 		return this.score;
 	}
 	
-	public abstract void collideWithPlayer(Player1 player);
+	public abstract void hitPlayer(Player1 player);
 	
-	protected void move(double xDistance, double yDistance, GameLoop game) {
+	protected void move(int xDistance, int yDistance, GameLoop game) {
 		this.addX(xDistance);
 		this.addY(yDistance);
 		if (!hittingPlayer(1, game)) {
@@ -45,7 +45,7 @@ public abstract class Baddie extends MovingSprite{
 			return false;
 		}
 		if (this.checkCollisions(game.getPlayer(playerID))) {
-			this.collideWithPlayer(game.getPlayer(playerID));
+			this.hitPlayer(game.getPlayer(playerID));
 			return true;
 		} else {
 			return false;

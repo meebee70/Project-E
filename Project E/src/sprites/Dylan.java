@@ -77,7 +77,7 @@ public class Dylan extends Baddie {
 		}
 	}
 	
-	public void collideWithPlayer(Player1 player) {
+	public void hitPlayer(Player1 player) {
 	}
 
 }

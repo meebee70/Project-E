@@ -339,8 +339,8 @@ public class GameLoop extends JFrame {
 	 * calls all sprites to update themselves according to their own update methods
 	 */
 	private void updateSprites() {
-		for (Sprite sprite : sprites) {
-			sprite.update(keyboard, this);
+		for (int i = 0; i < sprites.size(); i++) {
+			sprites.get(i).update(keyboard, this);
 		}    	
 
 	}

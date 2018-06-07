@@ -31,10 +31,11 @@ public final class Constants {
 	final public static int enterKey = 10;
 	
 	//Stats
-	final public static double moveSpeed = 2.5 * 60 / FPS;
+	final public static double moveSpeed = 2.6 * 60 / FPS;
 	final public static double fireballSpeed = moveSpeed * 2.2;
 	final public static double dylanSpeed = moveSpeed * 0.6;
 	final public static int shotCooldown = 30 * 60 / FPS;
-	final public static int snowmanTeleportCooldown = 60 * 5;
+	final public static int snowmanTeleportCooldown = 5 * FPS;
+	final public static int snowballCooldown = (int) (3 * FPS);
 	
 }

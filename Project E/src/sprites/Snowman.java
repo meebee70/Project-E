@@ -7,12 +7,14 @@ import java.util.Random;
 import engine.GameLoop;
 import engine.KeyboardInput;
 import misc.Constants;
+import misc.Direction;
 
 public class Snowman extends Baddie {
 	
 	private static final int score = 175;
 	
-	private int coolDown = Constants.snowmanTeleportCooldown;
+	private static int coolDown = Constants.snowmanTeleportCooldown;
+	private static int snowballCooldown = Constants.snowballCooldown;
 	private int count = 0;
 	
 
@@ -30,7 +32,7 @@ public class Snowman extends Baddie {
 	}
 
 	@Override
-	public void collideWithPlayer(Player1 player) {
+	public void hitPlayer(Player1 player) {
 		player.loseLife();
 	}
 
@@ -38,6 +40,31 @@ public class Snowman extends Baddie {
 		count++;
 		if (count % coolDown == 0) {
 			this.teleport(game);
+		}
+		
+		if (count % snowballCooldown == 0) {
+			Direction snowballDirection;
+			Player1 target;
+			if (game.getPlayerLocation(1).distance(this.getPos()) < game.getPlayerLocation(2).distance(this.getPos())) {
+				target = game.getPlayer(2);
+			} else {
+				target = game.getPlayer(1);
+			}
+			
+			if (target.getCenterX() > this.getCenterX()) {
+				if (target.getCenterY() > this.getCenterY()) {
+					snowballDirection = Direction.BOTTOM_RIGHT;
+				} else {
+					snowballDirection = Direction.TOP_RIGHT;
+				}
+			} else {
+				if (target.getCenterY() > this.getCenterY()) {
+					snowballDirection = Direction.BOTTOM_LEFT;
+				} else {
+					snowballDirection = Direction.TOP_LEFT;
+				}
+			}
+			game.addSprite(new Snowball(this, snowballDirection));
 		}
 	}
 	
