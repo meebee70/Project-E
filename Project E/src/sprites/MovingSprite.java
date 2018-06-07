@@ -23,15 +23,15 @@ public abstract class MovingSprite extends Sprite{
 		
 		if (this.isWrapAround()) {
 			if (this.getXPos() + this.getWidth() < 0) {	//Too far left
-				xSpeed += game.SCREEN_WIDTH;
-			} else if (this.getXPos() + this.getWidth() > game.SCREEN_WIDTH) {//Too far right
-				xSpeed -= game.SCREEN_WIDTH;
+				xSpeed += game.SCREEN_WIDTH + this.getWidth()/2;
+			} else if (this.getXPos() > game.SCREEN_WIDTH) {//Too far right
+				xSpeed -= game.SCREEN_WIDTH + this.getWidth()/2;
 			}
 			
 			if (this.getYPos() + this.getHeight() < 0) {
-				ySpeed += game.SCREEN_HEIGHT;
-			} else if (this.getYPos() + this.getHeight() > game.SCREEN_HEIGHT) {
-				ySpeed -= game.SCREEN_HEIGHT;
+				ySpeed += game.SCREEN_HEIGHT + this.getHeight() /2;
+			} else if (this.getYPos() > game.SCREEN_HEIGHT) {
+				ySpeed -= game.SCREEN_HEIGHT + this.getHeight()/2;
 			}
 		}
 		

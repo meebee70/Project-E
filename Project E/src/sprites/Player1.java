@@ -19,8 +19,8 @@ public class Player1 extends MovingSprite {
 		super(starterX, starterY, Constants.moveSpeed);
 		setCollidable(true);
 		setDefaultImage("res/character sprites/player one.png");
-    this.cooldown = 0;
-    this.setWrapAround(true);
+		this.cooldown = 0;
+		this.setWrapAround(true);
 	}
 	
 	public Player1(int starterX, int starterY) {
@@ -37,7 +37,7 @@ public class Player1 extends MovingSprite {
 	}
 	
 	/**
-	 * Use the keyboard inputs to determin the movement direction
+	 * Use the keyboard inputs to determine the movement direction
 	 * @param keyboard
 	 */
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {

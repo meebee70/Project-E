@@ -41,7 +41,7 @@ public class GameLoop extends JFrame {
 	 */
 	final public static int FRAMES_PER_SECOND = (int) Constants.FPS;
 
-	public int SCREEN_HEIGHT = 900;
+	public int SCREEN_HEIGHT = 800;
 	public int SCREEN_WIDTH = 900;
 
 	/**
