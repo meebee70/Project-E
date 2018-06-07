@@ -41,8 +41,8 @@ public class GameLoop extends JFrame {
 	 */
 	final public static int FRAMES_PER_SECOND = (int) Constants.FPS;
 
-	public int SCREEN_HEIGHT = 800;
-	public int SCREEN_WIDTH = 900;
+	public final int SCREEN_HEIGHT = 750;
+	public final int SCREEN_WIDTH = 900;
 
 	/**
 	 * if the camera should follow the player
@@ -258,11 +258,6 @@ public class GameLoop extends JFrame {
 			handleKeyboardInput();
 
 			//UPDATE STATE
-
-			SCREEN_HEIGHT = getHeight();
-			SCREEN_WIDTH = getWidth();
-			panel.setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
-
 			if (gameState.isRunning()){
 				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
 				lblTime.setText(String.valueOf((int)score));
@@ -286,7 +281,7 @@ public class GameLoop extends JFrame {
 							sprites.add(player2);
 							score -= 5000;
 						}else{
-							gameState = State.done;
+							//gameState = State.done;
 							//TODO implement a "done" game state
 						}
 					}

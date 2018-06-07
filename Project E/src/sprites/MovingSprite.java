@@ -18,7 +18,7 @@ public abstract class MovingSprite extends Sprite{
 	public void update(KeyboardInput keyboard, long actual_delta_time, GameLoop game) {
 		this.setDirection(keyboard, game);
 		
-		xSpeed = this.getXDirection() * moveSpeed;
+		xSpeed = this.xDirection * moveSpeed;
 		ySpeed = this.yDirection * moveSpeed;
 		
 		if (this.isWrapAround()) {
@@ -48,6 +48,7 @@ public abstract class MovingSprite extends Sprite{
 	protected void move(double xDistance, double yDistance, GameLoop game) {
 		if (xDistance != 0) {
 			this.addX(xDistance);
+			game.repaint();
 			if (this.isCollideable()) {
 				for (Sprite wall : game.getBarriers()) {
 					if (wall != this) {
@@ -62,11 +63,12 @@ public abstract class MovingSprite extends Sprite{
 		
 		if (yDistance != 0) {
 			this.addY(yDistance);
+			game.repaint();
 			if (this.isCollideable()) {
 				for (Sprite wall : game.getBarriers()) {
 					if (wall != this) {
 						//Potentially uses lazy evaluation
-						while (this.checkCollisions(wall) || wall.checkCollisions(this)) {
+						while (this.checkCollisions(wall) || wall.checkCollisions(this)) {//there is a problem where is wall is moving into us, we cannot move
 							this.addY(-yDirection);
 						}
 					}
