@@ -75,8 +75,6 @@ public class Snowman extends Baddie {
 		this.setLocation(new Point(newXLocation, newYLocation));
 		if (this.checkCollisions(game.getPlayer(1)) || this.checkCollisions(game.getPlayer(2))) {
 			this.teleport(game);
-		} else {
-			System.out.println("Teleportation Activated");
 		}
 	}
 

@@ -1,5 +1,6 @@
 package engine;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,13 +9,13 @@ import sprites.Dylan;
 import sprites.Sprite;
 
 public class BaddieGenerator {
-	private final int cyclesPerDylan = 20;
+	private final int cyclesPerBaddie = 10;
 	private final int hardMax = 50;
-	private int maxBaddies = 5;
+	private int maxBaddies;
 	private final int scorePerBaddie = 75;
 	private int cycle = 0;
 	private int baddies = 0;
-	private int usedScore = 0;
+	private Class<?> baddieType;
 	
 	private Random generator = new Random();
 	
@@ -23,10 +24,10 @@ public class BaddieGenerator {
 	 * Initial Max Baddies = 5
 	 * Score Per Baddie = 75
 	 */
-	public BaddieGenerator() {
+	public BaddieGenerator(Class<Baddie> type) {
+		this.maxBaddies = 5;
 		this.cycle = 0;
-		this.usedScore = 0;
-		this.generator = new Random();
+		this.baddieType = type;
 	}
 	
 	/**
@@ -34,40 +35,53 @@ public class BaddieGenerator {
 	 * @param initialMaxBaddies
 	 * @param scorePerBaddie
 	 */
-	public BaddieGenerator(int initialMaxBaddies, int scorePerBaddie) {
+	public BaddieGenerator(Class<?> type, int initialMaxBaddies, int scorePerBaddie) {
 		this.maxBaddies = initialMaxBaddies;
 		this.cycle = 0;
-		this.usedScore = 0;
+		this.baddieType = type;
 	}
 	
 	public void update(GameLoop game) {
 		this.cycle++;
+		updateBaddieCount(game.getSprites());
+		if (game.getScore() >= scorePerBaddie * baddies) {
+//			System.out.println("game score " + game.getScore());
+			this.addBaddie();
+		}
+		
 		if (maxBaddies > hardMax) {
 			maxBaddies = hardMax;
 		}
-		updateBaddieCount(game.getSprites());
-		if (game.getScore() - usedScore >= scorePerBaddie) {
-			this.addBaddies(1);
-			usedScore += scorePerBaddie;
+		
+		
+		if (cycle % cyclesPerBaddie == 0 && baddies < maxBaddies) {
+			this.generateBaddie(game);
+			System.out.println("Baddies: " + baddies + " Max: " + maxBaddies + " Type: " + baddieType.getName());
 		}
-		
-		
-		if (cycle % cyclesPerDylan == 0 && baddies < maxBaddies) {
+	}
+	
+	private void generateBaddie(GameLoop game) {
+		try {
+			game.addSprite((Baddie) baddieType.getDeclaredConstructor(int.class, int.class).newInstance(generator.nextInt(900), -150));
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
 			game.addSprite(new Dylan(generator.nextInt(900), -150));
+			e.printStackTrace();
+			System.out.println("Generated Default Baddie");
 		}
 	}
 	
 	private void updateBaddieCount(ArrayList<Sprite> sprites) {
 		baddies = 0;
 		for (Sprite object : sprites) {
-			if (object instanceof Baddie) {
+			if (object.getClass().equals(baddieType.getClass())) {
 				baddies++;
 			}
 		}
 	}
 	
-	private void addBaddies(int moreBaddies) {
-		this.maxBaddies += moreBaddies;
+	private void addBaddie() {
+		this.maxBaddies++;
 	}
 
 }

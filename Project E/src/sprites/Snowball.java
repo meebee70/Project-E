@@ -72,7 +72,6 @@ public class Snowball extends Baddie {
 
 	@Override
 	public void hitPlayer(Player1 player) {
-		System.out.println("Hit with a snowball");
 		player.loseLife();
 		this.loseLife();
 	}
