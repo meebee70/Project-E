@@ -50,6 +50,11 @@ public class Barrier extends Sprite{
 		return defaultImage;
 	}
 
+	@Override
+	public String toString() {
+		return "[Barrier]";
+	}
+
 
 	
 	

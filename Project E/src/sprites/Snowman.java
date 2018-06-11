@@ -24,7 +24,7 @@ public class Snowman extends Baddie {
 	 * @param y
 	 */
 	public Snowman(int x, int y) {
-		super(score, 0);
+		super(x, y, score, 0);
 		this.setDefaultImage("res/baddies/Snowman.png");
 		this.setCollidable(false);
 		this.setXDirection(0);
@@ -38,7 +38,7 @@ public class Snowman extends Baddie {
 
 	public void update(KeyboardInput keyboard, GameLoop game) {
 		count++;
-		if (count % coolDown == 0) {
+		if (count % coolDown == 1) {
 			this.teleport(game);
 		}
 		
@@ -75,8 +75,6 @@ public class Snowman extends Baddie {
 		this.setLocation(new Point(newXLocation, newYLocation));
 		if (this.checkCollisions(game.getPlayer(1)) || this.checkCollisions(game.getPlayer(2))) {
 			this.teleport(game);
-		} else {
-			System.out.println("Teleportation Activated");
 		}
 	}
 
@@ -87,6 +85,10 @@ public class Snowman extends Baddie {
 
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
+	}
+	
+	public String toString() {
+		return "[Snowman]";
 	}
 
 }

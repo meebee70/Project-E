@@ -1,6 +1,6 @@
 package engine;
 
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 import sprites.Baddie;
@@ -8,66 +8,103 @@ import sprites.Dylan;
 import sprites.Sprite;
 
 public class BaddieGenerator {
-	private final int cyclesPerDylan = 20;
-	private final int hardMax = 50;
-	private int maxBaddies = 5;
-	private final int scorePerBaddie = 75;
-	private int cycle = 0;
-	private int baddies = 0;
-	private int usedScore = 0;
+	private int hardMax = 25;
+	private int respawnCycles = 5;
+	private int cycles = 0;
+	private int maxBaddies, baddies;
+	private final int scorePerBaddie;
+	private Class<?> baddieType;
+	private final GameLoop game;
 	
-	private Random generator = new Random();
+	private static Random generator = new Random();
 	
 	/**
 	 * Periodically generates Dylan objects above the screen
 	 * Initial Max Baddies = 5
 	 * Score Per Baddie = 75
 	 */
-	public BaddieGenerator() {
-		this.cycle = 0;
-		this.usedScore = 0;
-		this.generator = new Random();
+	public BaddieGenerator(Class<Baddie> type, GameLoop game) {
+		this.maxBaddies = 5;
+		this.scorePerBaddie = 75;
+		this.baddieType = type;
+		this.game = game;
+		if (maxBaddies > hardMax) {
+			this.hardMax = maxBaddies;
+		}
 	}
 	
 	/**
 	 * Periodically generates Dylan objects above the screen
 	 * @param initialMaxBaddies
 	 * @param scorePerBaddie
+	 * @param gameLoop
 	 */
-	public BaddieGenerator(int initialMaxBaddies, int scorePerBaddie) {
+	public BaddieGenerator(Class<?> type, int initialMaxBaddies, int scorePerBaddie, GameLoop game) {
+		this.scorePerBaddie = scorePerBaddie;
 		this.maxBaddies = initialMaxBaddies;
-		this.cycle = 0;
-		this.usedScore = 0;
-	}
-	
-	public void update(GameLoop game) {
-		this.cycle++;
+		this.baddieType = type;
+		this.game = game;
 		if (maxBaddies > hardMax) {
-			maxBaddies = hardMax;
-		}
-		updateBaddieCount(game.getSprites());
-		if (game.getScore() - usedScore >= scorePerBaddie) {
-			this.addBaddies(1);
-			usedScore += scorePerBaddie;
-		}
-		
-		
-		if (cycle % cyclesPerDylan == 0 && baddies < maxBaddies) {
-			game.addSprite(new Dylan(generator.nextInt(900), -150));
+			this.hardMax = maxBaddies;
 		}
 	}
 	
-	private void updateBaddieCount(ArrayList<Sprite> sprites) {
+	/**
+	 * Periodically generates Dylan objects above the screen
+	 * @param initialMaxBaddies
+	 * @param scorePerBaddie
+	 * @param respawnCycles
+	 * @param gameLoop
+	 */
+	public BaddieGenerator(Class<?> type, int initialMaxBaddies, int scorePerBaddie, int respawnCycles, GameLoop game) {
+		this.scorePerBaddie = scorePerBaddie;
+		this.maxBaddies = initialMaxBaddies;
+		this.baddieType = type;
+		this.game = game;
+		this.respawnCycles = respawnCycles;
+		if (maxBaddies > hardMax) {
+			this.hardMax = maxBaddies;
+		}
+	}
+	
+	public void update() {
+		cycles++;
 		baddies = 0;
-		for (Sprite object : sprites) {
-			if (object instanceof Baddie) {
+		for (Sprite object : game.getSprites()) {
+			if (object.getClass().getName() == baddieType.getName()) {
 				baddies++;
+			}
+		}
+		
+		if (baddies >= maxBaddies && game.getScore() >= scorePerBaddie * baddies) {
+			maxBaddies++;
+			if (maxBaddies > hardMax) {
+				maxBaddies = hardMax;
+			}
+		}
+		
+		
+		if (baddies < maxBaddies && cycles % respawnCycles == 0) {
+			this.generateBaddie();
+		}
+	}
+	
+	private void generateBaddie() {
+		for (int i = 0; i < maxBaddies - baddies; i++) {
+			try {
+				game.addSprite((Baddie) baddieType.getDeclaredConstructor(int.class, int.class).newInstance(generator.nextInt(game.SCREEN_WIDTH), -150));
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException e) {
+				//If unable to generate proper Baddie
+				game.addSprite(new Dylan(generator.nextInt(game.SCREEN_WIDTH), -150));
+				e.printStackTrace();
+				System.out.println("Generated Default Baddie");
 			}
 		}
 	}
 	
-	private void addBaddies(int moreBaddies) {
-		this.maxBaddies += moreBaddies;
+	public void setHardMax(int newMax) {
+		this.hardMax = newMax;
 	}
 
 }
