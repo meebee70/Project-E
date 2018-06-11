@@ -86,5 +86,9 @@ public class Snowman extends Baddie {
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
 	}
+	
+	public String toString() {
+		return "[Snowman]";
+	}
 
 }

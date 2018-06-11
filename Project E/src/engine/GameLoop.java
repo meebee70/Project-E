@@ -182,8 +182,10 @@ public class GameLoop extends JFrame {
 		cp.setComponentZOrder(lblTime, 0);
 		cp.setComponentZOrder(btnPauseRun, 0);
 		
-		dylanGenerator = new BaddieGenerator(Dylan.class, 5, 65);
-		snowmanGenerator = new BaddieGenerator(Snowman.class, 1, 3000);
+		dylanGenerator = new BaddieGenerator(Dylan.class, 5, 65, this);
+		dylanGenerator.setHardMax(30);
+		snowmanGenerator = new BaddieGenerator(Snowman.class, 1, 3000, this);
+		snowmanGenerator.setHardMax(8);
 		createSprites();
 
 		setVisible(true); //this should not be touched    	    
@@ -270,8 +272,8 @@ public class GameLoop extends JFrame {
 				this.generateFireballs();
 				
 
-				dylanGenerator.update(this);
-				snowmanGenerator.update(this);
+				dylanGenerator.update();
+				snowmanGenerator.update();
 				
 
 				updateSprites();

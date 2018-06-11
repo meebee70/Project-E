@@ -12,6 +12,7 @@ public class Snowball extends Baddie {
 	private final Direction direction;
 	private boolean armed = false;
 	private final Snowman snowman;
+	private final static int maxSize = 8;
 	
 	public Snowball(Snowman snowman, Direction direction) {
 		super(snowman.getCenterX(), snowman.getCenterY(), 0, Constants.fireballSpeed * 0.5);
@@ -84,6 +85,9 @@ public class Snowball extends Baddie {
 	
 	@Override
 	public void setLives(int newLives) {
+		if (newLives > maxSize) {
+			newLives = maxSize;
+		}
 		this.setSize(25 * newLives, 25 * newLives);
 		super.setLives(newLives);
 	}
@@ -112,5 +116,10 @@ public class Snowball extends Baddie {
 			this.setYDirection(0);
 			break;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "[Snowball]";
 	}
 }

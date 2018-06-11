@@ -196,5 +196,5 @@ public abstract class Sprite {
 		this.wrapAround = wrapAround;
 	}
 	
-	
+	public abstract String toString();
 }
