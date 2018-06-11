@@ -9,9 +9,10 @@ import sprites.Sprite;
 
 public class BaddieGenerator {
 	private int hardMax = 25;
-	private int maxBaddies;
+	private int respawnCycles = 5;
+	private int cycles = 0;
+	private int maxBaddies, baddies;
 	private final int scorePerBaddie;
-	private int baddies = 0;
 	private Class<?> baddieType;
 	private final GameLoop game;
 	
@@ -24,24 +25,50 @@ public class BaddieGenerator {
 	 */
 	public BaddieGenerator(Class<Baddie> type, GameLoop game) {
 		this.maxBaddies = 5;
+		this.scorePerBaddie = 75;
 		this.baddieType = type;
 		this.game = game;
-		this.scorePerBaddie = 75;
+		if (maxBaddies > hardMax) {
+			this.hardMax = maxBaddies;
+		}
 	}
 	
 	/**
 	 * Periodically generates Dylan objects above the screen
 	 * @param initialMaxBaddies
 	 * @param scorePerBaddie
+	 * @param gameLoop
 	 */
 	public BaddieGenerator(Class<?> type, int initialMaxBaddies, int scorePerBaddie, GameLoop game) {
 		this.scorePerBaddie = scorePerBaddie;
 		this.maxBaddies = initialMaxBaddies;
 		this.baddieType = type;
 		this.game = game;
+		if (maxBaddies > hardMax) {
+			this.hardMax = maxBaddies;
+		}
+	}
+	
+	/**
+	 * Periodically generates Dylan objects above the screen
+	 * @param initialMaxBaddies
+	 * @param scorePerBaddie
+	 * @param respawnCycles
+	 * @param gameLoop
+	 */
+	public BaddieGenerator(Class<?> type, int initialMaxBaddies, int scorePerBaddie, int respawnCycles, GameLoop game) {
+		this.scorePerBaddie = scorePerBaddie;
+		this.maxBaddies = initialMaxBaddies;
+		this.baddieType = type;
+		this.game = game;
+		this.respawnCycles = respawnCycles;
+		if (maxBaddies > hardMax) {
+			this.hardMax = maxBaddies;
+		}
 	}
 	
 	public void update() {
+		cycles++;
 		baddies = 0;
 		for (Sprite object : game.getSprites()) {
 			if (object.getClass().getName() == baddieType.getName()) {
@@ -57,7 +84,7 @@ public class BaddieGenerator {
 		}
 		
 		
-		if (baddies < maxBaddies) {
+		if (baddies < maxBaddies && cycles % respawnCycles == 0) {
 			this.generateBaddie();
 		}
 	}

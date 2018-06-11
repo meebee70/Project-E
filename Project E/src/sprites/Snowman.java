@@ -24,7 +24,7 @@ public class Snowman extends Baddie {
 	 * @param y
 	 */
 	public Snowman(int x, int y) {
-		super(score, 0);
+		super(x, y, score, 0);
 		this.setDefaultImage("res/baddies/Snowman.png");
 		this.setCollidable(false);
 		this.setXDirection(0);
@@ -38,7 +38,7 @@ public class Snowman extends Baddie {
 
 	public void update(KeyboardInput keyboard, GameLoop game) {
 		count++;
-		if (count % coolDown == 0) {
+		if (count % coolDown == 1) {
 			this.teleport(game);
 		}
 		

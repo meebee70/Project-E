@@ -184,7 +184,7 @@ public class GameLoop extends JFrame {
 		
 		dylanGenerator = new BaddieGenerator(Dylan.class, 5, 65, this);
 		dylanGenerator.setHardMax(30);
-		snowmanGenerator = new BaddieGenerator(Snowman.class, 1, 3000, this);
+		snowmanGenerator = new BaddieGenerator(Snowman.class, 1, 3000, 500, this);
 		snowmanGenerator.setHardMax(8);
 		createSprites();
 
