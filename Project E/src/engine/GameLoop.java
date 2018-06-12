@@ -380,7 +380,7 @@ public class GameLoop extends JFrame {
 	 */
 	private void disposeSprites() {
 		for (Sprite sprite : sprites) {
-			if (sprite.getDispose() == true) {
+			if (sprite.getDispose()) {
 				spritesToDispose.add(sprite);
 			}
 		}
