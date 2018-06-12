@@ -3,6 +3,7 @@ package sprites;
 import engine.GameLoop;
 import engine.KeyboardInput;
 import misc.Constants;
+import misc.Direction;
 
 public class Player2 extends Player1 {
 	
@@ -34,6 +35,25 @@ public class Player2 extends Player1 {
 		
 		this.setXDirection(xDirection);
 		this.setYDirection(yDirection);
+	}
+	
+	protected void generateFireballs(KeyboardInput keyboard, GameLoop game) {
+		Direction direction = Direction.NULL;
+		if (this.isAlive() && this.getCooldown() <= 0) {
+			if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
+				direction = Direction.UP;
+			} else if (keyboard.keyDownOnce(Constants.playerTwoFireDown)) {
+				direction = Direction.DOWN;
+			} else if (keyboard.keyDownOnce(Constants.playerTwoFireRight)) {
+				direction = Direction.RIGHT;
+			} else if (keyboard.keyDownOnce(Constants.playerTwoFireLeft)) {
+				direction = Direction.LEFT;
+			}
+			
+			if (direction != Direction.NULL) {
+				game.addSprite(new Fireball(this, direction));
+			}
+		}
 	}
 	
 	public String toString() {

@@ -27,7 +27,8 @@ import java.awt.event.KeyEvent;
 
 /**
  * the main meat of the program, where all the stuff actually happens
- * @author Mr Wehnes
+ * Original author: Mr Wehnes
+ * Editied and improved by Chris Kozbial and Alexander Aldridge
  *
  */
 public class GameLoop extends JFrame {
@@ -269,9 +270,6 @@ public class GameLoop extends JFrame {
 				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
 				lblTime.setText(String.valueOf((int)score));
 
-				this.generateFireballs();
-				
-
 				dylanGenerator.update();
 				snowmanGenerator.update();
 				
@@ -303,39 +301,6 @@ public class GameLoop extends JFrame {
 		}
 	}
 
-	private void generateFireballs() {
-		Direction direction = Direction.NULL;
-		if (player1.isAlive() && player1.getCooldown() <= 0) {
-			if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
-				direction = Direction.UP;
-			} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
-				direction = Direction.DOWN;
-			} else if (keyboard.keyDownOnce(Constants.playerOneFireRight)) {
-				direction = Direction.RIGHT;
-			} else if (keyboard.keyDownOnce(Constants.playerOneFireLeft)) {
-				direction = Direction.LEFT;
-			}
-			if (direction != Direction.NULL) {
-				this.addSprite(new Fireball(player1, direction));
-			}
-		}
-
-		if (player2.isAlive() && player2.getCooldown() <= 0) {
-			direction = Direction.NULL;
-			if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
-				direction = Direction.UP;
-			} else if (keyboard.keyDownOnce(Constants.playerTwoFireDown)) {
-				direction = Direction.DOWN;
-			} else if (keyboard.keyDownOnce(Constants.playerTwoFireRight)) {
-				direction = Direction.RIGHT;
-			} else if (keyboard.keyDownOnce(Constants.playerTwoFireLeft)) {
-				direction = Direction.LEFT;
-			}
-			if (direction != Direction.NULL) {
-				this.addSprite(new Fireball(player2, direction));
-			}
-		}
-	}
 	
 	public void endGame(){
 		gameState = State.done;
