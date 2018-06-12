@@ -70,6 +70,8 @@ public class GameLoop extends JFrame {
 	private State gameState = State.running;
 	private State prevState = State.paused;
 	
+	private double scoreMult = 1.0;
+	
 	
 	private int selectedRow = 0;
 	private int selectedCol = 0;
@@ -185,10 +187,10 @@ public class GameLoop extends JFrame {
 		cp.add(lblTimeLabel);
 		
 		lblUpgradeCost = new JLabel("");
-		lblUpgradeCost.setForeground(Color.WHITE);
+		lblUpgradeCost.setForeground(Color.RED);
 		lblUpgradeCost.setFont(UIFont);
 		lblUpgradeCost.setBounds(600,600,700,635);
-		lblUpgradeCost.setVisible(false);//should only be visible on shop screen
+		lblUpgradeCost.setVisible(true);//should only be visible on shop screen
 		cp.add(lblUpgradeCost);
 		
 		lblLives = new JLabel(String.valueOf(lives));
@@ -208,7 +210,8 @@ public class GameLoop extends JFrame {
 		cp.setComponentZOrder(btnPauseRun, 0);
 		cp.setComponentZOrder(lblLives, 0);
 		cp.setComponentZOrder(lblLivesLabel, 0);
-
+		cp.setComponentZOrder(lblUpgradeCost,1);
+ 
 		createSprites();
 
 		setVisible(true); //this should not be touched    	    
@@ -322,6 +325,7 @@ public class GameLoop extends JFrame {
 				}
 			} else if (gameState.isShopping()){
 				lblTime.setText(String.valueOf((int)score));
+				lblUpgradeCost.setText(String.valueOf(UPGRADE_COST * Math.pow(1.1, upgradeLevels[selectedCol][selectedRow])));
 
 			}
 			//REFRESH
@@ -448,7 +452,7 @@ public class GameLoop extends JFrame {
 		for (Sprite sprite : spritesToDispose) {
 			sprites.remove(sprite);
 			if (sprite instanceof Baddie) {
-				this.score += ((Baddie) sprite).getScore();
+				this.score += ((Baddie) sprite).getScore() * scoreMult;
 			}
 		}
 		if (spritesToDispose.size() > 0) {
@@ -547,6 +551,21 @@ public class GameLoop extends JFrame {
         					getPlayer(selectedCol+ 1).setCooldownMult(getPlayer(selectedCol +1).getCooldownMult() +0.1);
         					score -= UPGRADE_COST * Math.pow(1.1, upgradeLevels[selectedCol][1]);
         					upgradeLevels[selectedCol][1] ++;
+        				}
+        			}
+        		}
+        		else{
+        			if (selectedRow == 0){//score multiplyer
+        				if (score > UPGRADE_COST * Math.pow(1.1, upgradeLevels[2][0])){
+        					score -= UPGRADE_COST * Math.pow(1.1, upgradeLevels[2][0]);
+        					scoreMult += 1.1;
+        					upgradeLevels[2][0] ++;
+        				}
+        			}else if (selectedRow == 1){//extra life
+        				if (score > UPGRADE_COST * Math.pow(1.1, upgradeLevels[2][1])){
+        					score -= UPGRADE_COST * Math.pow(1.1, upgradeLevels[2][1]);
+        					lives ++;
+        					upgradeLevels[2][1] ++;
         				}
         			}
         		}
