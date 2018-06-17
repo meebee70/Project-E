@@ -15,7 +15,6 @@ public abstract class Sprite {
 	private Point position;
 	private int IMAGE_WIDTH = 50; // sprite.get_width()
 	private int IMAGE_HEIGHT = 50; //sprite.get_height()
-	//private boolean dispose = false;
 	private boolean collidable = false;
 	private boolean wrapAround = false;
 	protected int lives = 1;
@@ -38,7 +37,7 @@ public abstract class Sprite {
 	 * Instantiate an object at a point with an image
 	 * @param x
 	 * @param y
-	 * @param img
+	 * @param image
 	 */
 	public Sprite(double x, double y, Image img){
 		this.position = new Point();
@@ -46,28 +45,50 @@ public abstract class Sprite {
 		defaultImage = img;
 	}
 	
+	/**
+	 * This method is called every loop and is commonly used to
+	 * update any variables within the object
+	 * @param keyboard
+	 * @param game
+	 */
+	public abstract void update(KeyboardInput keyboard, GameLoop game);
+	
+	/**
+	 * this methods defines how an object should present itself
+	 * @return the image it is to be displayed as
+	 */
+	public abstract Image getImage();
+	
+	/**
+	 * Set the default image of this sprite
+	 * @param img
+	 */
 	public void setDefaultImage(Image img){
 		defaultImage = img;
 	}
 	
-	public void setDefaultImage(String location){
+	/**
+	 * Change the default image of this sprite
+	 * @param imageLocation
+	 */
+	public void setDefaultImage(String imageLocation){
 		try{
-			setDefaultImage(ImageIO.read(new File(location)));
+			setDefaultImage(ImageIO.read(new File(imageLocation)));
 		} catch (Exception e){
 			e.printStackTrace();
 		}
 	}
 	
-	
+	/**
+	 * @return Whether or not to remove this object next loop
+	 */
 	public boolean getDispose() {
 		return this.lives < 1;
 	}
 
 	public void loseLife(){
 		this.lives--;
-	}	
-
-	public abstract void update(KeyboardInput keyboard, GameLoop game);
+	}
 	
 	public int getLives(){
 		return lives;
@@ -115,12 +136,6 @@ public abstract class Sprite {
 		return position;
 	}
 	
-	/**
-	 * this methods defines how an object should present itself
-	 * @return the image it is to be displayed as
-	 */
-	public abstract Image getImage();
-	
 	protected void setSize(int width, int height) {
 		this.IMAGE_WIDTH = width;
 		this.IMAGE_HEIGHT = height;
@@ -141,6 +156,23 @@ public abstract class Sprite {
 	protected void setCollidable(boolean collidable) {
 		this.collidable = collidable;
 	}
+	
+	/**
+	 * Does this sprite wrap around the universe?
+	 * @return
+	 */
+	public boolean isWrapAround() {
+		return wrapAround;
+	}
+	
+	/**
+	 * Set whether or not this sprite wraps around the universe
+	 * @param wrapAround
+	 */
+	public void setWrapAround(boolean wrapAround) {
+		this.wrapAround = wrapAround;
+	}
+	
 	
 	/**
 	 * This method checks to see if this object is colliding with another object
@@ -178,22 +210,6 @@ public abstract class Sprite {
 		xWithin = this.getXPos() < x && x <= this.getXPos() + this.getWidth();
 		yWithin = this.getYPos() < y && y <= this.getYPos() + this.getHeight();
 		return xWithin && yWithin;
-	}
-	
-	/**
-	 * Does this sprite wrap around the universe?
-	 * @return
-	 */
-	public boolean isWrapAround() {
-		return wrapAround;
-	}
-	
-	/**
-	 * Set whether or not this sprite wraps around the universe
-	 * @param wrapAround
-	 */
-	public void setWrapAround(boolean wrapAround) {
-		this.wrapAround = wrapAround;
 	}
 	
 	public abstract String toString();

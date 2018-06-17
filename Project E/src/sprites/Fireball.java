@@ -59,28 +59,7 @@ public class Fireball extends MovingSprite {
 
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
-		switch (this.direction) {
-		case UP:
-			this.setXDirection(0);
-			this.setYDirection(-1);
-			break;
-		case DOWN:
-			this.setXDirection(0);
-			this.setYDirection(1);
-			break;
-		case LEFT:
-			this.setXDirection(-1);
-			this.setYDirection(0);
-			break;
-		case RIGHT:
-			this.setXDirection(1);
-			this.setYDirection(0);
-			break;
-		default:
-			this.setXDirection(0);
-			this.setYDirection(0);
-			break;
-		}
+		direction.setMovingSpriteDirection(this);
 	}
 
 	@Override
@@ -89,7 +68,7 @@ public class Fireball extends MovingSprite {
 	}
 	
 	public String toString() {
-		return "[FireBall]";
+		return "[Fire Ball]";
 	}
 
 }

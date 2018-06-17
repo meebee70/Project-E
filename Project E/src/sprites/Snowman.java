@@ -15,6 +15,7 @@ public class Snowman extends Baddie {
 	
 	private static int coolDown = Constants.snowmanTeleportCooldown;
 	private static int snowballCooldown = Constants.snowballCooldown;
+	private static Random generator = new Random();
 	private int count = 0;
 	
 
@@ -67,14 +68,27 @@ public class Snowman extends Baddie {
 			game.addSprite(new Snowball(this, snowballDirection));
 		}
 	}
-	
+	/**
+	 * A recursive method to move the snowman to a
+	 * new, random space on the screen
+	 * @param gameLoop
+	 */
 	private void teleport(GameLoop game) {
-		Random generator = new Random();
-		int newXLocation = generator.nextInt(35) * 25;
-		int newYLocation = generator.nextInt(35) * 25;
+
+		int newXLocation = generator.nextInt(game.SCREEN_WIDTH / this.getWidth()) * this.getWidth();
+		int newYLocation = generator.nextInt(game.SCREEN_HEIGHT / this.getHeight()) * this.getHeight();
 		this.setLocation(new Point(newXLocation, newYLocation));
+		
 		if (this.checkCollisions(game.getPlayer(1)) || this.checkCollisions(game.getPlayer(2))) {
 			this.teleport(game);
+			return;
+		}
+		
+		for (Sprite wall : game.getBarriers()) {
+			if (this.checkCollisions(wall)) {
+				this.teleport(game);
+				return;
+			}
 		}
 	}
 
