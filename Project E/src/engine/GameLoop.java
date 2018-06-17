@@ -37,7 +37,7 @@ public class GameLoop extends JFrame {
 	/**
 	 * the speed at which the program should run
 	 */
-	final public static int FRAMES_PER_SECOND = (int) Constants.FPS;
+	final public static int FRAMES_PER_SECOND = Constants.FPS;
 
 	public final int SCREEN_HEIGHT = 750;
 	public final int SCREEN_WIDTH = 900;
@@ -51,8 +51,6 @@ public class GameLoop extends JFrame {
 	private JButton btnPauseRun;
 	private JLabel lblTimeLabel;
 	private JLabel lblTime;
-
-	private static Thread loop;
 
 	private Background gameBackground = new GameBackGround("res/backgrounds/8bitGrass.png"); 
 	private Background shopBackground = new ShopBackground("res/backgrounds/money bag.png");
@@ -121,7 +119,6 @@ public class GameLoop extends JFrame {
 	
 
 	public GameLoop() {
-		//super("Space Shooter"); replaced with "init()"
 		init("Cross-Fire");
 
 		try {
@@ -181,10 +178,6 @@ public class GameLoop extends JFrame {
 		cp.setComponentZOrder(lblTime, 0);
 		cp.setComponentZOrder(btnPauseRun, 0);
 		
-		dylanGenerator = new BaddieGenerator(Dylan.class, 5, 65, this);
-		dylanGenerator.setHardMax(30);
-		snowmanGenerator = new BaddieGenerator(Snowman.class, 1, 3000, 500, this);
-		snowmanGenerator.setHardMax(8);
 		createSprites();
 
 		setVisible(true); //this should not be touched    	    
@@ -199,16 +192,18 @@ public class GameLoop extends JFrame {
 		setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-
 	}
 	
 	/**
 	 * a method used on init to create all the starter sprites that will exist
 	 */
 	private void createSprites() {
-
-		addSprite(new Barrier(500,500));
-//		addSprite(new Snowman(0, 0));
+		dylanGenerator = new BaddieGenerator(Dylan.class, 5, 65, this);
+		dylanGenerator.setHardMax(30);
+		snowmanGenerator = new BaddieGenerator(Snowman.class, 1, 3000, 500, this);
+		snowmanGenerator.setHardMax(8);
+		
+		addSprite(new Barrier(500, 500));
 
 		setPlayer1(new Player1());
 		setPlayer2(new Player2());
@@ -218,27 +213,12 @@ public class GameLoop extends JFrame {
 		}
 
 	}
-	
-	public static void main(String[] args)
-	{
-		GameLoop m = new GameLoop();
 
-		loop = new Thread()
-		{
-			public void run()
-			{
-				m.gameLoop();//why is this it's own thread?
-			}
-		};
-
-		loop.start();
-
-	}
 	
 	/**
 	 * the main method for the program
 	 */
-	private void gameLoop() {
+	public void gameLoop() {
 		while (!gameState.isDone()) { // main game loop
 
 			/*
@@ -312,7 +292,6 @@ public class GameLoop extends JFrame {
 		actual_delta_time = (gameState.isPaused() ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
 		elapsed_time += actual_delta_time;
-		//System.out.println(actual_delta_time);
 	}
 
 
