@@ -20,7 +20,7 @@ public class Dylan extends Baddie {
 	private static final int yDefault = -30;
 	private static Random generator = new Random();
 	private int targetPlayer = generator.nextInt(2) + 1;
-	
+
 
 	public Dylan() {
 		super(xDefault, yDefault, score, SPEED);
@@ -49,7 +49,7 @@ public class Dylan extends Baddie {
 		}
 		super.update(keyboard, game);
 	}
-	
+
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
 		if (!game.getPlayer(1).isAlive() && !game.getPlayer(2).isAlive()) {
@@ -65,20 +65,25 @@ public class Dylan extends Baddie {
 			} else if (goal.getX() < this.getXPos()){
 				xDirection--;
 			}
-			
+
 			if (goal.getY() > this.getYPos()) {
 				yDirection++;
 			} else if (goal.getY() < this.getYPos()){
 				yDirection--;
 			}
-			
+
 			this.setXDirection(xDirection);
 			this.setYDirection(yDirection);
 		}
 	}
-	
+
 	public void hitPlayer(Player1 player) {
-			setXDirection(0);
-			setYDirection(0);
-		}
+		setXDirection(0);
+		setYDirection(0);
 	}
+
+	@Override
+	public String toString() {
+		return "[Dylan]";
+	}
+}

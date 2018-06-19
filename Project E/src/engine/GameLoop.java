@@ -22,8 +22,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -82,6 +80,22 @@ public class GameLoop extends JFrame {
 	private Font shopFont;
 	private Font shopFontBold;
 
+	long current_time = 0;								//MILLISECONDS
+	long next_refresh_time = 0;							//MILLISECONDS
+	long last_refresh_time = 0;
+	long minimum_delta_time = 1000 / FRAMES_PER_SECOND;	//MILLISECONDS
+	long actual_delta_time = 0;							//MILLISECONDS
+	long elapsed_time = 0;
+	//private boolean isPaused = false;
+
+	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+	ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
+
+	Player1 player1, player2;
+	BaddieGenerator dylanGenerator;
+	BaddieGenerator snowmanGenerator;
+	
+	
 	/**
 	 * this is all possible "states" the game may exist in, and due to the way the game is set up, other game
 	 * objects need not know the current state of the game.  Should that change, feel free to move this to its
@@ -111,20 +125,7 @@ public class GameLoop extends JFrame {
 			return this == done;
 		}
 	}
-
-	long current_time = 0;								//MILLISECONDS
-	long next_refresh_time = 0;							//MILLISECONDS
-	long last_refresh_time = 0;
-	long minimum_delta_time = 1000 / FRAMES_PER_SECOND;	//MILLISECONDS
-	long actual_delta_time = 0;							//MILLISECONDS
-	long elapsed_time = 0;
-	//private boolean isPaused = false;
-
-	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
-	ArrayList<Sprite> spritesToDispose = new ArrayList<Sprite>();
-
-	Player1 player1, player2;
-	BaddieGenerator dylanGenerator = new BaddieGenerator(5, 65);
+	
 
 	public GameLoop() {
 		//super("Space Shooter"); replaced with "init()"
@@ -211,7 +212,11 @@ public class GameLoop extends JFrame {
 		cp.setComponentZOrder(lblLives, 0);
 		cp.setComponentZOrder(lblLivesLabel, 0);
 		cp.setComponentZOrder(lblUpgradeCost,0);
- 
+    
+		dylanGenerator = new BaddieGenerator(Dylan.class, 5, 65, this);
+		dylanGenerator.setHardMax(30);
+		snowmanGenerator = new BaddieGenerator(Snowman.class, 1, 3000, 500, this);
+		snowmanGenerator.setHardMax(8);
 		createSprites();
 
 		setVisible(true); //this should not be touched    	    
@@ -235,7 +240,7 @@ public class GameLoop extends JFrame {
 	private void createSprites() {
 
 		addSprite(new Barrier(500,500));
-		addSprite(new Snowman(0, 0));
+//		addSprite(new Snowman(0, 0));
 
 		setPlayer1(new Player1());
 		setPlayer2(new Player2());
@@ -303,7 +308,8 @@ public class GameLoop extends JFrame {
 				this.generateFireballs();
 				
 
-				dylanGenerator.update(this);
+				dylanGenerator.update();
+				snowmanGenerator.update();
 				
 
 				updateSprites();
