@@ -104,7 +104,11 @@ public class Player1 extends MovingSprite {
 	}
 	
 	public void setCooldownMult(double newMult){
-		cooldownMax = (int) (BASE_COOLDOWN_MAX / newMult);
+		cooldownMax = (int) Math.max((int) (BASE_COOLDOWN_MAX / newMult),25/Constants.fireballSpeed);
+	}
+	
+	public double getCooldownMult(){
+		return ((double)BASE_COOLDOWN_MAX)/((double)cooldownMax);
 	}
 
 }

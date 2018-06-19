@@ -51,22 +51,28 @@ public class GameLoop extends JFrame {
 	private JButton btnPauseRun;
 	private JLabel lblTimeLabel;
 	private JLabel lblTime;
+	private JLabel lblUpgradeCost;
+	private JLabel lblLives;
+	private JLabel lblLivesLabel;
 
 	private Background gameBackground = new GameBackGround("res/backgrounds/8bitGrass.png"); 
 	private Background shopBackground = new ShopBackground("res/backgrounds/money bag.png");
 
 	private KeyboardInput keyboard = new KeyboardInput();
 
+	private int lives = 1;
 	private double score = 0;
 	private State gameState = State.running;
 	private State prevState = State.paused;
 	
+	private double scoreMult = 1.0;
+	
 	
 	private int selectedRow = 0;
 	private int selectedCol = 0;
-	private String[] playerOneUpgrades = 	{"Move Speed","Fire Rate",};
-	private String[] playerTwoUpgrades = 	{"Move Speed","Fire Rate",};
-	private String[] generalUpgrades = 		{"score multiplyer","extra life",};//these are subject to change
+	private final String[][] upgrades = 	{{"Move Speed","Fire Rate"},{"Move Speed","Fire Rate"},{"score multiplyer","extra life"}};//these are subject to change
+	private Integer[][] upgradeLevels = {{1,1},{1,1},{1,1}};
+	private final double UPGRADE_COST = 500;
 	
 	private Font shopFont;
 	private Font shopFontBold;
@@ -120,6 +126,9 @@ public class GameLoop extends JFrame {
 
 	public GameLoop() {
 		init("Cross-Fire");
+		
+		Font UIFont = new Font("Tahoma", Font.BOLD, 32);
+		Font buttonFont = new Font("Tahoma", Font.BOLD,10);
 
 		try {
 			shopFont = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("res/retroComputerFont.ttf"))).deriveFont(Font.PLAIN, 20);
@@ -154,14 +163,14 @@ public class GameLoop extends JFrame {
 			}
 		});
 
-		btnPauseRun.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btnPauseRun.setFont(buttonFont);
 		btnPauseRun.setBounds(20, 20, 48, 32);
 		btnPauseRun.setFocusable(false);
 		cp.add(btnPauseRun);
 
 		lblTime = new JLabel("000");
 		lblTime.setForeground(Color.WHITE);
-		lblTime.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblTime.setFont(UIFont);
 		lblTime.setBounds(180, 25, 310, 30);
 		cp.add(lblTime);
 
@@ -170,14 +179,35 @@ public class GameLoop extends JFrame {
 
 		lblTimeLabel = new JLabel("Score: ");
 		lblTimeLabel.setForeground(Color.WHITE);
-		lblTimeLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblTimeLabel.setFont(UIFont);
 		lblTimeLabel.setBounds(78, 22, 125, 30);
 		cp.add(lblTimeLabel);
-
+		
+		lblUpgradeCost = new JLabel("");
+		lblUpgradeCost.setForeground(Color.RED);
+		lblUpgradeCost.setFont(UIFont);
+		lblUpgradeCost.setBounds(600,300,700,335);
+		lblUpgradeCost.setVisible(true);//should only be visible on shop screen
+		cp.add(lblUpgradeCost);
+		
+		lblLives = new JLabel(String.valueOf(lives));
+		lblLives.setForeground(Color.WHITE);
+		lblLives.setFont(UIFont);
+		lblLives.setBounds(350,22,400,30);
+		cp.add(lblLives);
+		
+		lblLivesLabel = new JLabel("Lives: ");
+		lblLivesLabel.setForeground(Color.WHITE);
+		lblLivesLabel.setFont(UIFont);
+		lblLivesLabel.setBounds(250,22,350,30);
+		cp.add(lblLivesLabel);
+		
 		cp.setComponentZOrder(lblTimeLabel, 0);
 		cp.setComponentZOrder(lblTime, 0);
 		cp.setComponentZOrder(btnPauseRun, 0);
-		
+		cp.setComponentZOrder(lblLives, 0);
+		cp.setComponentZOrder(lblLivesLabel, 0);
+		cp.setComponentZOrder(lblUpgradeCost,0);
 		createSprites();
 
 		setVisible(true); //this should not be touched    	    
@@ -247,6 +277,11 @@ public class GameLoop extends JFrame {
 			if (gameState.isRunning()){
 				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
 				lblTime.setText(String.valueOf((int)score));
+				
+				lblLives.setBounds(350 + (String.valueOf((int)score).length() * 16),22,500,30);
+				lblLives.setText(String.valueOf(lives));
+				
+				lblLivesLabel.setBounds(250 + (String.valueOf((int)score).length() * 16),22,350,30);
 
 				dylanGenerator.update();
 				snowmanGenerator.update();
@@ -256,22 +291,22 @@ public class GameLoop extends JFrame {
 				disposeSprites();
 				
 				if (!sprites.contains(player1)){
-					if (!sprites.contains(player2)){
-						if (score > 5000){
-							player1.setLives(1);
-							player2.setLives(1);
-							sprites.clear();
-							sprites.add(player1);
-							sprites.add(player2);
-							score -= 5000;
-						}else{
-							//gameState = State.done;
-							//TODO implement a "done" game state
-						}
+					if (lives > 0){
+						sprites.add(player1);
+						player1.setLives(1);
+						lives--;
+					}
+				}
+				if (!sprites.contains(player2)){
+					if (lives > 0){
+						sprites.add(player2);
+						player2.setLives(1);
+						lives--;
 					}
 				}
 			} else if (gameState.isShopping()){
-				
+				lblTime.setText(String.valueOf((int)score));
+				lblUpgradeCost.setText(String.valueOf((int)(UPGRADE_COST * Math.pow(1.1, upgradeLevels[selectedCol][selectedRow]) + 0.99)));
 
 			}
 			//REFRESH
@@ -364,7 +399,7 @@ public class GameLoop extends JFrame {
 		for (Sprite sprite : spritesToDispose) {
 			sprites.remove(sprite);
 			if (sprite instanceof Baddie) {
-				this.score += ((Baddie) sprite).getScore();
+				this.score += ((Baddie) sprite).getScore() * scoreMult;
 			}
 		}
 		if (spritesToDispose.size() > 0) {
@@ -410,12 +445,14 @@ public class GameLoop extends JFrame {
 				
 				lblTime.setLocation(178, 20);
 				lblTimeLabel.setLocation(78,22);
+				lblUpgradeCost.setVisible(false);
 
 			}else{
 				prevState = gameState;
 				gameState = State.shop;
 				lblTime.setLocation(150, 600);
 				lblTimeLabel.setLocation(50,602);
+				lblUpgradeCost.setVisible(true);
 			}
 			
 		}
@@ -433,21 +470,52 @@ public class GameLoop extends JFrame {
         		selectedCol++;
         	}
         	
-        	if (selectedRow < 0){
-        		selectedRow = generalUpgrades.length-1;
-        	}else if (selectedRow > generalUpgrades.length-1){
-        		selectedRow = 0;
-        	}
         	
         	if (selectedCol < 0){
         		selectedCol = 2;
-        	}else if (selectedCol > 2){
+        	}else if (selectedCol > upgrades.length -1){
         		selectedCol = 0;
         	}
         	
+        	if (selectedRow < 0){
+        		selectedRow = upgrades[selectedCol].length-1;
+        	}else if (selectedRow > upgrades[selectedCol].length-1){
+        		selectedRow = 0;
+        	}
         	
-        	if (keyboard.keyDown(Constants.enterKey)){
-        		//TODO make shop upgrades do things
+        	
+        	if (keyboard.keyDownOnce(Constants.enterKey)){
+        		
+        		if (selectedCol == 0 || selectedCol == 1){// player upgrade
+        			if (selectedRow == 0){//move speed
+        				if (score > UPGRADE_COST * Math.pow(1.1,upgradeLevels[selectedCol][0])){
+        					getPlayer(selectedCol+1).speedMult(getPlayer(selectedCol +1).getSpeedMult() + 0.1);
+        					score -= UPGRADE_COST * Math.pow(1.1,upgradeLevels[selectedCol][0]);
+        					upgradeLevels[selectedCol][0] ++;
+        				}
+        			}else if (selectedRow == 1){//fireRate
+        				if (score > UPGRADE_COST * Math.pow(1.1, upgradeLevels[selectedCol][1])){
+        					getPlayer(selectedCol+ 1).setCooldownMult(getPlayer(selectedCol +1).getCooldownMult() +0.1);
+        					score -= UPGRADE_COST * Math.pow(1.1, upgradeLevels[selectedCol][1]);
+        					upgradeLevels[selectedCol][1] ++;
+        				}
+        			}
+        		}
+        		else{
+        			if (selectedRow == 0){//score multiplier
+        				if (score > UPGRADE_COST * Math.pow(2.5, upgradeLevels[2][0])){
+        					score -= UPGRADE_COST * Math.pow(2.5, upgradeLevels[2][0]);
+        					scoreMult += 1.1;
+        					upgradeLevels[2][0] ++;
+        				}
+        			}else if (selectedRow == 1){//extra life
+        				if (score > UPGRADE_COST * Math.pow(1.1, upgradeLevels[2][1])){
+        					score -= UPGRADE_COST * Math.pow(1.1, upgradeLevels[2][1]);
+        					lives ++;
+        					upgradeLevels[2][1] ++;
+        				}
+        			}
+        		}
         	}
         	
         	
@@ -486,52 +554,37 @@ public class GameLoop extends JFrame {
 			else if (gameState.isShopping()){
 				paintBackground(g, shopBackground);
 				
-				//draw player one upgrades
-				g.setFont(shopFontBold);
-				g.drawString("Player one upgrades", LEFT_SHOP_COL, 100);
-				g.setFont(shopFont);
-				for (int i = 0; i < playerOneUpgrades.length;i++){
-					if (selectedRow == i && selectedCol == 0){
-						g.setFont(shopFontBold);
-						g.setColor(Color.RED);
-						g.drawString(playerOneUpgrades[i], LEFT_SHOP_COL + 25, 150 + 35*i);
-						
-						g.setColor(Color.BLACK);
-						g.setFont(shopFont);
-					}else g.drawString(playerOneUpgrades[i], LEFT_SHOP_COL + 25, 150 + 35*i);
+				
+				
+				
+				for (int i = 0; i < upgrades.length;i++){//iterates through the different kinds of upgrades
+					g.setFont(shopFontBold);
+					g.drawString("Player one upgrades", LEFT_SHOP_COL, 100);
+					g.drawString("player two upgrades", RIGHT_SHOP_COL, 100);
+					g.drawString("General game upgrades", CENTER_SHOP_COL, 300);
+					
+					int bound;
+					if (i == 0){
+						bound = LEFT_SHOP_COL;
+					}else if (i == 1){
+						bound = RIGHT_SHOP_COL;
+					}else{
+						bound = CENTER_SHOP_COL;
+					}
+					
+					g.setFont(shopFont);
+					for (int j = 0; j < upgrades[i].length;j++){
+						if (selectedRow == j && selectedCol == i){
+							g.setFont(shopFontBold);
+							g.setColor(Color.RED);
+							g.drawString(upgrades[i][j], bound + 25, 150 +  35*j + ((int)(i/2)*200));
+							g.setColor(Color.BLACK);
+							g.setFont(shopFont);
+						}else{
+							g.drawString(upgrades[i][j], bound + 25, 150  + 35*j + ((int)(i/2)*200));
+						}
+					}
 				}
-				
-				//draw player two upgrades
-				g.setFont(shopFontBold);
-				g.drawString("player two upgrades", RIGHT_SHOP_COL, 100);
-				g.setFont(shopFont);
-				for (int i = 0; i < playerOneUpgrades.length;i++){
-					if (selectedRow == i && selectedCol == 1){
-						g.setFont(shopFontBold);
-						g.setColor(Color.RED);
-						g.drawString(playerOneUpgrades[i], RIGHT_SHOP_COL + 25, 150 + 35*i);
-						
-						g.setColor(Color.BLACK);
-						g.setFont(shopFont);
-					}else g.drawString(playerTwoUpgrades[i], RIGHT_SHOP_COL + 25, 150 + 35*i);
-				}
-				
-				//draw general upgrades
-				g.setFont(shopFontBold);
-				g.drawString("General game upgrades", CENTER_SHOP_COL, 300);
-				g.setFont(shopFont);
-				for (int i = 0; i < playerOneUpgrades.length;i++){
-					if (selectedRow == i && selectedCol == 2){
-						g.setFont(shopFontBold);
-						g.setColor(Color.RED);
-						g.drawString(generalUpgrades[i], CENTER_SHOP_COL + 25, 335 + 35*i);
-						
-						g.setColor(Color.BLACK);
-						g.setFont(shopFont);
-					}else g.drawString(generalUpgrades[i], CENTER_SHOP_COL + 25, 335 + 35*i);
-				}
-				
-				
 			}
 
 		}
