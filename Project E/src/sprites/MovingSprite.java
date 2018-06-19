@@ -103,5 +103,9 @@ public abstract class MovingSprite extends Sprite{
 	public void speedMult(double newMult){
 		this.moveSpeed = baseMoveSpeed * newMult;
 	}
+	
+	public double getSpeedMult(){
+		return this.moveSpeed / this.baseMoveSpeed;
+	}
 
 }
