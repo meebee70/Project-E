@@ -41,7 +41,7 @@ public class Player1 extends MovingSprite {
 	protected void generateFireballs(KeyboardInput keyboard, GameLoop game) {
 		Direction direction = Direction.NULL;
 		if (this.isAlive() && this.getCooldown() <= 0) {
-			if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
+			if (keyboard.keyDown(Constants.playerOneFireUp)) {
 				direction = Direction.UP;
 			} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
 				direction = Direction.DOWN;

@@ -40,7 +40,7 @@ public class Player2 extends Player1 {
 	protected void generateFireballs(KeyboardInput keyboard, GameLoop game) {
 		Direction direction = Direction.NULL;
 		if (this.isAlive() && this.getCooldown() <= 0) {
-			if (keyboard.keyDownOnce(Constants.playerTwoFireUp)) {
+			if (keyboard.keyDown(Constants.playerTwoFireUp)) {
 				direction = Direction.UP;
 			} else if (keyboard.keyDownOnce(Constants.playerTwoFireDown)) {
 				direction = Direction.DOWN;

@@ -72,7 +72,7 @@ public class GameLoop extends JFrame {
 	private int selectedCol = 0;
 	private final String[][] upgrades = 	{{"Move Speed","Fire Rate"},{"Move Speed","Fire Rate"},{"score multiplyer","extra life"}};//these are subject to change
 	private Integer[][] upgradeLevels = {{1,1},{1,1},{1,1}};
-	private final double UPGRADE_COST = 500;
+	private final double UPGRADE_COST = Constants.upgradeCost;
 	
 	private Font shopFont;
 	private Font shopFontBold;
@@ -208,6 +208,7 @@ public class GameLoop extends JFrame {
 		cp.setComponentZOrder(lblLives, 0);
 		cp.setComponentZOrder(lblLivesLabel, 0);
 		cp.setComponentZOrder(lblUpgradeCost,0);
+		
 		createSprites();
 
 		setVisible(true); //this should not be touched    	    
@@ -275,18 +276,14 @@ public class GameLoop extends JFrame {
 
 			//UPDATE STATE
 			if (gameState.isRunning()){
-				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/100); // adds score
-				lblTime.setText(String.valueOf((int)score));
+				score += ((double)actual_delta_time / 1000) + (Math.log10(elapsed_time)/50); // adds score
 				
 				lblLives.setBounds(350 + (String.valueOf((int)score).length() * 16),22,500,30);
-				lblLives.setText(String.valueOf(lives));
-				
 				lblLivesLabel.setBounds(250 + (String.valueOf((int)score).length() * 16),22,350,30);
 
 				dylanGenerator.update();
 				snowmanGenerator.update();
 				
-
 				updateSprites();
 				disposeSprites();
 				
@@ -305,10 +302,11 @@ public class GameLoop extends JFrame {
 					}
 				}
 			} else if (gameState.isShopping()){
-				lblTime.setText(String.valueOf((int)score));
 				lblUpgradeCost.setText(String.valueOf((int)(UPGRADE_COST * Math.pow(1.1, upgradeLevels[selectedCol][selectedRow]) + 0.99)));
 
 			}
+			lblTime.setText(String.valueOf((int)score));
+			lblLives.setText(String.valueOf(lives));
 			//REFRESH
 			this.repaint();
 		}
@@ -337,7 +335,6 @@ public class GameLoop extends JFrame {
 		for (int i = 0; i < sprites.size(); i++) {
 			sprites.get(i).update(keyboard, this);
 		}    	
-
 	}
 	
 	/**

@@ -17,7 +17,7 @@ public abstract class MovingSprite extends Sprite{
 	public void update(KeyboardInput keyboard, GameLoop game) {
 		this.setDirection(keyboard, game);
 		
-		xDistance = this.getXDirection() * moveSpeed;
+		xDistance = this.xDirection * moveSpeed;
 		yDistance = this.yDirection * moveSpeed;
 		
 		if (this.isWrapAround()) {
@@ -47,9 +47,6 @@ public abstract class MovingSprite extends Sprite{
 	protected void move(double xDistance, double yDistance, GameLoop game) {
 		if (xDistance != 0) {
 			this.addX(xDistance);
-      
-			game.repaint();
-      
 			if (this.isCollideable()) {
 				for (Sprite wall : game.getBarriers()) {
 					if (wall != this) {
@@ -64,7 +61,6 @@ public abstract class MovingSprite extends Sprite{
 		
 		if (yDistance != 0) {
 			this.addY(yDistance);
-			game.repaint();
 			if (this.isCollideable()) {
 				for (Sprite wall : game.getBarriers()) {
 					if (wall != this) {

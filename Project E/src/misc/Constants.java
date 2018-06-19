@@ -38,5 +38,6 @@ public final class Constants {
 	final public static int shotCooldown = 30 * 60 / FPS;
 	final public static int snowmanTeleportCooldown = 5 * FPS;
 	final public static int snowballCooldown = (int) (3 * FPS);
+	final public static int upgradeCost = 500;
 	
 }
