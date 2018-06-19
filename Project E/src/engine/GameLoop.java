@@ -189,7 +189,7 @@ public class GameLoop extends JFrame {
 		lblUpgradeCost = new JLabel("");
 		lblUpgradeCost.setForeground(Color.RED);
 		lblUpgradeCost.setFont(UIFont);
-		lblUpgradeCost.setBounds(600,600,700,635);
+		lblUpgradeCost.setBounds(600,300,700,335);
 		lblUpgradeCost.setVisible(true);//should only be visible on shop screen
 		cp.add(lblUpgradeCost);
 		
@@ -210,7 +210,7 @@ public class GameLoop extends JFrame {
 		cp.setComponentZOrder(btnPauseRun, 0);
 		cp.setComponentZOrder(lblLives, 0);
 		cp.setComponentZOrder(lblLivesLabel, 0);
-		cp.setComponentZOrder(lblUpgradeCost,1);
+		cp.setComponentZOrder(lblUpgradeCost,0);
  
 		createSprites();
 
@@ -325,7 +325,7 @@ public class GameLoop extends JFrame {
 				}
 			} else if (gameState.isShopping()){
 				lblTime.setText(String.valueOf((int)score));
-				lblUpgradeCost.setText(String.valueOf(UPGRADE_COST * Math.pow(1.1, upgradeLevels[selectedCol][selectedRow])));
+				lblUpgradeCost.setText(String.valueOf((int)(UPGRADE_COST * Math.pow(1.1, upgradeLevels[selectedCol][selectedRow]) + 0.99)));
 
 			}
 			//REFRESH
@@ -537,7 +537,7 @@ public class GameLoop extends JFrame {
         	}
         	
         	
-        	if (keyboard.keyDown(Constants.enterKey)){
+        	if (keyboard.keyDownOnce(Constants.enterKey)){
         		
         		if (selectedCol == 0 || selectedCol == 1){// player upgrade
         			if (selectedRow == 0){//move speed
@@ -555,9 +555,9 @@ public class GameLoop extends JFrame {
         			}
         		}
         		else{
-        			if (selectedRow == 0){//score multiplyer
-        				if (score > UPGRADE_COST * Math.pow(1.1, upgradeLevels[2][0])){
-        					score -= UPGRADE_COST * Math.pow(1.1, upgradeLevels[2][0]);
+        			if (selectedRow == 0){//score multiplier
+        				if (score > UPGRADE_COST * Math.pow(2.5, upgradeLevels[2][0])){
+        					score -= UPGRADE_COST * Math.pow(2.5, upgradeLevels[2][0]);
         					scoreMult += 1.1;
         					upgradeLevels[2][0] ++;
         				}
