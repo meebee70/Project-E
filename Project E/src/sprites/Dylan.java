@@ -10,10 +10,11 @@ import misc.Constants;
 
 /**
  * A basic enemy who chooses a player at random to follow
+ * Dylans attempt to stop the player from moving, and thus can make it more challenging to dodge snowballs
  * @author Alexander Aldridge
  */
 public class Dylan extends Baddie {
-	private static String spriteLocation = "res/baddies/Dylan V2.0.png";
+	private static final String spriteLocation = "res/baddies/Dylan V2.0.png";
 	private static final int score = 50;
 	private static final double SPEED = Constants.dylanSpeed;
 	private static final int xDefault = 350;
@@ -27,7 +28,6 @@ public class Dylan extends Baddie {
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(32, 32);
-		this.setCollidable(true);
 	}
 
 	public Dylan(int x, int y) {
@@ -35,7 +35,6 @@ public class Dylan extends Baddie {
 		this.setCollidable(true);
 		setDefaultImage(spriteLocation);
 		this.setSize(25, 25);
-		this.setCollidable(true);
 	}
 
 	@Override
@@ -45,35 +44,30 @@ public class Dylan extends Baddie {
 
 	public void update(KeyboardInput keyboard, GameLoop game) {
 		if (game.getPlayer(targetPlayer).isAlive() == false) {
-			targetPlayer = (targetPlayer + 1) % 2;
+			if (game.getPlayer((targetPlayer + 1) % 2).isAlive()) {
+				targetPlayer = (targetPlayer + 1) % 2;
+			}
 		}
 		super.update(keyboard, game);
 	}
 
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
-		if (!game.getPlayer(1).isAlive() && !game.getPlayer(2).isAlive()) {
-			this.setXDirection(0);
-			this.setYDirection(0);
-			return;
+		Point goal = game.getPlayerLocationCentered(targetPlayer);
+		if (goal.getX() > this.getXPos()) {
+			this.setXDirection(1);
+		} else if (goal.getX() < this.getXPos()){
+			this.setXDirection(-1);
 		} else {
-			Point goal = game.getPlayerLocationCentered(targetPlayer);
-			int xDirection = 0;
-			int yDirection = 0;
-			if (goal.getX() > this.getXPos()) {
-				xDirection++;
-			} else if (goal.getX() < this.getXPos()){
-				xDirection--;
-			}
+			this.setXDirection(0);
+		}
 
-			if (goal.getY() > this.getYPos()) {
-				yDirection++;
-			} else if (goal.getY() < this.getYPos()){
-				yDirection--;
-			}
-
-			this.setXDirection(xDirection);
-			this.setYDirection(yDirection);
+		if (goal.getY() > this.getYPos()) {
+			this.setYDirection(1);
+		} else if (goal.getY() < this.getYPos()){
+			this.setYDirection(-1);
+		} else {
+			this.setYDirection(0);
 		}
 	}
 

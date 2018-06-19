@@ -94,28 +94,7 @@ public class Snowball extends Baddie {
 	
 	@Override
 	protected void setDirection(KeyboardInput keyboard, GameLoop game) {
-		switch (this.direction) {
-		case BOTTOM_RIGHT:
-			this.setXDirection(1);
-			this.setYDirection(1);
-			break;
-		case BOTTOM_LEFT:
-			this.setXDirection(-1);
-			this.setYDirection(1);
-			break;
-		case TOP_RIGHT:
-			this.setXDirection(1);
-			this.setYDirection(-1);
-			break;
-		case TOP_LEFT:
-			this.setXDirection(-1);
-			this.setYDirection(-1);
-			break;
-		default:
-			this.setXDirection(0);
-			this.setYDirection(0);
-			break;
-		}
+		direction.setMovingSpriteDirection(this);
 	}
 
 	@Override

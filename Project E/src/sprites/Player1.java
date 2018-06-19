@@ -5,6 +5,7 @@ import java.awt.Image;
 import engine.GameLoop;
 import engine.KeyboardInput;
 import misc.Constants;
+import misc.Direction;
 
 public class Player1 extends MovingSprite {
 
@@ -32,8 +33,28 @@ public class Player1 extends MovingSprite {
 	}
 	
 	public void update(KeyboardInput keyboard, GameLoop game) {
+		this.generateFireballs(keyboard, game);
 		this.cooldown--;
 		super.update(keyboard, game);
+	}
+	
+	protected void generateFireballs(KeyboardInput keyboard, GameLoop game) {
+		Direction direction = Direction.NULL;
+		if (this.isAlive() && this.getCooldown() <= 0) {
+			if (keyboard.keyDownOnce(Constants.playerOneFireUp)) {
+				direction = Direction.UP;
+			} else if (keyboard.keyDownOnce(Constants.playerOneFireDown)) {
+				direction = Direction.DOWN;
+			} else if (keyboard.keyDownOnce(Constants.playerOneFireRight)) {
+				direction = Direction.RIGHT;
+			} else if (keyboard.keyDownOnce(Constants.playerOneFireLeft)) {
+				direction = Direction.LEFT;
+			}
+			
+			if (direction != Direction.NULL) {
+				game.addSprite(new Fireball(this, direction));
+			}
+		}
 	}
 	
 	/**

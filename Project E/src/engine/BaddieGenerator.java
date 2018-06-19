@@ -9,7 +9,7 @@ import sprites.Sprite;
 
 public class BaddieGenerator {
 	private int hardMax = 25;
-	private int respawnCycles = 5;
+	private int respawnCycles = 20;
 	private int cycles = 0;
 	private int maxBaddies, baddies;
 	private final int scorePerBaddie;

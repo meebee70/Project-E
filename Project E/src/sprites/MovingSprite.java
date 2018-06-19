@@ -88,11 +88,11 @@ public abstract class MovingSprite extends Sprite{
 		return this.yDirection;
 	}
 	
-	protected void setXDirection(int xDirection) {
+	public void setXDirection(int xDirection) {
 		this.xDirection = xDirection;
 	}
 
-	protected void setYDirection(int yDirection) {
+	public void setYDirection(int yDirection) {
 		this.yDirection = yDirection;
 	}
 	

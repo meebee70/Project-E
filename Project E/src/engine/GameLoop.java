@@ -6,11 +6,9 @@ import backgrounds.GameBackGround;
 import backgrounds.ShopBackground;
 import backgrounds.Tile;
 import misc.Constants;
-import misc.Direction;
 import sprites.Baddie;
 import sprites.Barrier;
 import sprites.Dylan;
-import sprites.Fireball;
 import sprites.Player1;
 import sprites.Player2;
 import sprites.Snowman;
@@ -27,7 +25,8 @@ import java.awt.event.KeyEvent;
 
 /**
  * the main meat of the program, where all the stuff actually happens
- * @author Mr Wehnes
+ * Original author: Mr Wehnes
+ * Editied and improved by Chris Kozbial and Alexander Aldridge
  *
  */
 public class GameLoop extends JFrame {
@@ -38,7 +37,7 @@ public class GameLoop extends JFrame {
 	/**
 	 * the speed at which the program should run
 	 */
-	final public static int FRAMES_PER_SECOND = (int) Constants.FPS;
+	final public static int FRAMES_PER_SECOND = Constants.FPS;
 
 	public final int SCREEN_HEIGHT = 750;
 	public final int SCREEN_WIDTH = 900;
@@ -55,8 +54,6 @@ public class GameLoop extends JFrame {
 	private JLabel lblUpgradeCost;
 	private JLabel lblLives;
 	private JLabel lblLivesLabel;
-
-	private static Thread loop;
 
 	private Background gameBackground = new GameBackGround("res/backgrounds/8bitGrass.png"); 
 	private Background shopBackground = new ShopBackground("res/backgrounds/money bag.png");
@@ -128,7 +125,6 @@ public class GameLoop extends JFrame {
 	
 
 	public GameLoop() {
-		//super("Space Shooter"); replaced with "init()"
 		init("Cross-Fire");
 		
 		Font UIFont = new Font("Tahoma", Font.BOLD, 32);
@@ -212,11 +208,6 @@ public class GameLoop extends JFrame {
 		cp.setComponentZOrder(lblLives, 0);
 		cp.setComponentZOrder(lblLivesLabel, 0);
 		cp.setComponentZOrder(lblUpgradeCost,0);
-    
-		dylanGenerator = new BaddieGenerator(Dylan.class, 5, 65, this);
-		dylanGenerator.setHardMax(30);
-		snowmanGenerator = new BaddieGenerator(Snowman.class, 1, 3000, 500, this);
-		snowmanGenerator.setHardMax(8);
 		createSprites();
 
 		setVisible(true); //this should not be touched    	    
@@ -231,16 +222,18 @@ public class GameLoop extends JFrame {
 		setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-
 	}
 	
 	/**
 	 * a method used on init to create all the starter sprites that will exist
 	 */
 	private void createSprites() {
-
-		addSprite(new Barrier(500,500));
-//		addSprite(new Snowman(0, 0));
+		dylanGenerator = new BaddieGenerator(Dylan.class, 5, 65, this);
+		dylanGenerator.setHardMax(30);
+		snowmanGenerator = new BaddieGenerator(Snowman.class, 1, 3000, 500, this);
+		snowmanGenerator.setHardMax(8);
+		
+		addSprite(new Barrier(500, 500));
 
 		setPlayer1(new Player1());
 		setPlayer2(new Player2());
@@ -250,27 +243,12 @@ public class GameLoop extends JFrame {
 		}
 
 	}
-	
-	public static void main(String[] args)
-	{
-		GameLoop m = new GameLoop();
 
-		loop = new Thread()
-		{
-			public void run()
-			{
-				m.gameLoop();//why is this it's own thread?
-			}
-		};
-
-		loop.start();
-
-	}
 	
 	/**
 	 * the main method for the program
 	 */
-	private void gameLoop() {
+	public void gameLoop() {
 		while (!gameState.isDone()) { // main game loop
 
 			/*
@@ -305,9 +283,6 @@ public class GameLoop extends JFrame {
 				
 				lblLivesLabel.setBounds(250 + (String.valueOf((int)score).length() * 16),22,350,30);
 
-				this.generateFireballs();
-				
-
 				dylanGenerator.update();
 				snowmanGenerator.update();
 				
@@ -339,39 +314,6 @@ public class GameLoop extends JFrame {
 		}
 	}
 
-	private void generateFireballs() {
-		Direction direction = Direction.NULL;
-		if (player1.isAlive() && player1.getCooldown() <= 0) {
-			if (keyboard.keyDown(Constants.playerOneFireUp)) {
-				direction = Direction.UP;
-			} else if (keyboard.keyDown(Constants.playerOneFireDown)) {
-				direction = Direction.DOWN;
-			} else if (keyboard.keyDown(Constants.playerOneFireRight)) {
-				direction = Direction.RIGHT;
-			} else if (keyboard.keyDown(Constants.playerOneFireLeft)) {
-				direction = Direction.LEFT;
-			}
-			if (direction != Direction.NULL) {
-				this.addSprite(new Fireball(player1, direction));
-			}
-		}
-
-		if (player2.isAlive() && player2.getCooldown() <= 0) {
-			direction = Direction.NULL;
-			if (keyboard.keyDown(Constants.playerTwoFireUp)) {
-				direction = Direction.UP;
-			} else if (keyboard.keyDown(Constants.playerTwoFireDown)) {
-				direction = Direction.DOWN;
-			} else if (keyboard.keyDown(Constants.playerTwoFireRight)) {
-				direction = Direction.RIGHT;
-			} else if (keyboard.keyDown(Constants.playerTwoFireLeft)) {
-				direction = Direction.LEFT;
-			}
-			if (direction != Direction.NULL) {
-				this.addSprite(new Fireball(player2, direction));
-			}
-		}
-	}
 	
 	public void endGame(){
 		gameState = State.done;
@@ -385,7 +327,6 @@ public class GameLoop extends JFrame {
 		actual_delta_time = (gameState.isPaused() ? 0 : current_time - last_refresh_time);
 		last_refresh_time = current_time;
 		elapsed_time += actual_delta_time;
-		//System.out.println(actual_delta_time);
 	}
 
 
@@ -451,7 +392,7 @@ public class GameLoop extends JFrame {
 	 */
 	private void disposeSprites() {
 		for (Sprite sprite : sprites) {
-			if (sprite.getDispose() == true) {
+			if (sprite.getDispose()) {
 				spritesToDispose.add(sprite);
 			}
 		}
